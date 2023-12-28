@@ -1,6 +1,11 @@
 # exception_handler
 
-This Dart package provides a robust framework for handling API calls, managing network connectivity, and processing exceptions in Flutter applications. It simplifies the process of making network requests, parsing responses, and handling various exceptions, making it an essential tool for Flutter developers.
+| Local | Repo Git | Coveralls |
+| ----- | -------- | --------- |
+| ![Coverage](./coverage_badge.svg) | ![Coverage](https://raw.githubusercontent.com/andgar2010/exception_handler/master/coverage_badge.svg?sanitize=true) | [![Coverage Status](https://coveralls.io/repos/github/andgar2010/exception_handler/badge.svg?branch=main)](https://coveralls.io/github/andgar2010/exception_handler?branch=main) |
+
+This Dart package provides a robust framework for handling API calls and processing exceptions in Flutter applications.
+It simplifies the process of making network requests, parsing responses, and handling various exceptions, making it an essential tool for Flutter developers.
 
 ## Features
 

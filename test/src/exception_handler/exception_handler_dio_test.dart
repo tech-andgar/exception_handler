@@ -384,7 +384,8 @@ void main() {
     test('handles general exception on API call', () async {
       final exception = Exception('General error');
       when(() => mockApiHandler.call()).thenThrow(exception);
-      final result = await DioExceptionHandler().callApi<String>(mockApiHandler);
+      final result =
+          await DioExceptionHandler().callApi<String>(mockApiHandler);
 
       expect(result, isA<FailureState>());
       expect((result as FailureState).exception, isA<DataClientException>());

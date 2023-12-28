@@ -9,3 +9,11 @@
 ## 1.0.2
 
 * doc: updated Readme
+
+## 1.0.3
+
+* doc: updated Readme
+
+## 1.0.4
+
+* chore: add check coverage on pipeline
