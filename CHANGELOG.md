@@ -21,3 +21,7 @@
 ## 1.0.5
 
 * fix: bug log duplication and add example
+
+## 1.0.6
+
+* test: updated test
