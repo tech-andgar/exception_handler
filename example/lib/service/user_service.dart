@@ -10,10 +10,7 @@ class UserService {
         await DioExceptionHandler().callApi<UserModel>(
       ApiHandler(
         call: () {
-          return Future.delayed(
-            const Duration(seconds: 1),
-            () => dio.get('https://jsonplaceholder.typicode.com/users/$id'),
-          );
+          return dio.get('https://jsonplaceholder.typicode.com/users/$id');
         },
         parserModel: (Object? data) =>
             UserModel.fromJson(data as Map<String, dynamic>),
