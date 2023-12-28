@@ -38,8 +38,9 @@ void main() {
     test('should correct toString', () {
       expect(
         parser.toString(),
-        'ResponseParser<String>(parserModel: "Closure: (dynamic) => String", '
-        'response: "{"key":"value"}", exception: null, stackTrace: null)',
+        'ResponseParser<Response<dynamic>, String>(parserModel: '
+        '"Closure: (dynamic) => String", response: "{"key":"value"}", '
+        'exception: null, stackTrace: null)',
       );
     });
   });

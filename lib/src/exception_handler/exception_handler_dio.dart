@@ -31,7 +31,8 @@ class DioExceptionHandler extends ExceptionHandler {
   /// ```
   @override
   Future<TaskResult<T>> callApi<Response, T>(
-      ApiHandler<Response, T> apiHandler) async {
+    ApiHandler<Response, T> apiHandler,
+  ) async {
     try {
       final Response response = await apiHandler.call();
 
