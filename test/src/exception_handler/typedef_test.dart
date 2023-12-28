@@ -12,7 +12,7 @@ void main() {
           );
       String mockParserModel(dynamic data) => 'Parsed $data';
 
-      final handler = ApiHandler<String>(
+      final handler = ApiHandler<Response, String>(
         call: mockApiCall,
         parserModel: mockParserModel,
       );
@@ -28,7 +28,7 @@ void main() {
       requestOptions: RequestOptions(),
     );
     String mockParserModel(dynamic data) => data['key'];
-    final parser = ResponseParser<String>(
+    final parser = ResponseParser<Response, String>(
       response: mockResponse,
       parserModel: mockParserModel,
     );

@@ -44,7 +44,7 @@ import 'package:exception_handler/exception_handler.dart';
 
 // Example of making an API call
 Future<void> fetchUserData() async {
-    ApiHandler<UserModel> apiHandler = ApiHandler(
+    final ApiHandler<Response, UserModel> apiHandler = ApiHandler(
         call: () => dio.get('https://example.com/api/user'),
         parserModel: (data) => UserModel.fromJson(data),
     );
@@ -69,7 +69,7 @@ import 'package:dio/dio.dart';
 import 'package:exception_handler/exception_handler.dart';
 
 Future<void> fetchComplexData() async {
-    ApiHandler<ComplexData> apiHandler = ApiHandler(
+    final ApiHandler<Response, ComplexData> apiHandler = ApiHandler(
         call: () => dio.get('https://example.com/api/complex'),
         parserModel: customParser,
     );

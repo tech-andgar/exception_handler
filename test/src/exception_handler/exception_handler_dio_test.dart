@@ -10,11 +10,11 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('DioExceptionHandler Tests', () {
     final mockDio = MockDio();
-    late MockApiHandler<String> mockApiHandler;
+    late MockApiHandler<Response, String> mockApiHandler;
     late MockConnectivity mockConnectivity;
 
     setUp(() {
-      mockApiHandler = MockApiHandler<String>();
+      mockApiHandler = MockApiHandler<Response, String>();
       mockConnectivity = MockConnectivity();
       DioExceptionHandler.connectivity = mockConnectivity;
     });
@@ -27,7 +27,8 @@ void main() {
         ),
       );
 
-      TaskResult<String> result = await DioExceptionHandler().callApi<String>(
+      TaskResult<String> result =
+          await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
           call: () => mockDio.get('test'),
           parserModel: (Object? data) => (data as Map)['key'],
@@ -58,7 +59,7 @@ void main() {
         ),
       );
 
-      var result = await DioExceptionHandler().callApi<String>(
+      var result = await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
           call: () => mockDio.get('test'),
           parserModel: (Object? data) => data as String,
@@ -103,7 +104,7 @@ void main() {
     test('API call with client exception', () async {
       when(() => mockDio.get(any())).thenThrow(Exception('Client Error'));
 
-      var result = await DioExceptionHandler().callApi<String>(
+      var result = await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
           call: () => mockDio.get('test'),
           parserModel: (Object? data) => data as String,
@@ -134,7 +135,8 @@ void main() {
         ),
       );
 
-      TaskResult<String> result = await DioExceptionHandler().callApi<String>(
+      TaskResult<String> result =
+          await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
           call: () => mockDio.get('test'),
           parserModel: (Object? data) =>
@@ -414,7 +416,7 @@ void main() {
       final exception = Exception('General error');
       when(() => mockApiHandler.call()).thenThrow(exception);
       final result =
-          await DioExceptionHandler().callApi<String>(mockApiHandler);
+          await DioExceptionHandler().callApi<Response, String>(mockApiHandler);
 
       expect(result, isA<FailureState>());
       expect((result as FailureState).exception, isA<DataClientException>());

@@ -7,7 +7,7 @@ class UserService {
     final Dio dio = Dio();
 
     final TaskResult<UserModel> result =
-        await DioExceptionHandler().callApi<UserModel>(
+        await DioExceptionHandler().callApi<Response, UserModel>(
       ApiHandler(
         call: () {
           return dio.get('https://jsonplaceholder.typicode.com/users/$id');

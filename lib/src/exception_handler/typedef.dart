@@ -1,18 +1,16 @@
-import 'package:dio/dio.dart';
-
 import '../utils/utils.dart';
 
-typedef ApiCall<T> = Future<Response<dynamic>> Function();
+typedef ApiCall<R, T> = Future<R> Function();
 typedef ParseFunction<T> = T Function(Object?);
 
-class ApiHandler<T> {
+class ApiHandler<R, T> {
   ApiHandler({required this.call, required this.parserModel});
 
-  final ApiCall<T> call;
+  final ApiCall<R, T> call;
   final ParseFunction<T> parserModel;
 }
 
-class ResponseParser<T> extends CustomEquatable {
+class ResponseParser<R, T> extends CustomEquatable {
   const ResponseParser({
     required this.response,
     required this.parserModel,
@@ -21,7 +19,7 @@ class ResponseParser<T> extends CustomEquatable {
   });
 
   final ParseFunction<T> parserModel;
-  final Response<dynamic> response;
+  final R response;
   final Exception? exception;
   final StackTrace? stackTrace;
 

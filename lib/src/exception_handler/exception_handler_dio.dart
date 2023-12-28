@@ -15,8 +15,23 @@ class DioExceptionHandler extends ExceptionHandler {
 
   /// callApi is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
+  ///
+  /// Eg:
+  /// ```dart
+  /// final TaskResult<UserModel> result =
+  ///        await DioExceptionHandler().callApi<Response, UserModel>(
+  ///      ApiHandler(
+  ///        call: () {
+  ///          return dio.get('https://jsonplaceholder.typicode.com/users/$id');
+  ///        },
+  ///        parserModel: (Object? data) =>
+  ///            UserModel.fromJson(data as Map<String, dynamic>),
+  ///      ),
+  ///    );
+  /// ```
   @override
-  Future<TaskResult<T>> callApi<T>(ApiHandler<T> apiHandler) async {
+  Future<TaskResult<T>> callApi<Response, T>(
+      ApiHandler<Response, T> apiHandler) async {
     try {
       final Response response = await apiHandler.call();
 

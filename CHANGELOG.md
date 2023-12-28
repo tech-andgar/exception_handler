@@ -33,3 +33,7 @@
 ## 1.0.8
 
 * chore: upload demo screenshot
+
+## 1.0.9
+
+* fix: updated type I/O of function callApi
