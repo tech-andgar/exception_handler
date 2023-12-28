@@ -79,51 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   final TaskResult<UserModel> result = snapshot.requireData;
 
                   return result.when(
-                    success: (UserModel user) => UserWidget(user: user),
-                    failure: (ExceptionState<UserModel> exception) {
-                      final String textException = switch (exception) {
-                        DataClientException<UserModel>() => 'Error: $exception',
-                        DataParseException<UserModel>() =>
-                          'Error Parse: $exception',
-                        DataHttpException<UserModel>() => 'Error: $exception',
-                        DataNetworkException<UserModel>() =>
-                          'Error: $exception',
-                      };
-
-                      final Text text = Text(
-                        textException,
-                        style: TextStyle(
-                          color: Colors.orange[700],
-                        ),
-                      );
-
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: text),
-                        );
-                      });
-
-                      const List<String> links = [
-                        'https://http.pizza',
-                        'https://http.garden',
-                        'https://httpducks.com',
-                        'https://httpgoats.com',
-                        'https://http.dog',
-                        'https://httpcats.com',
-                      ];
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: 400,
-                            child: Image.network(
-                              '${links[Random().nextInt(links.length)]}/404.webp',
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          text,
-                        ],
-                      );
-                    },
+                    success: (UserModel user) => UiUserWidget(user),
+                    failure: (ExceptionState<UserModel> exception) =>
+                        UiExceptionWidget(exception),
                   );
                 },
               ),
@@ -140,9 +98,61 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class UserWidget extends StatelessWidget {
-  const UserWidget({
-    required this.user,
+class UiExceptionWidget extends StatelessWidget {
+  const UiExceptionWidget(
+    this.exception, {
+    super.key,
+  });
+
+  final ExceptionState<UserModel> exception;
+
+  static const List<String> links = [
+    'https://http.pizza',
+    'https://http.garden',
+    'https://httpducks.com',
+    'https://httpgoats.com',
+    'https://http.dog',
+    'https://httpcats.com',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final String textException = switch (exception) {
+      DataClientException<UserModel>() => 'Error: $exception',
+      DataParseException<UserModel>() => 'Error Parse: $exception',
+      DataHttpException<UserModel>() => 'Error: $exception',
+      DataNetworkException<UserModel>() => 'Error: $exception',
+    };
+
+    final Text text = Text(
+      textException,
+      style: TextStyle(
+        color: Colors.orange[700],
+      ),
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: text));
+    });
+
+    return Column(
+      children: [
+        SizedBox(
+          height: 400,
+          child: Image.network(
+            '${links[Random().nextInt(links.length)]}/404.webp',
+          ),
+        ),
+        const SizedBox(height: 8),
+        text,
+      ],
+    );
+  }
+}
+
+class UiUserWidget extends StatelessWidget {
+  const UiUserWidget(
+    this.user, {
     super.key,
   });
   final UserModel user;

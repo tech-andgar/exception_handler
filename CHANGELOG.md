@@ -25,3 +25,7 @@
 ## 1.0.6
 
 * test: updated test
+
+## 1.0.7
+
+* chore: change minimum version to Dart 3.0.0
