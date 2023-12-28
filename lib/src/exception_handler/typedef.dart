@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 typedef ApiCall<T> = Future<Response<dynamic>> Function();
-typedef ParseFunction<T> = T Function(dynamic);
+typedef ParseFunction<T> = T Function(Object?);
 
 class ApiHandler<T> {
   ApiHandler({required this.call, required this.parserModel});

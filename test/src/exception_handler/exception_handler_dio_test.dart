@@ -30,7 +30,7 @@ void main() {
       TaskResult<String> result = await DioExceptionHandler().callApi<String>(
         ApiHandler(
           call: () => mockDio.get('test'),
-          parserModel: (data) => data['key'],
+          parserModel: (Object? data) => (data as Map)['key'],
         ),
       );
 
@@ -61,7 +61,7 @@ void main() {
       var result = await DioExceptionHandler().callApi<String>(
         ApiHandler(
           call: () => mockDio.get('test'),
-          parserModel: (data) => data,
+          parserModel: (Object? data) => data as String,
         ),
       );
 
@@ -106,7 +106,7 @@ void main() {
       var result = await DioExceptionHandler().callApi<String>(
         ApiHandler(
           call: () => mockDio.get('test'),
-          parserModel: (data) => data,
+          parserModel: (Object? data) => data as String,
         ),
       );
 
@@ -137,8 +137,8 @@ void main() {
       TaskResult<String> result = await DioExceptionHandler().callApi<String>(
         ApiHandler(
           call: () => mockDio.get('test'),
-          parserModel: (data) =>
-              int.parse(data).toString(), // Intentional parse error
+          parserModel: (Object? data) =>
+              int.parse(data as String).toString(), // Intentional parse error
         ),
       );
 
