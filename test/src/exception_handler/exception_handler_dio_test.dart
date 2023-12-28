@@ -190,6 +190,35 @@ void main() {
       when(() => mockDio.get(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
+          statusCode: 400,
+        ),
+      );
+      TaskResult result = await DioExceptionHandler().callApi(
+        ApiHandler(
+          call: () => mockDio.get('test'),
+          parserModel: (res) {},
+        ),
+      );
+
+      expect(result, isA<FailureState>());
+      result.when(
+        success: (_) => fail('Expected failure but got success'),
+        failure: (exception) {
+          expect(exception, isA<DataHttpException>());
+          if (exception is DataHttpException) {
+            expect(
+              exception.httpException,
+              equals(HttpException.unknownClient),
+            );
+          }
+        },
+      );
+    });
+    test('should return FailureState with DataHttpException for 404 error',
+        () async {
+      when(() => mockDio.get(any())).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: ''),
           statusCode: 404,
         ),
       );

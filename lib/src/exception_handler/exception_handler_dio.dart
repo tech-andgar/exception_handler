@@ -182,7 +182,9 @@ class DioExceptionHandler extends ExceptionHandler {
           statusCode,
           ResponseParser(
             response: Response(requestOptions: RequestOptions()),
-            parserModel: (data) {},
+            // coverage:ignore-start
+            parserModel: (_) {},
+            // coverage:ignore-end
             exception: e,
             stackTrace: s,
           ),
