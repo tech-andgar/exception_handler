@@ -17,3 +17,7 @@
 ## 1.0.4
 
 * chore: add check coverage on pipeline
+
+## 1.0.5
+
+* fix: bug log duplication and add example
