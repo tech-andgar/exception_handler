@@ -25,7 +25,7 @@ dependencies:
 
 Then, import it in your Dart files where you want to use it:
 
-```dart
+```dartimport 'package:dio/dio.dart';
 import 'package:exception_handler/exception_handler.dart';
 ```
 
@@ -39,6 +39,7 @@ Below are some examples to demonstrate how to use various features of the packag
 Here's a simple example of making an API call and handling the response:
 
 ```dart
+import 'package:dio/dio.dart';
 import 'package:exception_handler/exception_handler.dart';
 
 // Example of making an API call
@@ -64,6 +65,7 @@ Replace `UserModel` with the appropriate data model for your application.
 Using a custom parser for complex API responses:
 
 ```dart
+import 'package:dio/dio.dart';
 import 'package:exception_handler/exception_handler.dart';
 
 Future<void> fetchComplexData() async {
