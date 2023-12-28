@@ -29,3 +29,7 @@
 ## 1.0.7
 
 * chore: change minimum version to Dart 3.0.0
+
+## 1.0.8
+
+* chore: upload demo screenshot

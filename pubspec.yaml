@@ -1,6 +1,6 @@
 name: exception_handler
 description: A Dart package for streamlined API handling and robust exception management in Flutter apps.
-version: 1.0.7
+version: 1.0.8
 homepage: "https://github.com/andgar2010/exception_handler"
 
 environment:
@@ -23,6 +23,10 @@ dev_dependencies:
     git:
       url: https://github.com/foresightmobile/flutter_coverage_badge
       ref: 4d6371f1bd46fee1bd28a697e303412839e53548
+
+screenshots:
+  - description: 'Examples of the exception_handler on Windows.'
+    path: exception_handler_demo.gif
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
