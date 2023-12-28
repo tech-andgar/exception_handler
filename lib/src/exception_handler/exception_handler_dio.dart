@@ -48,17 +48,28 @@ class DioExceptionHandler extends ExceptionHandler {
   ) async {
     int? statusCode = responseParser.response.statusCode;
 
+    return await _handlestatusCode<T>(statusCode, responseParser);
+  }
+
+  static Future<TaskResult<T>> _handlestatusCode<T>(
+    int? statusCode,
+    ResponseParser responseParser,
+  ) async {
     return switch (statusCode) {
       int statusCode when statusCode.isBetween(200, 299) =>
         await _handle2xxparseResponse<T>(responseParser),
       int statusCode when statusCode.isBetween(300, 399) =>
-        _handle3xxRedirect<T>(statusCode),
+        _handle3xxRedirect<T>(statusCode, responseParser),
       int statusCode when statusCode.isBetween(400, 499) =>
-        _handle4xxClientError<T>(statusCode),
+        _handle4xxClientError<T>(statusCode, responseParser),
       int statusCode when statusCode.isBetween(500, 599) =>
-        _handle5xxServerError<T>(statusCode),
+        _handle5xxServerError<T>(statusCode, responseParser),
       _ => FailureState(
-          DataHttpException<T>(HttpException.unknown, StackTrace.current),
+          DataHttpException<T>(
+            HttpException.unknown,
+            responseParser.exception,
+            StackTrace.current,
+          ),
         ),
     };
   }
@@ -81,48 +92,85 @@ class DioExceptionHandler extends ExceptionHandler {
     }
   }
 
-  static FailureState<T> _handle3xxRedirect<T>(int statusCode) {
+  static FailureState<T> _handle3xxRedirect<T>(
+    int statusCode,
+    ResponseParser responseParser,
+  ) {
     return switch (statusCode) {
       _ => FailureState(
           DataHttpException<T>(
             HttpException.unknownRedirect,
+            responseParser.exception,
             StackTrace.current,
           ),
         )
     };
   }
 
-  static FailureState<T> _handle4xxClientError<T>(int statusCode) {
+  static FailureState<T> _handle4xxClientError<T>(
+    int statusCode,
+    ResponseParser responseParser,
+  ) {
     return switch (statusCode) {
       401 => FailureState(
-          DataHttpException<T>(HttpException.unauthorized, StackTrace.current),
+          DataHttpException<T>(
+            HttpException.unauthorized,
+            responseParser.exception,
+            StackTrace.current,
+          ),
+        ),
+      404 => FailureState(
+          DataHttpException<T>(
+            HttpException.badResponse,
+            responseParser.exception,
+            StackTrace.current,
+          ),
         ),
       _ => FailureState(
-          DataHttpException<T>(HttpException.unknownClient, StackTrace.current),
+          DataHttpException<T>(
+            HttpException.unknownClient,
+            responseParser.exception,
+            StackTrace.current,
+          ),
         )
     };
   }
 
-  static FailureState<T> _handle5xxServerError<T>(int statusCode) {
+  static FailureState<T> _handle5xxServerError<T>(
+    int statusCode,
+    ResponseParser responseParser,
+  ) {
     return switch (statusCode) {
       500 => FailureState(
           DataHttpException<T>(
             HttpException.internalServerError,
+            responseParser.exception,
             StackTrace.current,
           ),
         ),
       _ => FailureState(
-          DataHttpException<T>(HttpException.unknownServer, StackTrace.current),
+          DataHttpException<T>(
+            HttpException.unknownServer,
+            responseParser.exception,
+            StackTrace.current,
+          ),
         )
     };
   }
 
   /// _handleDioException handles exceptions from the Dio library,
   /// particularly around connectivity.
-  static TaskResult<T> _handleDioException<T>(
+  static Future<TaskResult<T>> _handleDioException<T>(
     DioException e,
     StackTrace s,
-  ) {
+  ) async {
+    const String start =
+        'This exception was thrown because the response has a status code of ';
+    const String end =
+        'and RequestOptions.validateStatus was configured to throw for this status code.';
+    final int? statusCode =
+        int.tryParse(e.message.toString().split(start).last.split(end).first);
+
     return switch (e.type) {
       DioExceptionType.receiveTimeout ||
       DioExceptionType.connectionTimeout ||
@@ -130,8 +178,14 @@ class DioExceptionHandler extends ExceptionHandler {
         FailureState(
           DataNetworkException<T>(NetworkException.timeOutException, s),
         ),
-      _ => FailureState(
-          DataNetworkException<T>(NetworkException.unknown, s),
+      _ => await _handlestatusCode(
+          statusCode,
+          ResponseParser(
+            response: Response(requestOptions: RequestOptions()),
+            parserModel: (data) {},
+            exception: e,
+            stackTrace: s,
+          ),
         ),
     };
   }
