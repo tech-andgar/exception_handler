@@ -50,12 +50,12 @@ jobs:
         run: dart analyze --fatal-infos
         # if: always() && steps.install.outcome == 'success'
 
-      - id: install_very_good_cli
-        name: Install Very Good CLI
-        run: dart pub global activate very_good_cli
+      # - id: install_very_good_cli
+      #   name: Install Very Good CLI
+      #   run: dart pub global activate very_good_cli
 
       - name: Run tests with coverage
-        run: very_good test --coverage
+        run: flutter test --test-randomize-ordering-seed random --coverage
         # if: always() && steps.install.outcome == 'success'
 
       - name: Check Code Coverage
