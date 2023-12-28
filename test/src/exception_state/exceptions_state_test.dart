@@ -42,6 +42,7 @@ void main() {
       final DataHttpException<String> dataHttpException =
           DataHttpException<String>(
         HttpException.unauthorized,
+        null,
         StackTrace.current,
       );
       test('should assign the http exception correctly', () {

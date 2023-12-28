@@ -208,7 +208,7 @@ void main() {
           if (exception is DataHttpException) {
             expect(
               exception.httpException,
-              equals(HttpException.unknownClient),
+              equals(HttpException.badResponse),
             );
           }
         },
@@ -369,16 +369,16 @@ void main() {
       result.when(
         success: (_) => fail('Expected failure but got success'),
         failure: (exception) {
-          expect(exception, isA<DataNetworkException>());
-          if (exception is DataNetworkException) {
+          expect(exception, isA<DataHttpException>());
+          if (exception is DataHttpException) {
             expect(
-              exception.networkException,
-              equals(NetworkException.unknown),
+              exception.httpException,
+              equals(HttpException.unknown),
             );
           }
         },
       );
-      expect((result as FailureState).exception, isA<DataNetworkException>());
+      expect((result as FailureState).exception, isA<DataHttpException>());
     });
 
     test('handles general exception on API call', () async {
