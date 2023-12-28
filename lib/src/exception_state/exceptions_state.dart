@@ -13,6 +13,7 @@ enum NetworkException {
 
 enum HttpException {
   unauthorized,
+  badResponse,
   internalServerError,
   unknown,
   unknownRedirect,
@@ -45,7 +46,7 @@ class DataClientException<T> extends ExceptionState<T> {
   DataClientException(Exception exception, StackTrace stackTrace)
       : super(clientException: exception, stackTrace: stackTrace) {
     log(
-      'DataClientException: client exception captured',
+      'Client exception captured:',
       error: exception,
       stackTrace: stackTrace,
       name: 'DataClientException',
@@ -62,7 +63,7 @@ class DataParseException<T> extends ExceptionState<T> {
   DataParseException(Exception exception, StackTrace stackTrace)
       : super(parseException: exception, stackTrace: stackTrace) {
     log(
-      'DataParseException: Unable to parse the json',
+      'Unable to parse the json:',
       error: exception,
       stackTrace: stackTrace,
       name: 'DataParseException',
@@ -75,10 +76,13 @@ class DataParseException<T> extends ExceptionState<T> {
 
 /// DataHttpException is used for handling HTTP-related exceptions.
 class DataHttpException<T> extends ExceptionState<T> {
-  DataHttpException(HttpException exception, StackTrace stackTrace)
-      : super(httpException: exception, stackTrace: stackTrace) {
+  DataHttpException(
+    HttpException httpException,
+    Exception? exception,
+    StackTrace stackTrace,
+  ) : super(httpException: httpException, stackTrace: stackTrace) {
     log(
-      'DataHttpException: a Http exception captured',
+      'A $httpException captured:',
       error: exception,
       stackTrace: stackTrace,
       name: 'DataHttpException',
@@ -95,7 +99,7 @@ class DataNetworkException<T> extends ExceptionState<T> {
   DataNetworkException(NetworkException exception, StackTrace stackTrace)
       : super(networkException: exception, stackTrace: stackTrace) {
     log(
-      'DataNetworkException: network exception captured',
+      'Network exception captured:',
       error: exception,
       stackTrace: stackTrace,
       name: 'DataNetworkException',
