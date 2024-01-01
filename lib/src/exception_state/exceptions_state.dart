@@ -12,13 +12,81 @@ enum NetworkException {
 }
 
 enum HttpException {
-  unauthorized,
-  badResponse,
-  internalServerError,
-  unknown,
+  // 1xx - Informative Responses
+  continue_,
+  switchingProtocols,
+  processing,
+  earlyHints,
+  // 2xx - Successful Responses
+  oK,
+  created,
+  accepted,
+  nonAuthoritativeInformation,
+  noContent,
+  resetContent,
+  partialContent,
+  multiStatus,
+  alreadyReported,
+  iMUsed,
+  // 3xx - Redirections
+  movedPermanently,
+  found,
+  notModified,
+  useProxy,
+  switchProxy,
+  temporaryRedirect,
   unknownRedirect,
+  // 4xx - Client Errors
+  badRequest,
+  unauthorized,
+  forbidden,
+  notFound,
+  methodNotAllowed,
+  notAcceptable,
+  proxyAuthenticationRequired,
+  requestTimeout,
+  conflict,
+  gone,
+  lengthRequired,
+  preconditionFailed,
+  payloadTooLarge,
+  uRITooLong,
+  unsupportedMediaType,
+  rangeNotSatisfiable,
+  expectationFailed,
+  imATeapot,
+  misdirectedRequest,
+  unprocessableEntity,
+  locked,
+  failedDependency,
+  upgradeRequired,
+  preconditionRequired,
+  tooManyRequests,
+  requestHeaderFieldsTooLarge,
+  unavailableForLegalReasons,
   unknownClient,
+  // 5xx - Server Errors
+  internalServerError,
+  notImplemented,
+  serviceUnavailable,
+  gatewayTimeout,
+  badGateway,
+  hTTPVersionNotSupported,
+  variantAlsoNegotiates,
+  insufficientStorage,
+  loopDetected,
+  notExtended,
+  networkAuthenticationRequired,
+  bandwidthLimitExceeded,
+  unknownError,
+  webServerIsDown,
+  connectionTimedOut,
+  originIsUnreachable,
+  aTimeoutOccurred,
+  sSLHandshakeFailed,
+  invalidSSLCertificate,
   unknownServer,
+  unknown,
 }
 
 /// ExceptionState class represents a generic state for handling various
@@ -114,3 +182,9 @@ class DataNetworkException<T> extends ExceptionState<T> {
   @override
   Map<String, Object?> get namedProps => {'networkException': networkException};
 }
+
+class ServerException implements Exception {}
+
+class CacheException implements Exception {}
+
+class InvalidInputException implements Exception {}
