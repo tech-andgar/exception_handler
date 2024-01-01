@@ -8,9 +8,9 @@ import 'package:flutter/foundation.dart';
 import '../exception_state/exception_state.dart';
 import '../task_result/task_result.dart';
 import '../utils/utils.dart';
-import 'exception_handler.dart';
+import 'exception_handler_client.dart';
 
-class DioExceptionHandler extends ExceptionHandler {
+class DioExceptionHandler extends ClientExceptionHandler {
   static Connectivity connectivity = Connectivity();
 
   /// callApi is a generic method to handle API calls and return a tuple of
