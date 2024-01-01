@@ -76,21 +76,26 @@ class DataParseException<T> extends ExceptionState<T> {
 
 /// DataHttpException is used for handling HTTP-related exceptions.
 class DataHttpException<T> extends ExceptionState<T> {
-  DataHttpException(
-    HttpException httpException,
+  DataHttpException({
+    required HttpException httpException,
+    required StackTrace stackTrace,
     Exception? exception,
-    StackTrace stackTrace,
-  ) : super(httpException: httpException, stackTrace: stackTrace) {
+    this.statusCode,
+  }) : super(httpException: httpException, stackTrace: stackTrace) {
     log(
-      'A $httpException captured:',
+      'A $httpException${statusCode != null ? ' $statusCode' : null} captured:',
       error: exception,
       stackTrace: stackTrace,
       name: 'DataHttpException',
     );
   }
+  final int? statusCode;
 
   @override
-  Map<String, Object?> get namedProps => {'httpException': httpException};
+  Map<String, Object?> get namedProps => {
+        'httpException': httpException,
+        'statusCode': statusCode,
+      };
 }
 
 /// DataNetworkException is for handling network-related exceptions

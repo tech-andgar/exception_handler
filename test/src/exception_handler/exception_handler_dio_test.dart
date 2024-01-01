@@ -239,7 +239,7 @@ void main() {
           if (exception is DataHttpException) {
             expect(
               exception.httpException,
-              equals(HttpException.badResponse),
+              equals(HttpException.notFound),
             );
           }
         },

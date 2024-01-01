@@ -41,9 +41,10 @@ void main() {
     group('DataHttpException', () {
       final DataHttpException<String> dataHttpException =
           DataHttpException<String>(
-        HttpException.unauthorized,
-        null,
-        StackTrace.current,
+        exception: null,
+        httpException: HttpException.unauthorized,
+        stackTrace: StackTrace.current,
+        statusCode: 401,
       );
       test('should assign the http exception correctly', () {
         expect(
@@ -54,7 +55,7 @@ void main() {
       test('should correct toString', () {
         expect(
           dataHttpException.toString(),
-          'DataHttpException<String>(httpException: HttpException.unauthorized)',
+          'DataHttpException<String>(httpException: HttpException.unauthorized, statusCode: 401)',
         );
       });
     });
