@@ -4,9 +4,9 @@ typedef ApiCall<R, T> = Future<R> Function();
 typedef ParseFunction<T> = T Function(Object?);
 
 class ApiHandler<R, T> {
-  ApiHandler({required this.call, required this.parserModel});
+  ApiHandler({required this.apiCall, required this.parserModel});
 
-  final ApiCall<R, T> call;
+  final ApiCall<R, T> apiCall;
   final ParseFunction<T> parserModel;
 }
 

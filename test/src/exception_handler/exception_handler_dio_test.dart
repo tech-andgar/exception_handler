@@ -30,7 +30,7 @@ void main() {
       TaskResult<String> result =
           await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) => (data as Map)['key'],
         ),
       );
@@ -61,7 +61,7 @@ void main() {
 
       var result = await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) => data as String,
         ),
       );
@@ -87,7 +87,7 @@ void main() {
 
     test('API call with no internet connection returns network exception',
         () async {
-      when(() => mockApiHandler.call())
+      when(() => mockApiHandler.apiCall())
           .thenThrow(DioException(requestOptions: RequestOptions()));
 
       when(() => mockConnectivity.checkConnectivity())
@@ -106,7 +106,7 @@ void main() {
 
       var result = await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) => data as String,
         ),
       );
@@ -138,7 +138,7 @@ void main() {
       TaskResult<String> result =
           await DioExceptionHandler().callApi<Response, String>(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) =>
               int.parse(data as String).toString(), // Intentional parse error
         ),
@@ -163,7 +163,7 @@ void main() {
         () async {
       TaskResult result = await DioExceptionHandler().callApi(
         ApiHandler(
-          call: () async {
+          apiCall: () async {
             return Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 300,
@@ -197,7 +197,7 @@ void main() {
       );
       TaskResult result = await DioExceptionHandler().callApi(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
         ),
       );
@@ -226,7 +226,7 @@ void main() {
       );
       TaskResult result = await DioExceptionHandler().callApi(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
         ),
       );
@@ -256,7 +256,7 @@ void main() {
       );
       TaskResult result = await DioExceptionHandler().callApi(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
         ),
       );
@@ -284,7 +284,7 @@ void main() {
       );
       TaskResult result = await DioExceptionHandler().callApi(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
         ),
       );
@@ -313,7 +313,7 @@ void main() {
       );
       TaskResult result = await DioExceptionHandler().callApi(
         ApiHandler(
-          call: () => mockDio.get('test'),
+          apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
         ),
       );
@@ -334,7 +334,7 @@ void main() {
     });
 
     test('handles DioException on API call', () async {
-      when(() => mockApiHandler.call()).thenThrow(
+      when(() => mockApiHandler.apiCall()).thenThrow(
         MockDioException(type: DioExceptionType.connectionTimeout),
       );
 
@@ -360,7 +360,7 @@ void main() {
       expect((result as FailureState).exception, isA<DataNetworkException>());
     });
     test('handles DioExceptionType.sendTimeout on API call', () async {
-      when(() => mockApiHandler.call()).thenThrow(
+      when(() => mockApiHandler.apiCall()).thenThrow(
         MockDioException(type: DioExceptionType.sendTimeout),
       );
 
@@ -386,7 +386,7 @@ void main() {
       expect((result as FailureState).exception, isA<DataNetworkException>());
     });
     test('handles DioExceptionType.unknown on API call', () async {
-      when(() => mockApiHandler.call()).thenThrow(
+      when(() => mockApiHandler.apiCall()).thenThrow(
         MockDioException(type: DioExceptionType.unknown),
       );
 
@@ -414,7 +414,7 @@ void main() {
 
     test('handles general exception on API call', () async {
       final exception = Exception('General error');
-      when(() => mockApiHandler.call()).thenThrow(exception);
+      when(() => mockApiHandler.apiCall()).thenThrow(exception);
       final result =
           await DioExceptionHandler().callApi<Response, String>(mockApiHandler);
 

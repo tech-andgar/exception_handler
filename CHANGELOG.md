@@ -41,3 +41,7 @@
 ## 1.0.10
 
 * fix: updated typo
+
+## 1.0.11
+
+* refactor: updated name property of ApiHandler

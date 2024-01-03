@@ -9,7 +9,7 @@ class UserService {
     final TaskResult<UserModel> result =
         await DioExceptionHandler().callApi<Response, UserModel>(
       ApiHandler(
-        call: () {
+        apiCall: () {
           return dio.get('https://jsonplaceholder.typicode.com/users/$id');
         },
         parserModel: (Object? data) =>

@@ -13,11 +13,11 @@ void main() {
       String mockParserModel(dynamic data) => 'Parsed $data';
 
       final handler = ApiHandler<Response, String>(
-        call: mockApiCall,
+        apiCall: mockApiCall,
         parserModel: mockParserModel,
       );
 
-      expect(await handler.call(), isA<Response<dynamic>>());
+      expect(await handler.apiCall(), isA<Response<dynamic>>());
       expect(handler.parserModel('data'), equals('Parsed data'));
     });
   });

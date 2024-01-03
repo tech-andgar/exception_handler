@@ -21,7 +21,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   /// final TaskResult<UserModel> result =
   ///        await DioExceptionHandler().callApi<Response, UserModel>(
   ///      ApiHandler(
-  ///        call: () {
+  ///        apiCall: () {
   ///          return dio.get('https://jsonplaceholder.typicode.com/users/$id');
   ///        },
   ///        parserModel: (Object? data) =>
@@ -34,7 +34,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
     ApiHandler<Response, T> apiHandler,
   ) async {
     try {
-      final Response response = await apiHandler.call();
+      final Response response = await apiHandler.apiCall();
 
       return _handleHttpResponse<T>(
         ResponseParser(response: response, parserModel: apiHandler.parserModel),

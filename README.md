@@ -1,7 +1,7 @@
 # exception_handler
 
-| Local | Repo Git | Coveralls |
-| ----- | -------- | --------- |
+| Local                             | Repo Git                                                                                                            | Coveralls                                                                                                                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Coverage](./coverage_badge.svg) | ![Coverage](https://raw.githubusercontent.com/andgar2010/exception_handler/master/coverage_badge.svg?sanitize=true) | [![Coverage Status](https://coveralls.io/repos/github/andgar2010/exception_handler/badge.svg?branch=main)](https://coveralls.io/github/andgar2010/exception_handler?branch=main) |
 
 This Dart package provides a robust framework for handling API calls and processing exceptions in Flutter applications.
@@ -45,7 +45,7 @@ import 'package:exception_handler/exception_handler.dart';
 // Example of making an API call
 Future<void> fetchUserData() async {
     final ApiHandler<Response, UserModel> apiHandler = ApiHandler(
-        call: () => dio.get('https://example.com/api/user'),
+        apiCall: () => dio.get('https://example.com/api/user'),
         parserModel: (data) => UserModel.fromJson(data),
     );
 
@@ -70,7 +70,7 @@ import 'package:exception_handler/exception_handler.dart';
 
 Future<void> fetchComplexData() async {
     final ApiHandler<Response, ComplexData> apiHandler = ApiHandler(
-        call: () => dio.get('https://example.com/api/complex'),
+        apiCall: () => dio.get('https://example.com/api/complex'),
         parserModel: customParser,
     );
 
