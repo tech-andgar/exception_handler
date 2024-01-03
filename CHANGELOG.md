@@ -37,3 +37,7 @@
 ## 1.0.9
 
 * fix: updated type I/O of function callApi
+
+## 1.0.10
+
+* fix: updated typo
