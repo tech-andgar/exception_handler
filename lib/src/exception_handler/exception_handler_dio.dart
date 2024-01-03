@@ -64,10 +64,10 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ) async {
     int? statusCode = responseParser.response.statusCode;
 
-    return await _handlestatusCode<T>(statusCode, responseParser);
+    return await _handleStatusCode<T>(statusCode, responseParser);
   }
 
-  static Future<TaskResult<T>> _handlestatusCode<T>(
+  static Future<TaskResult<T>> _handleStatusCode<T>(
     int? statusCode,
     ResponseParser responseParser,
   ) async {
@@ -201,7 +201,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
         FailureState(
           DataNetworkException<T>(NetworkException.timeOutException, s),
         ),
-      _ => await _handlestatusCode(
+      _ => await _handleStatusCode(
           statusCode,
           ResponseParser(
             response: Response(requestOptions: RequestOptions()),
