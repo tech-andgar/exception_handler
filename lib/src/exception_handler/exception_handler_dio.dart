@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../exception_state/exception_state.dart';
-import '../task_result/task_result.dart';
+import '../result_state/result_state.dart';
 import '../utils/utils.dart';
 import 'exception_handler_client.dart';
 
@@ -18,7 +18,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ///
   /// Eg:
   /// ```dart
-  /// final TaskResult<UserModel> result =
+  /// final ResultState<UserModel> result =
   ///        await DioExceptionHandler().callApi<Response, UserModel>(
   ///      ApiHandler(
   ///        apiCall: () {
@@ -30,7 +30,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ///    );
   /// ```
   @override
-  Future<TaskResult<T>> callApi<Response, T>(
+  Future<ResultState<T>> callApi<Response, T>(
     ApiHandler<Response, T> apiHandler,
   ) async {
     try {
@@ -59,7 +59,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _handleHttpResponse processes the HTTP response and handles different
   /// status codes.
-  static Future<TaskResult<T>> _handleHttpResponse<T>(
+  static Future<ResultState<T>> _handleHttpResponse<T>(
     ResponseParser responseParser,
   ) async {
     int? statusCode = responseParser.response.statusCode;
@@ -67,7 +67,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
     return await _handleStatusCode<T>(statusCode, responseParser);
   }
 
-  static Future<TaskResult<T>> _handleStatusCode<T>(
+  static Future<ResultState<T>> _handleStatusCode<T>(
     int? statusCode,
     ResponseParser responseParser,
   ) async {
@@ -93,7 +93,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _parseResponse tries to parse the response and handle any parsing
   /// exceptions.
-  static Future<TaskResult<T>> _handle2xxparseResponse<T>(
+  static Future<ResultState<T>> _handle2xxparseResponse<T>(
     ResponseParser responseParser,
   ) async {
     try {
@@ -183,7 +183,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _handleDioException handles exceptions from the Dio library,
   /// particularly around connectivity.
-  static Future<TaskResult<T>> _handleDioException<T>(
+  static Future<ResultState<T>> _handleDioException<T>(
     DioException e,
     StackTrace s,
   ) async {

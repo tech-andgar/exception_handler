@@ -72,11 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
               FutureBuilder(
                 future: UserService().getDataUser(_counter),
                 builder:
-                    (context, AsyncSnapshot<TaskResult<UserModel>> snapshot) {
+                    (context, AsyncSnapshot<ResultState<UserModel>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
-                  final TaskResult<UserModel> result = snapshot.requireData;
+                  final ResultState<UserModel> result = snapshot.requireData;
 
                   return switch (result) {
                     SuccessState<UserModel> success =>

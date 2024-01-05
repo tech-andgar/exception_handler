@@ -49,3 +49,7 @@
 ## 1.1.0
 
 * feat: replace "when()/abstract" by "switch/sealed class"
+
+## 1.1.1
+
+* refactor: updated class name for consistency and cohesion in the sealed class and subclass names

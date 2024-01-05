@@ -6,5 +6,5 @@ export 'typedef.dart';
 abstract class ClientExceptionHandler {
   /// callApi is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
-  Future<TaskResult<T>> callApi<R, T>(ApiHandler<R, T> apiHandler);
+  Future<ResultState<T>> callApi<R, T>(ApiHandler<R, T> apiHandler);
 }

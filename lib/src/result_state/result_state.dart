@@ -1,13 +1,13 @@
 import '../exception_state/exceptions_state.dart';
 import '../utils/utils.dart';
 
-/// An sealed base class to represent the different states of task result.
-sealed class TaskResult<T> extends CustomEquatable {
-  const TaskResult();
+/// An sealed base class to represent the different states of result.
+sealed class ResultState<T> extends CustomEquatable {
+  const ResultState();
 }
 
 /// Success status with a generic value T.
-class SuccessState<T> extends TaskResult<T> {
+class SuccessState<T> extends ResultState<T> {
   const SuccessState(this.data);
 
   final T data;
@@ -17,7 +17,7 @@ class SuccessState<T> extends TaskResult<T> {
 }
 
 /// Error status with a specific type of exception.
-class FailureState<T> extends TaskResult<T> {
+class FailureState<T> extends ResultState<T> {
   const FailureState(this.exception);
 
   final ExceptionState<T> exception;

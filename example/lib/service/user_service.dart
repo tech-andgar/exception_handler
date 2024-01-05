@@ -3,10 +3,10 @@ import 'package:example/model/user_model.dart';
 import 'package:exception_handler/exception_handler.dart';
 
 class UserService {
-  Future<TaskResult<UserModel>> getDataUser(int id) async {
+  Future<ResultState<UserModel>> getDataUser(int id) async {
     final Dio dio = Dio();
 
-    final TaskResult<UserModel> result =
+    final ResultState<UserModel> result =
         await DioExceptionHandler().callApi<Response, UserModel>(
       ApiHandler(
         apiCall: () {
