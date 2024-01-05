@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -100,10 +99,9 @@ class DioExceptionHandler extends ClientExceptionHandler {
     ResponseParser responseParser,
   ) async {
     try {
-      T dataModelParsed = await Isolate.run(
-        () => responseParser.parserModel(responseParser.response.data),
-        debugName:
-            kReleaseMode ? 'compute' : responseParser.parserModel.toString(),
+      T dataModelParsed = await compute(
+        responseParser.parserModel as ParseFunction<T>,
+        responseParser.response.data,
       );
 
       return SuccessState(dataModelParsed);

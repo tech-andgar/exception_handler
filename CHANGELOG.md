@@ -61,3 +61,7 @@
 ## 1.1.3
 
 * doc: updated Readme
+
+## 1.1.4
+
+* feat: add support web
