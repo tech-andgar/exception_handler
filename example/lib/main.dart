@@ -78,11 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                   final TaskResult<UserModel> result = snapshot.requireData;
 
-                  return result.when(
-                    success: (UserModel user) => UiUserWidget(user),
-                    failure: (ExceptionState<UserModel> exception) =>
-                        UiExceptionWidget(exception),
-                  );
+                  return switch (result) {
+                    SuccessState<UserModel> success =>
+                      UiUserWidget(success.data),
+                    FailureState<UserModel> failure =>
+                      UiExceptionWidget(failure.exception),
+                  };
                 },
               ),
             ],
