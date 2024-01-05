@@ -53,3 +53,7 @@
 ## 1.1.1
 
 * refactor: updated class name for consistency and cohesion in the sealed class and subclass names
+
+## 1.1.2
+
+* refactor: updated class name for consistency and cohesion in the sealed class and subclass names

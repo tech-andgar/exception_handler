@@ -2,10 +2,10 @@ import 'package:exception_handler/exception_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('exceptions state', () {
-    group('DataClientException', () {
+  group('Exceptions State', () {
+    group('DataClientExceptionState', () {
       final testException = Exception('Test exception');
-      final dataClientException = DataClientException<String>(
+      final dataClientException = DataClientExceptionState<String>(
         testException,
         StackTrace.current,
       );
@@ -20,27 +20,27 @@ void main() {
       test('should correct toString', () {
         expect(
           dataClientException.toString(),
-          'DataClientException<String>(clientException: Exception: Test exception)',
+          'DataClientExceptionState<String>(clientException: Exception: Test exception)',
         );
       });
     });
-    group('DataParseException', () {
+    group('DataParseExceptionState', () {
       final Exception exception = Exception('Parse error');
-      final DataParseException<String> dataParseException =
-          DataParseException<String>(exception, StackTrace.current);
+      final DataParseExceptionState<String> dataParseException =
+          DataParseExceptionState<String>(exception, StackTrace.current);
       test('should assign the parse exception correctly', () {
         expect(dataParseException.parseException, equals(exception));
       });
       test('should correct toString', () {
         expect(
           dataParseException.toString(),
-          'DataParseException<String>(parseException: Exception: Parse error)',
+          'DataParseExceptionState<String>(parseException: Exception: Parse error)',
         );
       });
     });
-    group('DataHttpException', () {
-      final DataHttpException<String> dataHttpException =
-          DataHttpException<String>(
+    group('DataHttpExceptionState', () {
+      final DataHttpExceptionState<String> dataHttpException =
+          DataHttpExceptionState<String>(
         exception: null,
         httpException: HttpException.unauthorized,
         stackTrace: StackTrace.current,
@@ -55,13 +55,13 @@ void main() {
       test('should correct toString', () {
         expect(
           dataHttpException.toString(),
-          'DataHttpException<String>(httpException: HttpException.unauthorized, statusCode: 401)',
+          'DataHttpExceptionState<String>(httpException: HttpException.unauthorized, statusCode: 401)',
         );
       });
     });
-    group('DataNetworkException', () {
-      final DataNetworkException<String> dataNetworkException =
-          DataNetworkException<String>(
+    group('DataNetworkExceptionState', () {
+      final DataNetworkExceptionState<String> dataNetworkException =
+          DataNetworkExceptionState<String>(
         NetworkException.noInternetConnection,
         StackTrace.current,
       );
@@ -75,13 +75,13 @@ void main() {
       test('should correct toString', () {
         expect(
           dataNetworkException.toString(),
-          'DataNetworkException<String>(networkException: NetworkException.noInternetConnection)',
+          'DataNetworkExceptionState<String>(networkException: NetworkException.noInternetConnection)',
         );
       });
     });
-    group('DataCacheException', () {
-      final DataCacheException<String> dataCacheException =
-          DataCacheException<String>(
+    group('DataCacheExceptionState', () {
+      final DataCacheExceptionState<String> dataCacheException =
+          DataCacheExceptionState<String>(
         CacheException.unknown,
         StackTrace.current,
       );
@@ -95,13 +95,13 @@ void main() {
       test('should correct toString', () {
         expect(
           dataCacheException.toString(),
-          'DataCacheException<String>(cacheException: CacheException.unknown)',
+          'DataCacheExceptionState<String>(cacheException: CacheException.unknown)',
         );
       });
     });
-    group('DataInvalidInputException', () {
-      final DataInvalidInputException<String> dataInvalidInputException =
-          DataInvalidInputException<String>(
+    group('DataInvalidInputExceptionState', () {
+      final DataInvalidInputExceptionState<String> dataInvalidInputException =
+          DataInvalidInputExceptionState<String>(
         InvalidInputException.unknown,
         StackTrace.current,
       );
@@ -115,7 +115,7 @@ void main() {
       test('should correct toString', () {
         expect(
           dataInvalidInputException.toString(),
-          'DataInvalidInputException<String>(invalidInputException: InvalidInputException.unknown)',
+          'DataInvalidInputExceptionState<String>(invalidInputException: InvalidInputException.unknown)',
         );
       });
     });

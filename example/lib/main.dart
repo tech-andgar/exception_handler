@@ -119,12 +119,12 @@ class UiExceptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String textException = switch (exception) {
-      DataClientException<UserModel>() => 'Error Client: $exception',
-      DataParseException<UserModel>() => 'Error Parse: $exception',
-      DataHttpException<UserModel>() => 'Error Http: $exception',
-      DataNetworkException<UserModel>() => 'Error Network: $exception',
-      DataCacheException<UserModel>() => 'Error Cache: $exception',
-      DataInvalidInputException<UserModel>() =>
+      DataClientExceptionState<UserModel>() => 'Error Client: $exception',
+      DataParseExceptionState<UserModel>() => 'Error Parse: $exception',
+      DataHttpExceptionState<UserModel>() => 'Error Http: $exception',
+      DataNetworkExceptionState<UserModel>() => 'Error Network: $exception',
+      DataCacheExceptionState<UserModel>() => 'Error Cache: $exception',
+      DataInvalidInputExceptionState<UserModel>() =>
         'Error Invalid Input: $exception',
     };
 

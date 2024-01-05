@@ -21,7 +21,7 @@ void main() {
   group('FailureState', () {
     final Exception exception = Exception('Test Exception');
     final FailureState<String> resultState = FailureState<String>(
-      DataClientException(exception, StackTrace.current),
+      DataClientExceptionState(exception, StackTrace.current),
     );
     test('should call failure callback with correct exception', () {
       final bool failureCalled = switch (resultState) {
@@ -35,7 +35,7 @@ void main() {
     test('should correct toString', () {
       expect(
         resultState.toString(),
-        'FailureState<String>(exception: DataClientException<String>(clientException: Exception: Test Exception))',
+        'FailureState<String>(exception: DataClientExceptionState<String>(clientException: Exception: Test Exception))',
       );
     });
   });

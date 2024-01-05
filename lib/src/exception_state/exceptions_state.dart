@@ -97,8 +97,8 @@ enum HttpException {
   unknown,
 }
 
-/// [ExceptionState] sealed class represents a generic state for handling various
-/// exceptions.
+/// [ExceptionState] sealed class represents a generic state for handling
+/// various exceptions.
 ///
 /// It includes optional fields for different exception types.
 sealed class ExceptionState<T> extends CustomEquatable {
@@ -121,19 +121,20 @@ sealed class ExceptionState<T> extends CustomEquatable {
   });
 }
 
-/// [DataClientException] captures exceptions related to client-side issues.
+/// [DataClientExceptionState] captures exceptions related to client-side
+/// issues.
 ///
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataClientException<T> extends ExceptionState<T> {
-  DataClientException(Exception exception, StackTrace stackTrace)
+class DataClientExceptionState<T> extends ExceptionState<T> {
+  DataClientExceptionState(Exception exception, StackTrace stackTrace)
       : super(clientException: exception, stackTrace: stackTrace) {
     log(
       'Client exception captured:',
       error: exception,
       stackTrace: stackTrace,
-      name: 'DataClientException',
+      name: 'DataClientExceptionState',
     );
   }
 
@@ -141,20 +142,20 @@ class DataClientException<T> extends ExceptionState<T> {
   Map<String, Object?> get namedProps => {'clientException': clientException};
 }
 
-/// [DataParseException] handles exceptions related to parsing issues
+/// [DataParseExceptionState] handles exceptions related to parsing issues
 /// (e.g., JSON parsing).
 ///
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataParseException<T> extends ExceptionState<T> {
-  DataParseException(Exception exception, StackTrace stackTrace)
+class DataParseExceptionState<T> extends ExceptionState<T> {
+  DataParseExceptionState(Exception exception, StackTrace stackTrace)
       : super(parseException: exception, stackTrace: stackTrace) {
     log(
       'Unable to parse the json:',
       error: exception,
       stackTrace: stackTrace,
-      name: 'DataParseException',
+      name: 'DataParseExceptionState',
     );
   }
 
@@ -162,13 +163,13 @@ class DataParseException<T> extends ExceptionState<T> {
   Map<String, Object?> get namedProps => {'parseException': parseException};
 }
 
-/// [DataHttpException] is used for handling HTTP-related exceptions.
+/// [DataHttpExceptionState] is used for handling HTTP-related exceptions.
 ///
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataHttpException<T> extends ExceptionState<T> {
-  DataHttpException({
+class DataHttpExceptionState<T> extends ExceptionState<T> {
+  DataHttpExceptionState({
     required HttpException httpException,
     required StackTrace stackTrace,
     Exception? exception,
@@ -178,7 +179,7 @@ class DataHttpException<T> extends ExceptionState<T> {
       'A $httpException${statusCode != null ? ' $statusCode' : null} captured:',
       error: exception,
       stackTrace: stackTrace,
-      name: 'DataHttpException',
+      name: 'DataHttpExceptionState',
     );
   }
 
@@ -191,20 +192,20 @@ class DataHttpException<T> extends ExceptionState<T> {
       };
 }
 
-/// [DataNetworkException] is for handling network-related exceptions
+/// [DataNetworkExceptionState] is for handling network-related exceptions
 /// (e.g., no internet connection).
 ///
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataNetworkException<T> extends ExceptionState<T> {
-  DataNetworkException(NetworkException exception, StackTrace stackTrace)
+class DataNetworkExceptionState<T> extends ExceptionState<T> {
+  DataNetworkExceptionState(NetworkException exception, StackTrace stackTrace)
       : super(networkException: exception, stackTrace: stackTrace) {
     log(
       'Network exception captured:',
       error: exception,
       stackTrace: stackTrace,
-      name: 'DataNetworkException',
+      name: 'DataNetworkExceptionState',
     );
   }
 
@@ -212,19 +213,20 @@ class DataNetworkException<T> extends ExceptionState<T> {
   Map<String, Object?> get namedProps => {'networkException': networkException};
 }
 
-/// [DataCacheException] is used for handling exceptions related to data caching.
+/// [DataCacheExceptionState] is used for handling exceptions related to data
+/// caching.
 ///
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataCacheException<T> extends ExceptionState<T> {
-  DataCacheException(CacheException exception, StackTrace stackTrace)
+class DataCacheExceptionState<T> extends ExceptionState<T> {
+  DataCacheExceptionState(CacheException exception, StackTrace stackTrace)
       : super(cacheException: exception, stackTrace: stackTrace) {
     log(
       'Cache exception captured:',
       error: exception,
       stackTrace: stackTrace,
-      name: 'DataCacheException',
+      name: 'DataCacheExceptionState',
     );
   }
 
@@ -232,14 +234,14 @@ class DataCacheException<T> extends ExceptionState<T> {
   Map<String, Object?> get namedProps => {'cacheException': cacheException};
 }
 
-/// [DataInvalidInputException] is used for handling exceptions related to
+/// [DataInvalidInputExceptionState] is used for handling exceptions related to
 /// invalid input data.
 ///
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataInvalidInputException<T> extends ExceptionState<T> {
-  DataInvalidInputException(
+class DataInvalidInputExceptionState<T> extends ExceptionState<T> {
+  DataInvalidInputExceptionState(
     InvalidInputException exception,
     StackTrace stackTrace,
   ) : super(invalidInputException: exception, stackTrace: stackTrace) {
@@ -247,7 +249,7 @@ class DataInvalidInputException<T> extends ExceptionState<T> {
       'Invalid Input exception captured:',
       error: exception,
       stackTrace: stackTrace,
-      name: 'DataInvalidInputException',
+      name: 'DataInvalidInputExceptionState',
     );
   }
 

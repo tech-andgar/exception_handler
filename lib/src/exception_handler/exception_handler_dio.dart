@@ -42,12 +42,15 @@ class DioExceptionHandler extends ClientExceptionHandler {
     } on DioException catch (e, s) {
       if (!await _isConnected()) {
         return FailureState(
-          DataNetworkException<T>(NetworkException.noInternetConnection, s),
+          DataNetworkExceptionState<T>(
+            NetworkException.noInternetConnection,
+            s,
+          ),
         );
       }
       return _handleDioException<T>(e, s);
     } on Exception catch (e, s) {
-      return FailureState(DataClientException<T>(e, s));
+      return FailureState(DataClientExceptionState<T>(e, s));
     }
   }
 
@@ -81,7 +84,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
       int statusCode when statusCode.isBetween(500, 599) =>
         _handle5xxServerError<T>(statusCode, responseParser),
       _ => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.unknown,
             stackTrace: StackTrace.current,
@@ -105,7 +108,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
       return SuccessState(dataModelParsed);
     } catch (e, s) {
-      return FailureState(DataParseException<T>(Exception(e), s));
+      return FailureState(DataParseExceptionState<T>(Exception(e), s));
     }
   }
 
@@ -115,7 +118,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ) {
     return switch (statusCode) {
       _ => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.unknownRedirect,
             stackTrace: StackTrace.current,
@@ -131,7 +134,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ) {
     return switch (statusCode) {
       401 => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.unauthorized,
             stackTrace: StackTrace.current,
@@ -139,7 +142,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
           ),
         ),
       404 => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.notFound,
             stackTrace: StackTrace.current,
@@ -147,7 +150,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
           ),
         ),
       _ => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.unknownClient,
             stackTrace: StackTrace.current,
@@ -163,7 +166,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ) {
     return switch (statusCode) {
       500 => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.internalServerError,
             stackTrace: StackTrace.current,
@@ -171,7 +174,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
           ),
         ),
       _ => FailureState(
-          DataHttpException<T>(
+          DataHttpExceptionState<T>(
             exception: responseParser.exception,
             httpException: HttpException.unknownServer,
             stackTrace: StackTrace.current,
@@ -199,7 +202,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.sendTimeout =>
         FailureState(
-          DataNetworkException<T>(NetworkException.timeOutException, s),
+          DataNetworkExceptionState<T>(NetworkException.timeOutException, s),
         ),
       _ => await _handleStatusCode(
           statusCode,
