@@ -130,16 +130,16 @@ void advancedExceptionHandling() async {
 
 void _handleExceptions(ExceptionState exception) {
   switch (exception) {
-    case DataClientException():
+    case DataClientExceptionState():
       // Handle client-side exceptions
       handleClientException(exception);
-    case DataParseException():
+    case DataParseExceptionState():
       // Handle parsing-related exceptions
       handleParseException(exception);
-    case DataHttpException():
+    case DataHttpExceptionState():
       // Handle HTTP-related exceptions
       handleHttpException(exception);
-    case DataNetworkException():
+    case DataNetworkExceptionState():
       // Handle network-related exceptions
       handleNetworkException(exception);
     case _:
@@ -148,22 +148,22 @@ void _handleExceptions(ExceptionState exception) {
   }
 }
 
-void handleNetworkException(DataNetworkException exception) {
+void handleNetworkException(DataNetworkExceptionState exception) {
     print('Network Exception: ${exception.networkException}');
     // Additional logic for handling network exceptions
 }
 
-void handleHttpException(DataHttpException exception) {
+void handleHttpException(DataHttpExceptionState exception) {
     print('HTTP Exception: ${exception.httpException}');
     // Additional logic for handling HTTP exceptions
 }
 
-void handleParseException(DataParseException exception) {
+void handleParseException(DataParseExceptionState exception) {
     print('Parse Exception: ${exception.parseException}');
     // Additional logic for handling parsing exceptions
 }
 
-void handleClientException(DataClientException exception) {
+void handleClientException(DataClientExceptionState exception) {
     print('Client Exception: ${exception.clientException}');
     // Additional logic for handling client-side exceptions
 }
