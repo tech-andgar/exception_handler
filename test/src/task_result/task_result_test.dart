@@ -6,10 +6,10 @@ void main() {
     const data = 'Test Data';
     const resultState = SuccessState<String>(data);
     test('should call success callback with correct data', () {
-      final result = resultState.when(
-        success: (resultData) => resultData,
-        failure: (_) => 'Failure',
-      );
+      final result = switch (resultState) {
+        FailureState<String>() => 'Failure',
+        SuccessState<String>(:String data) => data,
+      };
 
       expect(result, equals(data));
     });
@@ -24,15 +24,13 @@ void main() {
       DataClientException(exception, StackTrace.current),
     );
     test('should call failure callback with correct exception', () {
-      final failureCalled = resultState.when(
-        success: (_) => false,
-        failure: (ex) {
-          expect(ex.clientException, equals(exception));
-          return true;
-        },
-      );
+      final bool failureCalled = switch (resultState) {
+        SuccessState() => false,
+        FailureState() => true,
+      };
 
       expect(failureCalled, isTrue);
+      expect(resultState.exception.clientException, equals(exception));
     });
     test('should correct toString', () {
       expect(

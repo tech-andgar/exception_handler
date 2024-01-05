@@ -79,5 +79,45 @@ void main() {
         );
       });
     });
+    group('DataCacheException', () {
+      final DataCacheException<String> dataCacheException =
+          DataCacheException<String>(
+        CacheException.unknown,
+        StackTrace.current,
+      );
+      test('should assign the cache exception correctly', () {
+        expect(
+          dataCacheException.cacheException,
+          equals(CacheException.unknown),
+        );
+      });
+
+      test('should correct toString', () {
+        expect(
+          dataCacheException.toString(),
+          'DataCacheException<String>(cacheException: CacheException.unknown)',
+        );
+      });
+    });
+    group('DataInvalidInputException', () {
+      final DataInvalidInputException<String> dataInvalidInputException =
+          DataInvalidInputException<String>(
+        InvalidInputException.unknown,
+        StackTrace.current,
+      );
+      test('should assign the cache exception correctly', () {
+        expect(
+          dataInvalidInputException.invalidInputException,
+          equals(InvalidInputException.unknown),
+        );
+      });
+
+      test('should correct toString', () {
+        expect(
+          dataInvalidInputException.toString(),
+          'DataInvalidInputException<String>(invalidInputException: InvalidInputException.unknown)',
+        );
+      });
+    });
   });
 }

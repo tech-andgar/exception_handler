@@ -51,10 +51,12 @@ Future<void> fetchUserData() async {
 
     TaskResult<UserModel> result = await DioExceptionHandler().callApi(apiHandler);
 
-    result.when(
-        success: (UserModel data) => print('UserModel data: $data'),
-        failure: (exception) => print('Error: ${exception.toString()}'),
-    );
+    switch (result) {
+      case SuccessState<UserModel>(:UserModel data):
+        print('UserModel data: $data');
+      case FailureState<UserModel>(:ExceptionState exception):
+        print('Error: ${exception.toString()}');
+    }
 }
 ```
 
@@ -76,10 +78,12 @@ Future<void> fetchComplexData() async {
 
     TaskResult<ComplexData> result = await DioExceptionHandler().callApi(apiHandler);
 
-    result.when(
-        success: (ComplexData data) => print('Complex Data: $data'),
-        failure: (exception) => print('Error: ${exception.toString()}'),
-    );
+    switch (result) {
+      case SuccessState<ComplexData>(:ComplexData data):
+        print('Complex Data: $data');
+      case FailureState<ComplexData>(:ExceptionState exception):
+        print('Error: ${exception.toString()}');
+    }
 }
 
 ComplexData customParser(dynamic responseData) {
@@ -96,13 +100,13 @@ Handling basic exceptions with logging information:
 void handleApiCall() async {
     TaskResult<UserModel> result = await DioExceptionHandler().callApi(apiHandler);
 
-    result.when(
-        success: (UserModel data) => print('User data retrieved successfully: $data'),
-        failure: (exception) {
-            print('Exception occurred: ${exception.toString()}');
-            // Additional logging or error handling
-        },
-    );
+    switch (result) {
+      case SuccessState<UserModel>(:UserModel data):
+        print('User data retrieved successfully: $data');
+      case FailureState<UserModel>(:ExceptionState exception):
+        print('Exception occurred: ${exception.toString()}');
+        // Additional logging or error handling
+    }
 }
 ```
 
@@ -114,27 +118,34 @@ Implementing detailed handling for each type of exception:
 void advancedExceptionHandling() async {
     TaskResult<UserModel> result = await DioExceptionHandler().callApi(apiHandler);
 
-    result.when(
-        success: (UserModel data) => print('Fetched data: $data'),
-        failure: (exception) {
-            if (exception is DataNetworkException) {
-                // Handle network-related exceptions
-                handleNetworkException(exception);
-            } else if (exception is DataHttpException) {
-                // Handle HTTP-related exceptions
-                handleHttpException(exception);
-            } else if (exception is DataParseException) {
-                // Handle parsing-related exceptions
-                handleParseException(exception);
-            } else if (exception is DataClientException) {
-                // Handle client-side exceptions
-                handleClientException(exception);
-            } else {
-                // Handle any other types of exceptions
-                handleUnknownException(exception);
-            }
-        },
-    );
+    switch (result) {
+      case SuccessState<UserModel>(:UserModel data):
+        print('Fetched data: $data');
+
+      case FailureState<UserModel>(:ExceptionState exception):
+        _handleExceptions(exception);
+    }
+
+}
+
+void _handleExceptions(ExceptionState exception) {
+  switch (exception) {
+    case DataClientException():
+      // Handle client-side exceptions
+      handleClientException(exception);
+    case DataParseException():
+      // Handle parsing-related exceptions
+      handleParseException(exception);
+    case DataHttpException():
+      // Handle HTTP-related exceptions
+      handleHttpException(exception);
+    case DataNetworkException():
+      // Handle network-related exceptions
+      handleNetworkException(exception);
+    case _:
+      // Handle any other types of exceptions
+      handleUnknownException(exception);
+  }
 }
 
 void handleNetworkException(DataNetworkException exception) {
