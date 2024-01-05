@@ -45,3 +45,7 @@
 ## 1.0.11
 
 * refactor: updated name property of ApiHandler
+
+## 1.1.0
+
+* feat: replace "when()/abstract" by "switch/sealed class"
