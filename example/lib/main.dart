@@ -119,10 +119,13 @@ class UiExceptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String textException = switch (exception) {
-      DataClientException<UserModel>() => 'Error: $exception',
+      DataClientException<UserModel>() => 'Error Client: $exception',
       DataParseException<UserModel>() => 'Error Parse: $exception',
-      DataHttpException<UserModel>() => 'Error: $exception',
-      DataNetworkException<UserModel>() => 'Error: $exception',
+      DataHttpException<UserModel>() => 'Error Http: $exception',
+      DataNetworkException<UserModel>() => 'Error Network: $exception',
+      DataCacheException<UserModel>() => 'Error Cache: $exception',
+      DataInvalidInputException<UserModel>() =>
+        'Error Invalid Input: $exception',
     };
 
     final Text text = Text(
@@ -156,6 +159,7 @@ class UiUserWidget extends StatelessWidget {
     this.user, {
     super.key,
   });
+
   final UserModel user;
 
   @override
