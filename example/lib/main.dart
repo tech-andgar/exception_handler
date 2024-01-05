@@ -105,8 +105,6 @@ class UiExceptionWidget extends StatelessWidget {
     super.key,
   });
 
-  final ExceptionState<UserModel> exception;
-
   static const List<String> links = [
     'https://http.pizza',
     'https://http.garden',
@@ -115,6 +113,8 @@ class UiExceptionWidget extends StatelessWidget {
     'https://http.dog',
     'https://httpcats.com',
   ];
+
+  final ExceptionState<UserModel> exception;
 
   @override
   Widget build(BuildContext context) {
