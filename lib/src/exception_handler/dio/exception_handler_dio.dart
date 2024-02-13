@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 
 import '../../exception_state/exception_state.dart';
 import '../../result_state/result_state.dart';
-import '../../utils/utils.dart';
 import '../exception_handler_client.dart';
 
 class DioExceptionHandler extends ClientExceptionHandler {
@@ -80,13 +79,13 @@ class DioExceptionHandler extends ClientExceptionHandler {
     ResponseParser responseParser,
   ) async {
     return switch (statusCode) {
-      int statusCode when statusCode.isBetween(200, 299) =>
+      int statusCode when statusCode.isSuccessfulHttpStatusCode =>
         await _handle2xxparseResponse<TModel>(responseParser),
-      int statusCode when statusCode.isBetween(300, 399) =>
+      int statusCode when statusCode.isRedirectHttpStatusCode =>
         _handle3xxRedirect<TModel>(statusCode, responseParser),
-      int statusCode when statusCode.isBetween(400, 499) =>
+      int statusCode when statusCode.isClientErrorHttpStatusCode =>
         _handle4xxClientError<TModel>(statusCode, responseParser),
-      int statusCode when statusCode.isBetween(500, 599) =>
+      int statusCode when statusCode.isServerErrorHttpStatusCode =>
         _handle5xxServerError<TModel>(statusCode, responseParser),
       _ => FailureState(
           DataHttpExceptionState<TModel>(
