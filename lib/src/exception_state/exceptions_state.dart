@@ -135,7 +135,7 @@ class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
       : super(clientException: exception, stackTrace: stackTrace) {
     log(
       'Client exception captured:',
-      error: exception,
+      error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataClientExceptionState',
     );
@@ -156,7 +156,7 @@ class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
       : super(parseException: exception, stackTrace: stackTrace) {
     log(
       'Unable to parse the json:',
-      error: exception,
+      error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataParseExceptionState',
     );
@@ -179,8 +179,8 @@ class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
     this.statusCode,
   }) : super(httpException: httpException, stackTrace: stackTrace) {
     log(
-      'A $httpException${statusCode != null ? ' $statusCode' : null} captured:',
-      error: exception,
+      'A $httpException ${statusCode != null ? 'httpStatusCode: $statusCode' : null} captured:',
+      error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataHttpExceptionState',
     );
@@ -206,7 +206,7 @@ class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
       : super(networkException: exception, stackTrace: stackTrace) {
     log(
       'Network exception captured:',
-      error: exception,
+      error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataNetworkExceptionState',
     );
@@ -227,7 +227,7 @@ class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
       : super(cacheException: exception, stackTrace: stackTrace) {
     log(
       'Cache exception captured:',
-      error: exception,
+      error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataCacheExceptionState',
     );
@@ -250,7 +250,7 @@ class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
   ) : super(invalidInputException: exception, stackTrace: stackTrace) {
     log(
       'Invalid Input exception captured:',
-      error: exception,
+      error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataInvalidInputExceptionState',
     );
