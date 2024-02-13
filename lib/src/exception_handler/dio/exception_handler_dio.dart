@@ -103,7 +103,19 @@ class DioExceptionHandler extends ClientExceptionHandler {
         responseParser.parserModel as ParseFunction<TModel>,
         responseParser.response.data,
       );
-
+      return SuccessState(dataModelParsed);
+    } catch (e) {
+      try {
+        // TODO(andgar2010): need more investigation about compute error on platform windows
+        log(
+          '''
+Handle error compute.
+Error: $e
+Change mode async isolate to sync''',
+          name: 'DioExceptionHandler._handle2xxparseResponse',
+        );
+        final TModel dataModelParsed =
+            responseParser.parserModel(responseParser.response.data);
         return SuccessState(dataModelParsed);
       } catch (e, s) {
         return FailureState(DataParseExceptionState<TModel>(Exception(e), s));
