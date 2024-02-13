@@ -4,10 +4,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-import '../exception_state/exception_state.dart';
-import '../result_state/result_state.dart';
-import '../utils/utils.dart';
-import 'exception_handler_client.dart';
+import '../../exception_state/exception_state.dart';
+import '../../result_state/result_state.dart';
+import '../../utils/utils.dart';
+import '../exception_handler_client.dart';
 
 class DioExceptionHandler extends ClientExceptionHandler {
   static Connectivity connectivity = Connectivity();
