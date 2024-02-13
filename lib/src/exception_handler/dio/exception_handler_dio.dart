@@ -194,17 +194,49 @@ class DioExceptionHandler extends ClientExceptionHandler {
     const String end =
         'and RequestOptions.validateStatus was configured to throw for this status code.';
     final int? statusCode =
-        int.tryParse(e.message.toString().split(start).last.split(end).first);
+        int.tryParse(e.message.toString().split(start).last.split(end).first) ??
+            e.response?.statusCode;
 
-    return switch (e.type) {
-      DioExceptionType.receiveTimeout ||
-      DioExceptionType.connectionTimeout ||
-      DioExceptionType.sendTimeout =>
-        FailureState(
-          DataNetworkExceptionState<TModel>(NetworkException.timeOutException, s),
+    if (statusCode != null) {
+      return await _handleStatusCode(
+        statusCode,
+        ResponseParser(
+          response: Response(requestOptions: RequestOptions()),
+          // coverage:ignore-start
+          parserModel: (_) {},
+          // coverage:ignore-end
+          exception: e,
+          stackTrace: s,
         ),
-      _ => await _handleStatusCode(
-          statusCode,
+      );
+    } else {
+      return switch (e.type) {
+        DioExceptionType.connectionTimeout => FailureState(
+            DataNetworkExceptionState<TModel>(
+              NetworkException.timeOutException,
+              s,
+            ),
+          ),
+        DioExceptionType.receiveTimeout => FailureState(
+            DataNetworkExceptionState<TModel>(
+              NetworkException.receiveTimeout,
+              s,
+            ),
+          ),
+        DioExceptionType.cancel => FailureState(
+            DataNetworkExceptionState<TModel>(
+              NetworkException.cancel,
+              s,
+            ),
+          ),
+        DioExceptionType.sendTimeout => FailureState(
+            DataNetworkExceptionState<TModel>(
+              NetworkException.sendTimeout,
+              s,
+            ),
+          ),
+        _ => await _handleStatusCode(
+            statusCode,
           ResponseParser(
             response: Response(requestOptions: RequestOptions()),
             // coverage:ignore-start
