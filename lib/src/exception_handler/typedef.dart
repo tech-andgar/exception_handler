@@ -1,16 +1,16 @@
 import '../utils/utils.dart';
 
-typedef ApiCall<R, T> = Future<R> Function();
-typedef ParseFunction<T> = T Function(Object?);
+typedef ApiCall<R, TModel> = Future<R> Function();
+typedef ParseFunction<TModel> = TModel Function(Object?);
 
-class ApiHandler<R, T> {
+class ApiHandler<R, TModel> {
   ApiHandler({required this.apiCall, required this.parserModel});
 
-  final ApiCall<R, T> apiCall;
-  final ParseFunction<T> parserModel;
+  final ApiCall<R, TModel> apiCall;
+  final ParseFunction<TModel> parserModel;
 }
 
-class ResponseParser<R, T> extends CustomEquatable {
+class ResponseParser<R, TModel> extends CustomEquatable {
   const ResponseParser({
     required this.response,
     required this.parserModel,
@@ -18,7 +18,7 @@ class ResponseParser<R, T> extends CustomEquatable {
     this.stackTrace,
   });
 
-  final ParseFunction<T> parserModel;
+  final ParseFunction<TModel> parserModel;
   final R response;
   final Exception? exception;
   final StackTrace? stackTrace;

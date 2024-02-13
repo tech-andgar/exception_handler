@@ -101,7 +101,7 @@ enum HttpException {
 /// various exceptions.
 ///
 /// It includes optional fields for different exception types.
-sealed class ExceptionState<T> extends CustomEquatable {
+sealed class ExceptionState<TModel> extends CustomEquatable {
   final CacheException? cacheException;
   final Exception? clientException;
   final InvalidInputException? invalidInputException;
@@ -127,7 +127,7 @@ sealed class ExceptionState<T> extends CustomEquatable {
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataClientExceptionState<T> extends ExceptionState<T> {
+class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
   DataClientExceptionState(Exception exception, StackTrace stackTrace)
       : super(clientException: exception, stackTrace: stackTrace) {
     log(
@@ -148,7 +148,7 @@ class DataClientExceptionState<T> extends ExceptionState<T> {
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataParseExceptionState<T> extends ExceptionState<T> {
+class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
   DataParseExceptionState(Exception exception, StackTrace stackTrace)
       : super(parseException: exception, stackTrace: stackTrace) {
     log(
@@ -168,7 +168,7 @@ class DataParseExceptionState<T> extends ExceptionState<T> {
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataHttpExceptionState<T> extends ExceptionState<T> {
+class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
   DataHttpExceptionState({
     required HttpException httpException,
     required StackTrace stackTrace,
@@ -198,7 +198,7 @@ class DataHttpExceptionState<T> extends ExceptionState<T> {
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataNetworkExceptionState<T> extends ExceptionState<T> {
+class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
   DataNetworkExceptionState(NetworkException exception, StackTrace stackTrace)
       : super(networkException: exception, stackTrace: stackTrace) {
     log(
@@ -219,7 +219,7 @@ class DataNetworkExceptionState<T> extends ExceptionState<T> {
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataCacheExceptionState<T> extends ExceptionState<T> {
+class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
   DataCacheExceptionState(CacheException exception, StackTrace stackTrace)
       : super(cacheException: exception, stackTrace: stackTrace) {
     log(
@@ -240,7 +240,7 @@ class DataCacheExceptionState<T> extends ExceptionState<T> {
 /// This exception class extends [ExceptionState], providing a generic type [T]
 /// to allow encapsulating additional information or data related to
 /// the exception.
-class DataInvalidInputExceptionState<T> extends ExceptionState<T> {
+class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
   DataInvalidInputExceptionState(
     InvalidInputException exception,
     StackTrace stackTrace,
