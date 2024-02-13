@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http_status/http_status.dart';
 
-import '../../exception_state/exception_state.dart';
+import '../../exception_state/exceptions_state.dart';
 import '../../result_state/result_state.dart';
 import '../exception_handler_client.dart';
 
@@ -264,5 +266,6 @@ Change mode async isolate to sync''',
           ),
         ),
     };
+    }
   }
 }

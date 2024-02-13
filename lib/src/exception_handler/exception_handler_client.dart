@@ -1,6 +1,6 @@
 import '../../exception_handler.dart';
 
-export 'exception_handler_dio.dart';
+export 'dio/dio.dart';
 export 'typedef.dart';
 
 abstract class ClientExceptionHandler {
