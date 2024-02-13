@@ -37,7 +37,13 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
       Future<ResultState<TModel>> handleHttpResponse =
           _handleHttpResponse<TModel>(
+        ResponseParser(
+          response: response,
+          parserModel: apiHandler.parserModel,
+        ),
       );
+
+      return handleHttpResponse;
     } on DioException catch (e, s) {
       if (!await _isConnected() || e.type == DioExceptionType.connectionError) {
         return FailureState(
