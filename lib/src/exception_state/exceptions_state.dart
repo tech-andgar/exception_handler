@@ -6,8 +6,11 @@ import '../utils/utils.dart';
 // handling.
 
 enum NetworkException {
+  cancel,
   noInternetConnection,
   timeOutException,
+  sendTimeout,
+  receiveTimeout,
   unknown,
 }
 
@@ -26,7 +29,7 @@ enum HttpException {
   processing,
   earlyHints,
   // 2xx - Successful Responses
-  oK,
+  ok,
   created,
   accepted,
   nonAuthoritativeInformation,
