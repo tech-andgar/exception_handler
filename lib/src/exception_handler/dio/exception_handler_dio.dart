@@ -39,7 +39,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
           _handleHttpResponse<TModel>(
       );
     } on DioException catch (e, s) {
-      if (!await _isConnected()) {
+      if (!await _isConnected() || e.type == DioExceptionType.connectionError) {
         return FailureState(
           DataNetworkExceptionState<TModel>(
             NetworkException.noInternetConnection,
