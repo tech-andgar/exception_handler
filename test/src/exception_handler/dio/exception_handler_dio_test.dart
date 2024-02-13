@@ -4,10 +4,13 @@ import 'package:exception_handler/exception_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  final DioExceptionHandler dioExceptionHandler = DioExceptionHandler();
+
   group('DioExceptionHandler Tests', () {
     final mockDio = MockDio();
     late MockApiHandler<Response, String> mockApiHandler;
@@ -28,7 +31,7 @@ void main() {
       );
 
       ResultState<String> result =
-          await DioExceptionHandler().callApi<Response, String>(
+          await dioExceptionHandler.callApi<Response, String>(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) => (data as Map)['key'],
@@ -57,7 +60,7 @@ void main() {
         ),
       );
 
-      var result = await DioExceptionHandler().callApi<Response, String>(
+      var result = await dioExceptionHandler.callApi<Response, String>(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) => data as String,
@@ -89,7 +92,7 @@ void main() {
       when(() => mockConnectivity.checkConnectivity())
           .thenAnswer((_) async => ConnectivityResult.none);
 
-      final result = await DioExceptionHandler().callApi(mockApiHandler);
+      final result = await dioExceptionHandler.callApi(mockApiHandler);
 
       expect(result, isA<FailureState>());
       switch (result) {
@@ -102,7 +105,7 @@ void main() {
     test('API call with client exception', () async {
       when(() => mockDio.get(any())).thenThrow(Exception('Client Error'));
 
-      var result = await DioExceptionHandler().callApi<Response, String>(
+      var result = await dioExceptionHandler.callApi<Response, String>(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) => data as String,
@@ -133,7 +136,7 @@ void main() {
       );
 
       ResultState<String> result =
-          await DioExceptionHandler().callApi<Response, String>(
+          await dioExceptionHandler.callApi<Response, String>(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (Object? data) =>
@@ -156,7 +159,7 @@ void main() {
 
     test('should return FailureState with DataHttpException for 3xx error',
         () async {
-      ResultState result = await DioExceptionHandler().callApi(
+      ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
           apiCall: () async {
             return Response(
@@ -188,7 +191,7 @@ void main() {
           statusCode: 400,
         ),
       );
-      ResultState result = await DioExceptionHandler().callApi(
+      ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
@@ -217,7 +220,7 @@ void main() {
           statusCode: 404,
         ),
       );
-      ResultState result = await DioExceptionHandler().callApi(
+      ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
@@ -247,7 +250,7 @@ void main() {
           statusCode: 500,
         ),
       );
-      ResultState result = await DioExceptionHandler().callApi(
+      ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
@@ -276,7 +279,7 @@ void main() {
           statusCode: 501,
         ),
       );
-      ResultState result = await DioExceptionHandler().callApi(
+      ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
@@ -306,7 +309,7 @@ void main() {
           statusCode: 600,
         ),
       );
-      ResultState result = await DioExceptionHandler().callApi(
+      ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
           apiCall: () => mockDio.get('test'),
           parserModel: (res) {},
@@ -337,7 +340,7 @@ void main() {
           .thenAnswer((_) async => ConnectivityResult.wifi);
 
       final ResultState<String> result =
-          await DioExceptionHandler().callApi(mockApiHandler);
+          await dioExceptionHandler.callApi(mockApiHandler);
 
       expect(result, isA<FailureState>());
 
@@ -364,7 +367,7 @@ void main() {
           .thenAnswer((_) async => ConnectivityResult.wifi);
 
       final ResultState<String> result =
-          await DioExceptionHandler().callApi(mockApiHandler);
+          await dioExceptionHandler.callApi(mockApiHandler);
 
       expect(result, isA<FailureState>());
       switch (result) {
@@ -375,7 +378,7 @@ void main() {
           if (exception is DataNetworkExceptionState) {
             expect(
               exception.networkException,
-              equals(NetworkException.timeOutException),
+              equals(NetworkException.sendTimeout),
             );
           }
       }
@@ -390,7 +393,7 @@ void main() {
           .thenAnswer((_) async => ConnectivityResult.wifi);
 
       final ResultState<String> result =
-          await DioExceptionHandler().callApi(mockApiHandler);
+          await dioExceptionHandler.callApi(mockApiHandler);
 
       expect(result, isA<FailureState>());
       switch (result) {
@@ -412,7 +415,7 @@ void main() {
       final exception = Exception('General error');
       when(() => mockApiHandler.apiCall()).thenThrow(exception);
       final result =
-          await DioExceptionHandler().callApi<Response, String>(mockApiHandler);
+          await dioExceptionHandler.callApi<Response, String>(mockApiHandler);
 
       expect(result, isA<FailureState>());
       expect(
