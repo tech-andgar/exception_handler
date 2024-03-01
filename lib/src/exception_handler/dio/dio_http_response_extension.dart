@@ -88,7 +88,10 @@ extension HttpResponseDioExtension on Future<Response> {
         await DioExceptionHandler().callApi<Response, TModel>(
       ApiHandler(
         apiCall: () => this, // response = dio.get('https://')
-        parserModel: (Object? data) => fromJson(data as Map<String, dynamic>),
+        parserModel: (Object? data) {
+          final TModel resultMapper = fromJson(data as Map<String, dynamic>);
+          return resultMapper;
+        },
       ),
     );
 
