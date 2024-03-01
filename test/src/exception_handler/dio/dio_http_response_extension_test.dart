@@ -2,6 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:exception_handler/exception_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_exception/http_exception.dart';
+import 'package:http_status/http_status.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks.dart';
@@ -103,10 +105,8 @@ void main() {
           isA<DataParseExceptionState>(),
         );
         expect(
-          result.exception.parseException.toString(),
-          Exception(
-            "type 'String' is not a subtype of type 'int' in type cast",
-          ).toString(),
+          result.exception.toString(),
+          'DataParseExceptionState<UserModel>(parseException: "type \'String\' is not a subtype of type \'int\' in type cast")',
         );
       });
 
@@ -127,12 +127,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.timeOutException,
+          result.exception.toString(),
+          'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.timeOutException")',
         );
       });
 
@@ -152,12 +148,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.sendTimeout,
+          result.exception.toString(),
+          'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.sendTimeout")',
         );
       });
 
@@ -177,12 +169,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.cancel,
+          result.exception.toString(),
+          'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.cancel")',
         );
       });
 
@@ -202,12 +190,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.receiveTimeout,
+          result.exception.toString(),
+          'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.receiveTimeout")',
         );
       });
 
@@ -228,12 +212,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.noInternetConnection,
+          result.exception.toString(),
+          'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.noInternetConnection")',
         );
       });
 
@@ -253,12 +233,19 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpException(
+            httpStatus: HttpStatus(
+              code: 0,
+              name: 'unknown_HttpStatus',
+              description: 'unknown_description',
+            ),
+            detail: '',
+          ),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknown,
+          result.exception.toString(),
+          'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
         );
       });
 
@@ -285,12 +272,19 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpException(
+            httpStatus: HttpStatus(
+              code: 0,
+              name: 'unknown_HttpStatus',
+              description: 'unknown_description',
+            ),
+            detail: '',
+          ),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknown,
+          result.exception.toString(),
+          'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
         );
       });
 
@@ -317,17 +311,17 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(100).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknown,
+          result.exception.toString(),
+          'DataHttpExceptionState<UserModel>(httpException: HttpException [100 Continue])',
         );
       });
 
       test(
-          'should return FailureState.DataHttpExceptionState.httpException.unknownRedirect on status code 300',
+          'should return FailureState.DataHttpExceptionState.httpException.multipleChoices on status code 300',
           () async {
         // Arrange
 
@@ -349,17 +343,18 @@ void main() {
           (result as FailureState<UserModel>).exception,
           isA<DataHttpExceptionState>(),
         );
+
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(300).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknownRedirect,
+          result.exception.toString(),
+          'DataHttpExceptionState<UserModel>(httpException: HttpException [300 Multiple Choices])',
         );
       });
       test(
-          'should return FailureState.DataHttpExceptionState.httpException.unknownClient on status code 400',
+          'should return FailureState.DataHttpExceptionState.httpException.badRequest on status code 400',
           () async {
         // Arrange
         final dioResponse = futureDioException(
@@ -380,13 +375,14 @@ void main() {
           (result as FailureState<UserModel>).exception,
           isA<DataHttpExceptionState>(),
         );
+
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(400).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknownClient,
+          result.exception.toString(),
+          'DataHttpExceptionState<UserModel>(httpException: HttpException [400 Bad Request])',
         );
       });
 
@@ -413,12 +409,12 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(500).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.internalServerError,
+          result.exception.toString(),
+          'DataHttpExceptionState<UserModel>(httpException: HttpException [500 Internal Server Error])',
         );
       });
     });
@@ -472,10 +468,8 @@ void main() {
           isA<DataParseExceptionState>(),
         );
         expect(
-          result.exception.parseException.toString(),
-          Exception(
-            "type 'String' is not a subtype of type 'int' in type cast",
-          ).toString(),
+          result.exception.toString(),
+          'DataParseExceptionState<List<UserModel>>(parseException: "type \'String\' is not a subtype of type \'int\' in type cast")',
         );
       });
 
@@ -496,12 +490,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.timeOutException,
+          result.exception.toString(),
+          'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.timeOutException")',
         );
       });
 
@@ -524,12 +514,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.sendTimeout,
+          result.exception.toString(),
+          'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.sendTimeout")',
         );
       });
 
@@ -549,12 +535,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.cancel,
+          result.exception.toString(),
+          'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.cancel")',
         );
       });
 
@@ -574,12 +556,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.receiveTimeout,
+          result.exception.toString(),
+          'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.receiveTimeout")',
         );
       });
 
@@ -600,12 +578,8 @@ void main() {
           isA<DataNetworkExceptionState>(),
         );
         expect(
-          result.exception.networkException,
-          isA<NetworkException>(),
-        );
-        expect(
-          result.exception.networkException,
-          NetworkException.noInternetConnection,
+          result.exception.toString(),
+          'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.noInternetConnection")',
         );
       });
 
@@ -625,12 +599,19 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpException(
+            httpStatus: HttpStatus(
+              code: 0,
+              name: 'unknown_HttpStatus',
+              description: 'unknown_description',
+            ),
+            detail: '',
+          ),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknown,
+          result.exception.toString(),
+          'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
         );
       });
 
@@ -657,12 +638,19 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpException(
+            httpStatus: HttpStatus(
+              code: 0,
+              name: 'unknown_HttpStatus',
+              description: 'unknown_description',
+            ),
+            detail: '',
+          ),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknown,
+          result.exception.toString(),
+          'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
         );
       });
 
@@ -689,12 +677,12 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(100).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknown,
+          result.exception.toString(),
+          'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [100 Continue])',
         );
       });
 
@@ -721,12 +709,12 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(300).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknownRedirect,
+          result.exception.toString(),
+          'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [300 Multiple Choices])',
         );
       });
 
@@ -753,12 +741,12 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(400).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.unknownClient,
+          result.exception.toString(),
+          'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [400 Bad Request])',
         );
       });
 
@@ -785,12 +773,12 @@ void main() {
           isA<DataHttpExceptionState>(),
         );
         expect(
-          result.exception.httpException,
-          isA<HttpException>(),
+          (result.exception as DataHttpExceptionState).httpException,
+          HttpStatus.fromCode(500).exception(),
         );
         expect(
-          result.exception.httpException,
-          HttpException.internalServerError,
+          result.exception.toString(),
+          'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [500 Internal Server Error])',
         );
       });
     });

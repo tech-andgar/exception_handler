@@ -8,7 +8,7 @@ void main() {
     test('should call success callback with correct data', () {
       final result = switch (resultState) {
         FailureState<String>() => 'Failure',
-        SuccessState<String>(:String data) => data,
+        SuccessState<String>(:final String data) => data,
       };
 
       expect(result, equals(data));
@@ -19,10 +19,9 @@ void main() {
   });
 
   group('FailureState', () {
-    final Exception exception = Exception('Test Exception');
-    final FailureState<String> resultState = FailureState<String>(
-      DataClientExceptionState(exception, StackTrace.current),
-    );
+    final DataClientExceptionState<String> exception =
+        DataClientExceptionState<String>('Test Exception', StackTrace.current);
+    final FailureState<String> resultState = FailureState<String>(exception);
     test('should call failure callback with correct exception', () {
       final bool failureCalled = switch (resultState) {
         SuccessState() => false,
@@ -30,12 +29,12 @@ void main() {
       };
 
       expect(failureCalled, isTrue);
-      expect(resultState.exception.clientException, equals(exception));
+      expect(resultState.exception, equals(exception));
     });
     test('should correct toString', () {
       expect(
         resultState.toString(),
-        'FailureState<String>(exception: DataClientExceptionState<String>(clientException: Exception: Test Exception))',
+        'FailureState<String>(exception: DataClientExceptionState<String>(clientException: "Test Exception"))',
       );
     });
   });
