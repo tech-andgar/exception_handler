@@ -147,7 +147,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _isConnected checks the current network connectivity status.
   static Future<bool> _isConnected() async {
-    ConnectivityResult result = await connectivity.checkConnectivity();
+    final ConnectivityResult result = await connectivity.checkConnectivity();
     return result != ConnectivityResult.none;
   }
 
@@ -215,18 +215,20 @@ class DioExceptionHandler extends ClientExceptionHandler {
         int.tryParse(e.message.toString().split(start).last.split(end).first) ??
             e.response?.statusCode;
 
+    late final Future<ResultState<TModel>> handleStatusCode = _handleStatusCode(
+      statusCode,
+      ResponseParser(
+        response: Response(requestOptions: RequestOptions()),
+        // coverage:ignore-start
+        parserModel: (_) => Object() as TModel,
+        // coverage:ignore-end
+        exception: e,
+        stackTrace: s,
+      ),
+    );
+
     if (statusCode != null) {
-      return await _handleStatusCode(
-        statusCode,
-        ResponseParser(
-          response: Response(requestOptions: RequestOptions()),
-          // coverage:ignore-start
-          parserModel: (_) {},
-          // coverage:ignore-end
-          exception: e,
-          stackTrace: s,
-        ),
-      );
+      return await handleStatusCode;
     } else {
       return switch (e.type) {
         DioExceptionType.connectionTimeout => FailureState(
@@ -253,18 +255,8 @@ class DioExceptionHandler extends ClientExceptionHandler {
               s,
             ),
           ),
-        _ => await _handleStatusCode(
-            statusCode,
-          ResponseParser(
-            response: Response(requestOptions: RequestOptions()),
-            // coverage:ignore-start
-            parserModel: (_) {},
-            // coverage:ignore-end
-            exception: e,
-            stackTrace: s,
-          ),
-        ),
-    };
+        _ => await handleStatusCode,
+      };
     }
   }
 }
