@@ -336,7 +336,7 @@ class UiExceptionWidget extends StatelessWidget {
         'Debugger: Error Parse: $exception',
       DataHttpExceptionState<UserModel>() => 'Debugger: Error Http: $exception',
       DataNetworkExceptionState<UserModel>() =>
-        'Debugger: Error Network: $exception\n\nError: ${exception.networkException?.name.split('.').last}',
+        'Debugger: Error Network: $exception\n\nError: ${exception.toString().split('.').last}',
       DataCacheExceptionState<UserModel>() =>
         'Debugger: Error Cache: $exception',
       DataInvalidInputExceptionState<UserModel>() =>
