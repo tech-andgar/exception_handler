@@ -117,9 +117,9 @@ class DioExceptionHandler extends ClientExceptionHandler {
     try {
       final Response response = await apiHandler.apiCall();
 
-      Future<ResultState<TModel>> handleHttpResponse =
-          _handleHttpResponse<TModel>(
-        ResponseParser(
+      final Future<ResultState<TModel>> handleHttpResponse =
+          _handleHttpResponse(
+        ResponseParser<Response, TModel>(
           response: response,
           parserModel: apiHandler.parserModel,
         ),
@@ -130,14 +130,18 @@ class DioExceptionHandler extends ClientExceptionHandler {
       if (!await _isConnected() || e.type == DioExceptionType.connectionError) {
         return FailureState(
           DataNetworkExceptionState<TModel>(
-            NetworkException.noInternetConnection,
+            'NetworkException.noInternetConnection',
             s,
           ),
         );
       }
-      return _handleDioException<TModel>(e, s);
+      final ResultState<TModel> handleDioException =
+          await _handleDioException(e, s);
+      return handleDioException;
     } on Exception catch (e, s) {
-      return FailureState(DataClientExceptionState<TModel>(e, s));
+      final FailureState<TModel> failureState =
+          FailureState(DataClientExceptionState<TModel>(e.toString(), s));
+      return failureState;
     }
   }
 
@@ -149,12 +153,15 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _handleHttpResponse processes the HTTP response and handles different
   /// status codes.
-  static Future<ResultState<TModel>> _handleHttpResponse<TModel>(
+  Future<ResultState<TModel>> _handleHttpResponse<Response, TModel>(
     ResponseParser responseParser,
   ) async {
-    int? statusCode = responseParser.response.statusCode;
+    final int? statusCode = responseParser.response.statusCode;
 
-    return await _handleStatusCode<TModel>(statusCode, responseParser);
+    return await _handleStatusCode(
+      statusCode,
+      responseParser as ResponseParser<Response, TModel>,
+    );
   }
 
   Future<ResultState<TModel>> _handleStatusCode<Response, TModel>(
@@ -196,7 +203,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _handleDioException handles exceptions from the Dio library,
   /// particularly around connectivity.
-  static Future<ResultState<TModel>> _handleDioException<TModel>(
+  Future<ResultState<TModel>> _handleDioException<TModel>(
     DioException e,
     StackTrace s,
   ) async {
@@ -224,25 +231,25 @@ class DioExceptionHandler extends ClientExceptionHandler {
       return switch (e.type) {
         DioExceptionType.connectionTimeout => FailureState(
             DataNetworkExceptionState<TModel>(
-              NetworkException.timeOutException,
+              'NetworkException.timeOutException',
               s,
             ),
           ),
         DioExceptionType.receiveTimeout => FailureState(
             DataNetworkExceptionState<TModel>(
-              NetworkException.receiveTimeout,
+              'NetworkException.receiveTimeout',
               s,
             ),
           ),
         DioExceptionType.cancel => FailureState(
             DataNetworkExceptionState<TModel>(
-              NetworkException.cancel,
+              'NetworkException.cancel',
               s,
             ),
           ),
         DioExceptionType.sendTimeout => FailureState(
             DataNetworkExceptionState<TModel>(
-              NetworkException.sendTimeout,
+              'NetworkException.sendTimeout',
               s,
             ),
           ),
