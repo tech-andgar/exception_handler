@@ -4,104 +4,148 @@
 
 import 'dart:developer';
 
+import 'package:http_exception/http_exception.dart';
+
 import '../utils/utils.dart';
 
-// Enums defining different types of exceptions for clear and specific error
-// handling.
+/// Represents errors related to network communication.
+class NetworkException implements Exception {
+  const NetworkException({this.message = 'A network error occurred.'});
 
-enum NetworkException {
-  cancel,
-  noInternetConnection,
-  timeOutException,
-  sendTimeout,
-  receiveTimeout,
-  unknown,
+  final String message;
 }
 
-enum CacheException {
-  unknown,
+/// Represents errors related to data caching operations.
+class CacheException implements Exception {
+  const CacheException({this.message = 'A cache error occurred.'});
+
+  final String message;
 }
 
-enum InvalidInputException {
-  unknown,
+/// Represents errors due to invalid user input.
+class InvalidInputException implements Exception {
+  const InvalidInputException({this.message = 'Invalid input provided.'});
+
+  final String message;
 }
 
-enum HttpException {
-  // 1xx - Informative Responses
-  continue_,
-  switchingProtocols,
-  processing,
-  earlyHints,
-  // 2xx - Successful Responses
-  ok,
-  created,
-  accepted,
-  nonAuthoritativeInformation,
-  noContent,
-  resetContent,
-  partialContent,
-  multiStatus,
-  alreadyReported,
-  iMUsed,
-  // 3xx - Redirections
-  movedPermanently,
-  found,
-  notModified,
-  useProxy,
-  switchProxy,
-  temporaryRedirect,
-  unknownRedirect,
-  // 4xx - Client Errors
-  badRequest,
-  unauthorized,
-  forbidden,
-  notFound,
-  methodNotAllowed,
-  notAcceptable,
-  proxyAuthenticationRequired,
-  requestTimeout,
-  conflict,
-  gone,
-  lengthRequired,
-  preconditionFailed,
-  payloadTooLarge,
-  uRITooLong,
-  unsupportedMediaType,
-  rangeNotSatisfiable,
-  expectationFailed,
-  imATeapot,
-  misdirectedRequest,
-  unprocessableEntity,
-  locked,
-  failedDependency,
-  upgradeRequired,
-  preconditionRequired,
-  tooManyRequests,
-  requestHeaderFieldsTooLarge,
-  unavailableForLegalReasons,
-  unknownClient,
-  // 5xx - Server Errors
-  internalServerError,
-  notImplemented,
-  serviceUnavailable,
-  gatewayTimeout,
-  badGateway,
-  hTTPVersionNotSupported,
-  variantAlsoNegotiates,
-  insufficientStorage,
-  loopDetected,
-  notExtended,
-  networkAuthenticationRequired,
-  bandwidthLimitExceeded,
-  unknownError,
-  webServerIsDown,
-  connectionTimedOut,
-  originIsUnreachable,
-  aTimeoutOccurred,
-  sSLHandshakeFailed,
-  invalidSSLCertificate,
-  unknownServer,
-  unknown,
+/// Represents errors when the database is not found.
+class DatabaseNotFoundException implements Exception {
+  const DatabaseNotFoundException({this.message = 'Database not found.'});
+
+  final String message;
+}
+
+/// Represents errors due to provision of invalid data.
+class InvalidDataException implements Exception {
+  const InvalidDataException({this.message = 'Invalid data provided.'});
+
+  final String message;
+}
+
+/// Represents errors encountered during parsing of data.
+class DataParsingException implements Exception {
+  const DataParsingException({this.message = 'Error parsing data.'});
+
+  final String message;
+}
+
+/// Represents errors encountered while saving data.
+class DataPersistenceException implements Exception {
+  const DataPersistenceException({this.message = 'Error saving data.'});
+
+  final String message;
+}
+
+/// Represents timeouts when waiting for a response.
+class ReceiveTimeoutException implements Exception {
+  const ReceiveTimeoutException({
+    this.message = 'The connection has timed out.',
+  });
+
+  final String message;
+}
+
+/// Represents the absence of an internet connection.
+class NoInternetConnectionException implements Exception {
+  const NoInternetConnectionException({
+    this.message = 'No internet connection detected.',
+  });
+
+  final String message;
+}
+
+/// Represents timeouts when sending data.
+class SendTimeoutException implements Exception {
+  const SendTimeoutException({
+    this.message = 'The connection timed out while sending data.',
+  });
+
+  final String message;
+}
+
+/// Represents an operation cancellation.
+class CancelException implements Exception {
+  const CancelException({this.message = 'The operation was cancelled.'});
+
+  final String message;
+}
+
+/// Represents the failure of user authentication.
+class AuthenticationFailedException implements Exception {
+  const AuthenticationFailedException({
+    this.message = 'Authentication failed.',
+  });
+
+  final String message;
+}
+
+/// Represents an error due to an expired token.
+class TokenExpiredException implements Exception {
+  const TokenExpiredException({this.message = 'Token has expired.'});
+
+  final String message;
+}
+
+/// Represents an error due to denied access.
+class AccessDeniedException implements Exception {
+  const AccessDeniedException({this.message = 'Access denied.'});
+
+  final String message;
+}
+
+/// Represents errors related to configuration issues.
+class ConfigurationException implements Exception {
+  const ConfigurationException({
+    this.message = 'Configuration error occurred.',
+  });
+
+  final String message;
+}
+
+/// Represents errors when a required dependency is not found.
+class DependencyNotFoundException implements Exception {
+  const DependencyNotFoundException({
+    this.message = 'Required dependency was not found.',
+  });
+
+  final String message;
+}
+
+/// Represents errors when a requested feature is not supported.
+class FeatureNotSupportedException implements Exception {
+  const FeatureNotSupportedException({
+    this.message = 'This feature is not supported.',
+  });
+
+  final String message;
+}
+
+/// Represents errors of an unknown nature.
+class UnknownErrorException implements Exception {
+  const UnknownErrorException({this.message = 'An unknown error occurred.'});
+
+  final String message;
 }
 
 /// [ExceptionState] sealed class represents a generic state for handling
