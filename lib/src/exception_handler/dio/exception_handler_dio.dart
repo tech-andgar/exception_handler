@@ -8,14 +8,80 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http_exception/http_exception.dart';
 import 'package:http_status/http_status.dart';
 
 import '../../exception_state/exceptions_state.dart';
 import '../../result_state/result_state.dart';
 import '../exception_handler_client.dart';
 
+/// handleHttpGenericParseResponseDio tries to parse the response and handle
+/// any parsing exceptions.
+Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
+  int statusCode,
+  ResponseParser responseParser,
+) async {
+  try {
+    final FailureState<TModel> failureState = FailureState(
+      DataHttpExceptionState<TModel>(
+        exception: responseParser.exception,
+        httpException: HttpStatus.fromCode(statusCode).exception(),
+        stackTrace: StackTrace.current,
+      ),
+    );
+    return failureState;
+  } catch (e) {
+    return FailureState(
+      DataHttpExceptionState<TModel>(
+        exception: responseParser.exception,
+        httpException: HttpException(
+          httpStatus: HttpStatus(
+            code: statusCode,
+            name: 'unknown_HttpStatus',
+            description: 'unknown_description',
+          ),
+          detail: 'exception: $e',
+        ),
+        stackTrace: StackTrace.current,
+      ),
+    );
+  }
+}
+
+/// handleHttp2xxParseResponseDio tries to parse the response and handle
+/// any parsing exceptions.
+Future<ResultState<TModel>> handleHttp2xxParseResponseDio<Response, TModel>(
+  int? statusCode,
+  ResponseParser responseParser,
+) async {
+  try {
+    final TModel dataModelParsed = await compute(
+      responseParser.parserModel as ParseFunction<TModel>,
+      responseParser.response.data,
+    );
+    return SuccessState(dataModelParsed);
+  } catch (e) {
+    try {
+      // TODO(andgar2010): need more investigation about compute error on platform windows
+      log(
+        '''
+Handle error compute.
+Error: $e
+Change mode async isolate to sync''',
+        name: 'DioExceptionHandler._handle2xxparseResponse',
+      );
+      final TModel dataModelParsed =
+          responseParser.parserModel(responseParser.response.data);
+      return SuccessState(dataModelParsed);
+    } catch (e, s) {
+      return FailureState(DataParseExceptionState<TModel>(e.toString(), s));
+    }
+  }
+}
+
 class DioExceptionHandler extends ClientExceptionHandler {
   static Connectivity connectivity = Connectivity();
+  late HandleHttpParseResponse handleParseResponse_;
 
   /// callApi is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
@@ -35,8 +101,19 @@ class DioExceptionHandler extends ClientExceptionHandler {
   /// ```
   @override
   Future<ResultState<TModel>> callApi<Response, TModel>(
-    ApiHandler<Response, TModel> apiHandler,
-  ) async {
+    ApiHandler<Response, TModel> apiHandler, {
+    HandleHttpParseResponse<Response, TModel>? handleHttpParseResponse,
+  }) async {
+    handleParseResponse_ = handleHttpParseResponse ??
+        HandleHttpParseResponse<Response, TModel>(
+          handleHttp1xxParseResponse: handleHttpGenericParseResponseDio,
+          handleHttp2xxParseResponse: handleHttp2xxParseResponseDio,
+          handleHttp3xxParseResponse: handleHttpGenericParseResponseDio,
+          handleHttp4xxParseResponse: handleHttpGenericParseResponseDio,
+          handleHttp5xxParseResponse: handleHttpGenericParseResponseDio,
+          handleHttpUnknownParseResponse: handleHttpGenericParseResponseDio,
+        );
+
     try {
       final Response response = await apiHandler.apiCall();
 
@@ -80,129 +157,40 @@ class DioExceptionHandler extends ClientExceptionHandler {
     return await _handleStatusCode<TModel>(statusCode, responseParser);
   }
 
-  static Future<ResultState<TModel>> _handleStatusCode<TModel>(
+  Future<ResultState<TModel>> _handleStatusCode<Response, TModel>(
     int? statusCode,
-    ResponseParser responseParser,
+    ResponseParser<Response, TModel> responseParser,
   ) async {
     return switch (statusCode) {
-      int statusCode when statusCode.isSuccessfulHttpStatusCode =>
-        await _handle2xxparseResponse<TModel>(responseParser),
-      int statusCode when statusCode.isRedirectHttpStatusCode =>
-        _handle3xxRedirect<TModel>(statusCode, responseParser),
-      int statusCode when statusCode.isClientErrorHttpStatusCode =>
-        _handle4xxClientError<TModel>(statusCode, responseParser),
-      int statusCode when statusCode.isServerErrorHttpStatusCode =>
-        _handle5xxServerError<TModel>(statusCode, responseParser),
-      _ => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.unknown,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
+      final int statusCode when statusCode.isInformationHttpStatusCode =>
+        await handleParseResponse_.handleHttp1xxParseResponse!(
+          statusCode,
+          responseParser,
         ),
-    };
-  }
-
-  /// _parseResponse tries to parse the response and handle any parsing
-  /// exceptions.
-  static Future<ResultState<TModel>> _handle2xxparseResponse<TModel>(
-    ResponseParser responseParser,
-  ) async {
-    try {
-      TModel dataModelParsed = await compute(
-        responseParser.parserModel as ParseFunction<TModel>,
-        responseParser.response.data,
-      );
-      return SuccessState(dataModelParsed);
-    } catch (e) {
-      try {
-        // TODO(andgar2010): need more investigation about compute error on platform windows
-        log(
-          '''
-Handle error compute.
-Error: $e
-Change mode async isolate to sync''',
-          name: 'DioExceptionHandler._handle2xxparseResponse',
-        );
-        final TModel dataModelParsed =
-            responseParser.parserModel(responseParser.response.data);
-        return SuccessState(dataModelParsed);
-      } catch (e, s) {
-        return FailureState(DataParseExceptionState<TModel>(Exception(e), s));
-      }
-    }
-  }
-
-  static FailureState<TModel> _handle3xxRedirect<TModel>(
-    int statusCode,
-    ResponseParser responseParser,
-  ) {
-    return switch (statusCode) {
-      _ => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.unknownRedirect,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
-        )
-    };
-  }
-
-  static FailureState<TModel> _handle4xxClientError<TModel>(
-    int statusCode,
-    ResponseParser responseParser,
-  ) {
-    return switch (statusCode) {
-      401 => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.unauthorized,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
+      final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
+        await handleParseResponse_.handleHttp2xxParseResponse!(
+          statusCode,
+          responseParser,
         ),
-      404 => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.notFound,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
+      final int statusCode when statusCode.isRedirectHttpStatusCode =>
+        await handleParseResponse_.handleHttp3xxParseResponse!(
+          statusCode,
+          responseParser,
         ),
-      _ => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.unknownClient,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
-        )
-    };
-  }
-
-  static FailureState<TModel> _handle5xxServerError<TModel>(
-    int statusCode,
-    ResponseParser responseParser,
-  ) {
-    return switch (statusCode) {
-      500 => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.internalServerError,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
+      final int statusCode when statusCode.isClientErrorHttpStatusCode =>
+        await handleParseResponse_.handleHttp4xxParseResponse!(
+          statusCode,
+          responseParser,
         ),
-      _ => FailureState(
-          DataHttpExceptionState<TModel>(
-            exception: responseParser.exception,
-            httpException: HttpException.unknownServer,
-            stackTrace: StackTrace.current,
-            statusCode: statusCode,
-          ),
-        )
+      final int statusCode when statusCode.isServerErrorHttpStatusCode =>
+        await handleParseResponse_.handleHttp5xxParseResponse!(
+          statusCode,
+          responseParser,
+        ),
+      _ => await handleParseResponse_.handleHttpUnknownParseResponse!(
+          statusCode ?? 000,
+          responseParser,
+        ),
     };
   }
 
