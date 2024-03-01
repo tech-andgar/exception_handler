@@ -108,22 +108,14 @@ enum HttpException {
 /// various exceptions.
 ///
 /// It includes optional fields for different exception types.
-sealed class ExceptionState<TModel> extends CustomEquatable {
-  final CacheException? cacheException;
-  final Exception? clientException;
-  final InvalidInputException? invalidInputException;
-  final Exception? parseException;
-  final HttpException? httpException;
-  final NetworkException? networkException;
+sealed class ExceptionState<TModel> extends CustomEquatable
+    implements Exception {
+  /// A message describing the format error.
+  final String message;
   final StackTrace stackTrace;
 
   const ExceptionState({
-    this.cacheException,
-    this.clientException,
-    this.invalidInputException,
-    this.parseException,
-    this.httpException,
-    this.networkException,
+    required this.message,
     required this.stackTrace,
   });
 }
@@ -135,18 +127,18 @@ sealed class ExceptionState<TModel> extends CustomEquatable {
 /// to allow encapsulating additional information or data related to
 /// the exception.
 class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
-  DataClientExceptionState(Exception exception, StackTrace stackTrace)
-      : super(clientException: exception, stackTrace: stackTrace) {
+  DataClientExceptionState(String message, StackTrace stackTrace)
+      : super(message: message, stackTrace: stackTrace) {
     log(
       'Client exception captured:',
-      error: exception.toString(),
+      error: message,
       stackTrace: stackTrace,
       name: 'DataClientExceptionState',
     );
   }
 
   @override
-  Map<String, Object?> get namedProps => {'clientException': clientException};
+  Map<String, Object?> get namedProps => {'clientException': message};
 }
 
 /// [DataParseExceptionState] handles exceptions related to parsing issues
@@ -156,18 +148,18 @@ class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
 /// to allow encapsulating additional information or data related to
 /// the exception.
 class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
-  DataParseExceptionState(Exception exception, StackTrace stackTrace)
-      : super(parseException: exception, stackTrace: stackTrace) {
+  DataParseExceptionState(String message, StackTrace stackTrace)
+      : super(message: message, stackTrace: stackTrace) {
     log(
       'Unable to parse the json:',
-      error: exception.toString(),
+      error: message,
       stackTrace: stackTrace,
       name: 'DataParseExceptionState',
     );
   }
 
   @override
-  Map<String, Object?> get namedProps => {'parseException': parseException};
+  Map<String, Object?> get namedProps => {'parseException': message};
 }
 
 /// [DataHttpExceptionState] is used for handling HTTP-related exceptions.
@@ -177,26 +169,22 @@ class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
   DataHttpExceptionState({
-    required HttpException httpException,
+    required this.httpException,
     required StackTrace stackTrace,
     Exception? exception,
-    this.statusCode,
-  }) : super(httpException: httpException, stackTrace: stackTrace) {
+  }) : super(message: httpException.toString(), stackTrace: stackTrace) {
     log(
-      'A $httpException ${statusCode != null ? 'httpStatusCode: $statusCode' : null} captured:',
+      'A $httpException, captured:',
       error: exception.toString(),
       stackTrace: stackTrace,
       name: 'DataHttpExceptionState',
     );
   }
 
-  final int? statusCode;
+  final HttpException httpException;
 
   @override
-  Map<String, Object?> get namedProps => {
-        'httpException': httpException,
-        'statusCode': statusCode,
-      };
+  Map<String, Object?> get namedProps => {'httpException': httpException};
 }
 
 /// [DataNetworkExceptionState] is for handling network-related exceptions
@@ -206,18 +194,18 @@ class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
 /// to allow encapsulating additional information or data related to
 /// the exception.
 class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
-  DataNetworkExceptionState(NetworkException exception, StackTrace stackTrace)
-      : super(networkException: exception, stackTrace: stackTrace) {
+  DataNetworkExceptionState(String message, StackTrace stackTrace)
+      : super(message: message, stackTrace: stackTrace) {
     log(
       'Network exception captured:',
-      error: exception.toString(),
+      error: message,
       stackTrace: stackTrace,
       name: 'DataNetworkExceptionState',
     );
   }
 
   @override
-  Map<String, Object?> get namedProps => {'networkException': networkException};
+  Map<String, Object?> get namedProps => {'networkException': message};
 }
 
 /// [DataCacheExceptionState] is used for handling exceptions related to data
@@ -227,18 +215,18 @@ class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
 /// to allow encapsulating additional information or data related to
 /// the exception.
 class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
-  DataCacheExceptionState(CacheException exception, StackTrace stackTrace)
-      : super(cacheException: exception, stackTrace: stackTrace) {
+  DataCacheExceptionState(String message, StackTrace stackTrace)
+      : super(message: message, stackTrace: stackTrace) {
     log(
       'Cache exception captured:',
-      error: exception.toString(),
+      error: message,
       stackTrace: stackTrace,
       name: 'DataCacheExceptionState',
     );
   }
 
   @override
-  Map<String, Object?> get namedProps => {'cacheException': cacheException};
+  Map<String, Object?> get namedProps => {'cacheException': message};
 }
 
 /// [DataInvalidInputExceptionState] is used for handling exceptions related to
@@ -249,18 +237,17 @@ class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
   DataInvalidInputExceptionState(
-    InvalidInputException exception,
+    String message,
     StackTrace stackTrace,
-  ) : super(invalidInputException: exception, stackTrace: stackTrace) {
+  ) : super(message: message, stackTrace: stackTrace) {
     log(
       'Invalid Input exception captured:',
-      error: exception.toString(),
+      error: message,
       stackTrace: stackTrace,
       name: 'DataInvalidInputExceptionState',
     );
   }
 
   @override
-  Map<String, Object?> get namedProps =>
-      {'invalidInputException': invalidInputException};
+  Map<String, Object?> get namedProps => {'invalidInputException': message};
 }
