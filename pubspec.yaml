@@ -9,11 +9,13 @@ environment:
 
 dependencies:
   connectivity_plus: ^5.0.2
-  dio: ^5.4.0
+  dio: ^5.4.1
   equatable: ^2.0.5
-  http_status:
+  http_exception:
+    path: ../http_exception
   flutter:
     sdk: flutter
+  http_status: ^3.3.0
 
 dev_dependencies:
   flutter_test:
