@@ -186,7 +186,8 @@ extension HttpResponseDioExtension on Future<Response> {
       ApiHandler(
         apiCall: () => this, // response = dio.get('https://')
         parserModel: (Object? data) {
-          final List<dynamic> responseData = data as List;
+          final List<Map<String, dynamic>> responseData =
+              data as List<Map<String, dynamic>>;
           final List<TModel> listResult =
               responseData.map((item) => fromJson(item)).toList();
           return listResult;

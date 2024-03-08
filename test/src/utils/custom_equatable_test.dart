@@ -2,11 +2,11 @@ import 'package:exception_handler/exception_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class TestClass extends CustomEquatable {
-  final String name;
+  const TestClass({required this.name, this.age, this.height});
+
   final int? age;
   final double? height;
-
-  const TestClass({required this.name, this.age, this.height});
+  final String name;
 
   @override
   Map<String, Object?> get namedProps =>

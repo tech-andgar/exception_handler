@@ -96,7 +96,7 @@ Change mode async isolate to sync''',
   }
 }
 
-class DioExceptionHandler extends ClientExceptionHandler {
+class DioExceptionHandler implements ClientExceptionHandler {
   static Connectivity connectivity = Connectivity();
   late HandleHttpParseResponse handleParseResponse_;
 
@@ -117,9 +117,9 @@ class DioExceptionHandler extends ClientExceptionHandler {
   ///    );
   /// ```
   @override
-  Future<ResultState<TModel>> callApi<Response, TModel>(
-    ApiHandler<Response, TModel> apiHandler, {
-    HandleHttpParseResponse<Response, TModel>? handleHttpParseResponse,
+  Future<ResultState<TModel>> callApi<TResponse, TModel>(
+    ApiHandler<TResponse, TModel> apiHandler, {
+    HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
   }) async {
     handleParseResponse_ = handleHttpParseResponse ??
         HandleHttpParseResponse<Response, TModel>(
@@ -132,7 +132,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
         );
 
     try {
-      dynamic response = await apiHandler.apiCall();
+      final Response response = await apiHandler.apiCall() as Response<dynamic>;
 
       final Future<ResultState<TModel>> handleHttpResponse =
           _handleHttpResponse(
@@ -172,7 +172,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
   /// _handleHttpResponse processes the HTTP response and handles different
   /// status codes.
   Future<ResultState<TModel>> _handleHttpResponse<TModel>(
-    ResponseParser<Response, TModel> responseParser,
+    ResponseParser<Response<dynamic>, TModel> responseParser,
   ) async {
     final int? statusCode = responseParser.response.statusCode;
 
@@ -182,38 +182,37 @@ class DioExceptionHandler extends ClientExceptionHandler {
   Future<ResultState<TModel>> _handleStatusCode<TModel>(
     int? statusCode,
     ResponseParser<Response, TModel> responseParser,
-  ) async {
-    return switch (statusCode) {
-      final int statusCode when statusCode.isInformationHttpStatusCode =>
-        await handleParseResponse_.handleHttp1xxParseResponse!(
-          statusCode,
-          responseParser,
-        ),
-      final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
-        await handleHttp2xxParseResponseDio<TModel>(responseParser),
-      // final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
-      //   await handleParseResponse_.handleHttp2xxParseResponse!(responseParser),
-      final int statusCode when statusCode.isRedirectHttpStatusCode =>
-        await handleParseResponse_.handleHttp3xxParseResponse!(
-          statusCode,
-          responseParser,
-        ),
-      final int statusCode when statusCode.isClientErrorHttpStatusCode =>
-        await handleParseResponse_.handleHttp4xxParseResponse!(
-          statusCode,
-          responseParser,
-        ),
-      final int statusCode when statusCode.isServerErrorHttpStatusCode =>
-        await handleParseResponse_.handleHttp5xxParseResponse!(
-          statusCode,
-          responseParser,
-        ),
-      _ => await handleParseResponse_.handleHttpUnknownParseResponse!(
-          statusCode ?? 000,
-          responseParser,
-        ),
-    };
-  }
+  ) async =>
+      switch (statusCode) {
+        final int statusCode when statusCode.isInformationHttpStatusCode =>
+          await handleParseResponse_.handleHttp1xxParseResponse!(
+            statusCode,
+            responseParser,
+          ),
+        final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
+          await handleHttp2xxParseResponseDio<TModel>(responseParser),
+        // final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
+        //   await handleParseResponse_.handleHttp2xxParseResponse!(responseParser),
+        final int statusCode when statusCode.isRedirectHttpStatusCode =>
+          await handleParseResponse_.handleHttp3xxParseResponse!(
+            statusCode,
+            responseParser,
+          ),
+        final int statusCode when statusCode.isClientErrorHttpStatusCode =>
+          await handleParseResponse_.handleHttp4xxParseResponse!(
+            statusCode,
+            responseParser,
+          ),
+        final int statusCode when statusCode.isServerErrorHttpStatusCode =>
+          await handleParseResponse_.handleHttp5xxParseResponse!(
+            statusCode,
+            responseParser,
+          ),
+        _ => await handleParseResponse_.handleHttpUnknownParseResponse!(
+            statusCode ?? 000,
+            responseParser,
+          ),
+      };
 
   /// _handleDioException handles exceptions from the Dio library,
   /// particularly around connectivity.

@@ -14,12 +14,10 @@ class UserModel {
     required this.name,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'] as int,
-      name: json['name'] as String,
-    );
-  }
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        id: json['id'] as int,
+        name: json['name'] as String,
+      );
 
   final int id;
   final String name;
@@ -41,16 +39,15 @@ void main() {
     Future<Never> futureDioException(
       DioExceptionType type, {
       Response? response,
-    }) {
-      return Future.delayed(
-        const Duration(microseconds: 10),
-        () => throw DioException(
-          response: response,
-          requestOptions: requestOptions,
-          type: type,
-        ),
-      );
-    }
+    }) =>
+        Future.delayed(
+          const Duration(microseconds: 10),
+          () => throw DioException(
+            response: response,
+            requestOptions: requestOptions,
+            type: type,
+          ),
+        );
 
     late MockConnectivity mockConnectivity;
 
@@ -469,7 +466,7 @@ void main() {
         );
         expect(
           result.exception.toString(),
-          'DataParseExceptionState<List<UserModel>>(parseException: "type \'String\' is not a subtype of type \'int\' in type cast")',
+          'DataParseExceptionState<List<UserModel>>(parseException: "type \'List<dynamic>\' is not a subtype of type \'List<Map<String, dynamic>>\' in type cast")',
         );
       });
 
@@ -506,11 +503,11 @@ void main() {
 
         // Assert
         expect(
-          (result as FailureState<List<UserModel>>),
+          result as FailureState<List<UserModel>>,
           isA<FailureState<List<UserModel>>>(),
         );
         expect(
-          (result).exception,
+          result.exception,
           isA<DataNetworkExceptionState>(),
         );
         expect(

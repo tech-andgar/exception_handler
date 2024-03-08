@@ -10,7 +10,7 @@ void main() {
             statusCode: 200,
             requestOptions: RequestOptions(),
           );
-      String mockParserModel(dynamic data) => 'Parsed $data';
+      String mockParserModel(Object? data) => 'Parsed $data';
 
       final handler = ApiHandler<Response, String>(
         apiCall: mockApiCall,
@@ -27,7 +27,7 @@ void main() {
       statusCode: 200,
       requestOptions: RequestOptions(),
     );
-    String mockParserModel(dynamic data) => data['key'];
+    String mockParserModel(Object? data) => (data as Map)['key'] as String;
     final parser = ResponseParser<Response, String>(
       response: mockResponse,
       parserModel: mockParserModel,
@@ -39,7 +39,7 @@ void main() {
       expect(
         parser.toString(),
         'ResponseParser<Response<dynamic>, String>(parserModel: '
-        '"Closure: (dynamic) => String", response: "{"key":"value"}", '
+        '"Closure: (Object?) => String", response: "{"key":"value"}", '
         'exception: null, stackTrace: null)',
       );
     });

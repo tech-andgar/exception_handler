@@ -24,7 +24,7 @@ void main() {
       DioExceptionHandler.connectivity = mockConnectivity;
     });
     test('Successful API call returns parsed data', () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           data: {'key': 'value'},
@@ -34,8 +34,8 @@ void main() {
 
       final ResultState<String> result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
-          parserModel: (Object? data) => (data as Map)['key'],
+          apiCall: () => mockDio.get<dynamic>('test'),
+          parserModel: (Object? data) => (data as Map)['key'] as String,
         ),
       );
 
@@ -54,7 +54,7 @@ void main() {
 
     test('API call with 401 status code returns unauthorized exception',
         () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           statusCode: 401,
@@ -63,7 +63,7 @@ void main() {
 
       final result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (Object? data) => data as String,
         ),
       );
@@ -105,11 +105,11 @@ void main() {
       }
     });
     test('API call with client exception', () async {
-      when(() => mockDio.get(any())).thenThrow(Exception('Client Error'));
+      when(() => mockDio.get<dynamic>(any())).thenThrow(Exception('Client Error'));
 
       final result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (Object? data) => data as String,
         ),
       );
@@ -129,7 +129,7 @@ void main() {
     });
 
     test('API call with parsing error', () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           data: 'Invalid data',
@@ -139,7 +139,7 @@ void main() {
 
       final ResultState<String> result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (Object? data) =>
               int.parse(data as String).toString(), // Intentional parse error
         ),
@@ -162,12 +162,10 @@ void main() {
         () async {
       final ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () async {
-            return Response(
-              requestOptions: RequestOptions(path: ''),
-              statusCode: 300,
-            );
-          },
+          apiCall: () async => Response<dynamic>(
+            requestOptions: RequestOptions(path: ''),
+            statusCode: 300,
+          ),
           parserModel: (res) {},
         ),
       );
@@ -187,7 +185,7 @@ void main() {
     });
     test('should return FailureState with DataHttpException for 4xx error',
         () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           statusCode: 400,
@@ -195,7 +193,7 @@ void main() {
       );
       final ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (res) {},
         ),
       );
@@ -209,7 +207,7 @@ void main() {
           expect(exception, isA<DataHttpExceptionState>());
           if (exception is DataHttpExceptionState) {
             expect(
-              (exception).httpException,
+              exception.httpException,
               equals(HttpStatus.fromCode(400).exception()),
             );
           }
@@ -217,7 +215,7 @@ void main() {
     });
     test('should return FailureState with DataHttpException for 404 error',
         () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           statusCode: 404,
@@ -225,7 +223,7 @@ void main() {
       );
       final ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (res) {},
         ),
       );
@@ -239,7 +237,7 @@ void main() {
           expect(exception, isA<DataHttpExceptionState>());
           if (exception is DataHttpExceptionState) {
             expect(
-              (exception).httpException,
+              exception.httpException,
               equals(HttpStatus.fromCode(404).exception()),
             );
           }
@@ -248,7 +246,7 @@ void main() {
 
     test('should return FailureState with DataHttpException for 500 error',
         () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           statusCode: 500,
@@ -256,7 +254,7 @@ void main() {
       );
       final ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (res) {},
         ),
       );
@@ -269,7 +267,7 @@ void main() {
           expect(exception, isA<DataHttpExceptionState>());
           if (exception is DataHttpExceptionState) {
             expect(
-              (exception).httpException,
+              exception.httpException,
               equals(HttpStatus.fromCode(500).exception()),
             );
           }
@@ -277,7 +275,7 @@ void main() {
     });
     test('should return FailureState with DataHttpException for 501 error',
         () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           statusCode: 501,
@@ -285,7 +283,7 @@ void main() {
       );
       final ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (res) {},
         ),
       );
@@ -299,7 +297,7 @@ void main() {
           expect(exception, isA<DataHttpExceptionState>());
           if (exception is DataHttpExceptionState) {
             expect(
-              (exception).httpException,
+              exception.httpException,
               equals(HttpStatus.fromCode(501).exception()),
             );
           }
@@ -307,7 +305,7 @@ void main() {
     });
     test('should return FailureState with DataHttpException for 600 error',
         () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           statusCode: 600,
@@ -315,7 +313,7 @@ void main() {
       );
       final ResultState result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (res) {},
         ),
       );
@@ -329,7 +327,7 @@ void main() {
           expect(exception, isA<DataHttpExceptionState>());
           if (exception is DataHttpExceptionState) {
             expect(
-              (exception).httpException,
+              exception.httpException,
               equals(
                 HttpException(
                   httpStatus: HttpStatus(
@@ -371,7 +369,7 @@ void main() {
             );
           }
       }
-      expect((result).exception, isA<DataNetworkExceptionState>());
+      expect(result.exception, isA<DataNetworkExceptionState>());
     });
     test('handles DioExceptionType.sendTimeout on API call', () async {
       when(() => mockApiHandler.apiCall()).thenThrow(
@@ -398,7 +396,7 @@ void main() {
             );
           }
       }
-      expect((result).exception, isA<DataNetworkExceptionState>());
+      expect(result.exception, isA<DataNetworkExceptionState>());
     });
     test('handles DioExceptionType.unknown on API call', () async {
       when(() => mockApiHandler.apiCall()).thenThrow(
@@ -420,7 +418,7 @@ void main() {
           expect(exception, isA<DataHttpExceptionState>());
           if (exception is DataHttpExceptionState) {
             expect(
-              (exception).httpException,
+              exception.httpException,
               equals(
                 HttpException(
                   httpStatus: HttpStatus(
@@ -434,7 +432,7 @@ void main() {
             );
           }
       }
-      expect((result).exception, isA<DataHttpExceptionState>());
+      expect(result.exception, isA<DataHttpExceptionState>());
     });
 
     test('handles general exception on API call', () async {
@@ -449,7 +447,7 @@ void main() {
       );
     });
     test('API call with unknown error', () async {
-      when(() => mockDio.get(any())).thenAnswer(
+      when(() => mockDio.get<dynamic>(any())).thenAnswer(
         (_) async => Response(
           requestOptions: RequestOptions(path: ''),
           data: 'Invalid data',
@@ -459,7 +457,7 @@ void main() {
 
       final ResultState<String> result = await dioExceptionHandler.callApi(
         ApiHandler(
-          apiCall: () => mockDio.get('test'),
+          apiCall: () => mockDio.get<dynamic>('test'),
           parserModel: (Object? data) {
             throw Exception('Error Unknown'); // Intentional error
           },
