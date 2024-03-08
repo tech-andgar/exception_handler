@@ -23,14 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 🎯 Setup Dart
-        uses: dart-lang/setup-dart@v1.6.2
+      - uses: subosito/flutter-action@v2
         with:
-          sdk: ${{ matrix.channel }}
+          channel: ${{ matrix.channel }}
+
+      - id: disabled_analytics_flutter
+        name: Disabled Analytics Flutter
+        run: flutter config --no-analytics
 
       - id: disabled_analytics_dart
         name: Disabled Analytics Dart
         run: dart --disable-analytics
+
+      - id: checking_version_flutter
+        name: Check version flutter is installed
+        run: flutter --version
 
       - id: checking_version_dart
         name: Check version Dart is installed
@@ -68,10 +75,9 @@ jobs:
       - name: 🔍 Analyze check unnecessary nullable (DCL)
         run: dart run dart_code_linter:metrics check-unnecessary-nullable .
 
-      - name: 🧪 Run Tests
-        run: |
-          dart pub global activate coverage
-          dart pub global run coverage:test_with_coverage
+      - name: 🧪 Run Tests with coverage
+        run: flutter test --test-randomize-ordering-seed random --coverage
+        # if: always() && steps.install.outcome == 'success'
 
       - name: 📦 Pre-publish - dry run
         run: dart pub publish --dry-run
