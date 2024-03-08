@@ -85,22 +85,16 @@ extension HttpResponseDioExtension on Future<Response<Object?>> {
   ///        print(failure.exception);
   ///    }
   /// ```
+  ///
   Future<ResultState<TModel>> fromJson<TModel>(
     TModel Function(Map<String, dynamic>) fromJson,
-  ) async {
-    final ResultState<TModel> result =
-        await DioExceptionHandler().callApi<Response<Object?>, TModel>(
-      ApiHandler(
-        apiCall: () => this, // response = dio.get('https://')
-        parserModel: (Object? data) {
-          final TModel resultMapper = fromJson(data as Map<String, dynamic>);
-          return resultMapper;
-        },
-      ),
-    );
-
-    return result;
-  }
+  ) async =>
+      await DioExceptionHandler().callApi<Response<Object?>, TModel>(
+        ApiHandler(
+          apiCall: () => this, // Same: response = dio.get('https://').
+          parserModel: (Object? data) => fromJson(data as Map<String, dynamic>),
+        ),
+      );
 
   /// Converts a Dio HTTP response into an [ResultState<List<TModel>>] type
   /// using a custom `fromJsonAsList` method.
@@ -180,21 +174,13 @@ extension HttpResponseDioExtension on Future<Response<Object?>> {
   /// ```
   Future<ResultState<List<TModel>>> fromJsonAsList<TModel>(
     TModel Function(Map<String, dynamic>) fromJson,
-  ) async {
-    final ResultState<List<TModel>> result =
-        await DioExceptionHandler().callApi<Response<Object?>, List<TModel>>(
-      ApiHandler(
-        apiCall: () => this, // response = dio.get('https://')
-        parserModel: (Object? data) {
-          final List<Map<String, dynamic>> responseData =
-              data as List<Map<String, dynamic>>;
-          final List<TModel> listResult =
-              responseData.map((item) => fromJson(item)).toList();
-          return listResult;
-        },
-      ),
-    );
-
-    return result;
-  }
+  ) async =>
+      await DioExceptionHandler().callApi<Response<Object?>, List<TModel>>(
+        ApiHandler(
+          apiCall: () => this, // Same: response = dio.get('https://').
+          parserModel: (Object? data) => (data as List<Map<String, dynamic>>)
+              .map((item) => fromJson(item))
+              .toList(),
+        ),
+      );
 }

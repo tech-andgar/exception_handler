@@ -20,12 +20,14 @@ abstract class CustomEquatable extends Equatable {
           (MapEntry<String, Object?> e) => (e.value is num ||
                   e.value is Exception ||
                   e.value is Enum ||
-                  e.value is ExceptionState || // For internal exception handler
+                  e.value
+                      is ExceptionState || // For internal exception handler.
                   e.value == null)
               ? '${e.key}: ${e.value}'
               : '${e.key}: "${e.value}"',
         )
         .join(', ');
+
     return '$type($propList)';
   }
 

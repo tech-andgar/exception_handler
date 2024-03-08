@@ -8,8 +8,9 @@ export 'dio/dio.dart';
 export 'typedef.dart';
 
 mixin ClientExceptionHandler {
-  /// callApi is a generic method to handle API calls and return a tuple of
+  /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
+  ///
   Future<ResultState<TModel>> callApi<R, TModel>(
     ApiHandler<R, TModel> apiHandler, {
     HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,

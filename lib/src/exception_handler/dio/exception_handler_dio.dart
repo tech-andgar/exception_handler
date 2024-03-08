@@ -12,21 +12,21 @@ import 'package:http_status/http_status.dart';
 
 import '../../../exception_handler.dart';
 
-/// handleHttpGenericParseResponseDio tries to parse the response and handle
+/// Method [handleHttpGenericParseResponseDio] tries to parse the response and handle
 /// any parsing exceptions.
+///
 Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
   int statusCode,
   ResponseParser<Response, TModel> responseParser,
 ) async {
   try {
-    final FailureState<TModel> failureState = FailureState(
+    return FailureState(
       DataHttpExceptionState<TModel>(
         exception: responseParser.exception,
         httpException: HttpStatus.fromCode(statusCode).exception(),
         stackTrace: StackTrace.current,
       ),
     );
-    return failureState;
   } catch (e) {
     return FailureState(
       DataHttpExceptionState<TModel>(
@@ -45,7 +45,7 @@ Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
   }
 }
 
-/// handleHttp2xxParseResponseDio tries to parse the response and handle
+/// Method [handleHttp2xxParseResponseDio] tries to parse the response and handle
 /// any parsing exceptions.
 Future<ResultState<TModel>> handleHttp2xxParseResponseDio<TModel>(
   ResponseParser<Response<Object?>, TModel> responseParser,
@@ -55,6 +55,7 @@ Future<ResultState<TModel>> handleHttp2xxParseResponseDio<TModel>(
       responseParser.parserModel,
       responseParser.response.data,
     );
+
     return SuccessState(dataModelParsed);
   } catch (e) {
     try {
@@ -101,7 +102,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   // ignore: strict_raw_type
   late HandleHttpParseResponse handleParseResponse_;
 
-  /// callApi is a generic method to handle API calls and return a tuple of
+  /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
   ///
   /// Eg:
@@ -117,6 +118,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   ///      ),
   ///    );
   /// ```
+  ///
   @override
   Future<ResultState<TModel>> callApi<TResponse, TModel>(
     ApiHandler<TResponse, TModel> apiHandler, {
@@ -125,6 +127,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
     handleParseResponse_ = handleHttpParseResponse ??
         HandleHttpParseResponse<Response<Object?>, TModel>(
           handleHttp1xxParseResponse: handleHttpGenericParseResponseDio,
+          // TODO(andgar2010): investiagtion bug.
           // handleHttp2xxParseResponse: handleHttp2xxParseResponseDio,
           handleHttp3xxParseResponse: handleHttpGenericParseResponseDio,
           handleHttp4xxParseResponse: handleHttpGenericParseResponseDio,
@@ -136,15 +139,12 @@ class DioExceptionHandler implements ClientExceptionHandler {
       final Response<Object?> response =
           await apiHandler.apiCall() as Response<Object?>;
 
-      final Future<ResultState<TModel>> handleHttpResponse =
-          _handleHttpResponse(
+      return _handleHttpResponse(
         ResponseParser(
           response: response,
           parserModel: apiHandler.parserModel,
         ),
       );
-
-      return handleHttpResponse;
     } on DioException catch (e, s) {
       if (!await _isConnected() || e.type == DioExceptionType.connectionError) {
         return FailureState(
@@ -154,20 +154,19 @@ class DioExceptionHandler implements ClientExceptionHandler {
           ),
         );
       }
-      final ResultState<TModel> handleDioException =
-          await _handleDioException(e, s);
-      return handleDioException;
+
+      return await _handleDioException(e, s);
     } on Exception catch (e, s) {
-      final FailureState<TModel> failureState = FailureState(
+      return FailureState(
         DataClientExceptionState<TModel>(message: e.toString(), stackTrace: s),
       );
-      return failureState;
     }
   }
 
   /// _isConnected checks the current network connectivity status.
   static Future<bool> _isConnected() async {
     final ConnectivityResult result = await connectivity.checkConnectivity();
+
     return result != ConnectivityResult.none;
   }
 
@@ -193,6 +192,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
           ),
         final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
           await handleHttp2xxParseResponseDio<TModel>(responseParser),
+        // TODO(andgar2010): investiagtion bug
         // final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
         //   await handleParseResponse_.handleHttp2xxParseResponse!(responseParser),
         final int statusCode when statusCode.isRedirectHttpStatusCode =>
@@ -242,36 +242,34 @@ class DioExceptionHandler implements ClientExceptionHandler {
       ),
     );
 
-    if (statusCode != null) {
-      return await handleStatusCode;
-    } else {
-      return switch (e.type) {
-        DioExceptionType.connectionTimeout => FailureState(
-            DataNetworkExceptionState<TModel>(
-              message: 'NetworkException.timeOutException',
-              stackTrace: s,
-            ),
-          ),
-        DioExceptionType.receiveTimeout => FailureState(
-            DataNetworkExceptionState<TModel>(
-              message: 'NetworkException.receiveTimeout',
-              stackTrace: s,
-            ),
-          ),
-        DioExceptionType.cancel => FailureState(
-            DataNetworkExceptionState<TModel>(
-              message: 'NetworkException.cancel',
-              stackTrace: s,
-            ),
-          ),
-        DioExceptionType.sendTimeout => FailureState(
-            DataNetworkExceptionState<TModel>(
-              message: 'NetworkException.sendTimeout',
-              stackTrace: s,
-            ),
-          ),
-        _ => await handleStatusCode,
-      };
-    }
+    return statusCode != null
+        ? await handleStatusCode
+        : switch (e.type) {
+            DioExceptionType.connectionTimeout => FailureState(
+                DataNetworkExceptionState<TModel>(
+                  message: 'NetworkException.timeOutException',
+                  stackTrace: s,
+                ),
+              ),
+            DioExceptionType.receiveTimeout => FailureState(
+                DataNetworkExceptionState<TModel>(
+                  message: 'NetworkException.receiveTimeout',
+                  stackTrace: s,
+                ),
+              ),
+            DioExceptionType.cancel => FailureState(
+                DataNetworkExceptionState<TModel>(
+                  message: 'NetworkException.cancel',
+                  stackTrace: s,
+                ),
+              ),
+            DioExceptionType.sendTimeout => FailureState(
+                DataNetworkExceptionState<TModel>(
+                  message: 'NetworkException.sendTimeout',
+                  stackTrace: s,
+                ),
+              ),
+            _ => await handleStatusCode,
+          };
   }
 }
