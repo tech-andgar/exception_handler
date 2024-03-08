@@ -39,7 +39,7 @@ class ResponseParser<R, TModel> extends CustomEquatable {
 class HandleHttpParseResponse<R, TModel> {
   HandleHttpParseResponse({
     this.handleHttp1xxParseResponse,
-    this.handleHttp2xxParseResponse,
+//    this.handleHttp2xxParseResponse,
     this.handleHttp3xxParseResponse,
     this.handleHttp4xxParseResponse,
     this.handleHttp5xxParseResponse,
@@ -51,10 +51,9 @@ class HandleHttpParseResponse<R, TModel> {
     ResponseParser<R, TModel>,
   )? handleHttp1xxParseResponse;
 
-  final Future<ResultState<TModel>> Function<R, TModel>(
-    int statusCode,
-    ResponseParser<R, TModel>,
-  )? handleHttp2xxParseResponse;
+  // final Future<ResultState<TModel>> Function<TModel>(
+  //   ResponseParser,
+  // )? handleHttp2xxParseResponse;
 
   final Future<ResultState<TModel>> Function<R, TModel>(
     int statusCode,

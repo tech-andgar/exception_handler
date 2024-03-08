@@ -50,9 +50,8 @@ Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
 
 /// handleHttp2xxParseResponseDio tries to parse the response and handle
 /// any parsing exceptions.
-Future<ResultState<TModel>> handleHttp2xxParseResponseDio<Response, TModel>(
-  int? statusCode,
-  ResponseParser responseParser,
+Future<ResultState<TModel>> handleHttp2xxParseResponseDio<TModel>(
+  ResponseParser<Response, TModel> responseParser,
 ) async {
   try {
     final TModel dataModelParsed = await compute(
@@ -107,7 +106,7 @@ class DioExceptionHandler extends ClientExceptionHandler {
     handleParseResponse_ = handleHttpParseResponse ??
         HandleHttpParseResponse<Response, TModel>(
           handleHttp1xxParseResponse: handleHttpGenericParseResponseDio,
-          handleHttp2xxParseResponse: handleHttp2xxParseResponseDio,
+          // handleHttp2xxParseResponse: handleHttp2xxParseResponseDio,
           handleHttp3xxParseResponse: handleHttpGenericParseResponseDio,
           handleHttp4xxParseResponse: handleHttpGenericParseResponseDio,
           handleHttp5xxParseResponse: handleHttpGenericParseResponseDio,
@@ -175,10 +174,9 @@ class DioExceptionHandler extends ClientExceptionHandler {
           responseParser,
         ),
       final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
-        await handleParseResponse_.handleHttp2xxParseResponse!(
-          statusCode,
-          responseParser,
-        ),
+        await handleHttp2xxParseResponseDio<TModel>(responseParser),
+      // final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
+      //   await handleParseResponse_.handleHttp2xxParseResponse!(responseParser),
       final int statusCode when statusCode.isRedirectHttpStatusCode =>
         await handleParseResponse_.handleHttp3xxParseResponse!(
           statusCode,
