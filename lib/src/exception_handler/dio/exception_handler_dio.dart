@@ -7,13 +7,10 @@ import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:exception_handler/exception_handler.dart';
 import 'package:http_exception/http_exception.dart';
 import 'package:http_status/http_status.dart';
 
-import '../../exception_state/exceptions_state.dart';
-import '../../result_state/result_state.dart';
-import '../exception_handler_client.dart';
+import '../../../exception_handler.dart';
 
 /// handleHttpGenericParseResponseDio tries to parse the response and handle
 /// any parsing exceptions.
