@@ -8,7 +8,7 @@ import '../../../exception_handler.dart';
 
 /// An extension on `Future<Response>` providing methods for handling Dio HTTP responses and converting them
 /// into [ResultState<TModel>] or [ResultState<List<TModel>>] types.
-extension HttpResponseDioExtension on Future<Response> {
+extension HttpResponseDioExtension on Future<Response<Object?>> {
   /// Converts a Dio HTTP response into an [ResultState<TModel>] type using
   /// a custom `fromJson` method.
   ///
@@ -89,7 +89,7 @@ extension HttpResponseDioExtension on Future<Response> {
     TModel Function(Map<String, dynamic>) fromJson,
   ) async {
     final ResultState<TModel> result =
-        await DioExceptionHandler().callApi<Response, TModel>(
+        await DioExceptionHandler().callApi<Response<Object?>, TModel>(
       ApiHandler(
         apiCall: () => this, // response = dio.get('https://')
         parserModel: (Object? data) {
@@ -182,7 +182,7 @@ extension HttpResponseDioExtension on Future<Response> {
     TModel Function(Map<String, dynamic>) fromJson,
   ) async {
     final ResultState<List<TModel>> result =
-        await DioExceptionHandler().callApi<Response, List<TModel>>(
+        await DioExceptionHandler().callApi<Response<Object?>, List<TModel>>(
       ApiHandler(
         apiCall: () => this, // response = dio.get('https://')
         parserModel: (Object? data) {

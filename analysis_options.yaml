@@ -1,7 +1,131 @@
 include: package:flutter_lints/flutter.yaml
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+analyzer:
+  plugins:
+    - dart_code_linter
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
+# Lint rules and documentation, see http://dart-lang.github.io/linter/lints
 linter:
   rules:
-    require_trailing_commas: true
+# Error Rules
+    - avoid_slow_async_io
+    - cancel_subscriptions
+    - close_sinks
+    - comment_references
+    - literal_only_boolean_expressions
+    - no_adjacent_strings_in_list
+    - test_types_in_equals
+    - throw_in_finally
+    - unnecessary_statements
+
+# Style Rules
+    - always_declare_return_types
+    - always_put_control_body_on_new_line # works against dartfmt
+    - always_put_required_named_parameters_first
+    # - always_specify_types # More disbuting
+    - avoid_annotating_with_dynamic
+    - avoid_bool_literals_in_conditional_expressions
+    # - avoid_catching_errors # tempory disabled because working validation
+    - avoid_classes_with_only_static_members
+    - avoid_double_and_int_checks
+    - avoid_field_initializers_in_const_classes
+    - avoid_function_literals_in_foreach_calls
+    - avoid_init_to_null
+    - avoid_js_rounded_ints
+    - avoid_positional_boolean_parameters
+    - avoid_private_typedef_functions
+    - avoid_returning_this
+    - avoid_setters_without_getters
+    # - avoid_types_on_closure_parameters # confilict always_specify_types
+    - avoid_unused_constructor_parameters
+    - avoid_void_async
+    - cascade_invocations
+    - directives_ordering
+    - join_return_with_assignment
+    - library_prefixes
+    # - lines_longer_than_80_chars
+    # - omit_local_variable_types # confilict always_specify_types
+    - one_member_abstracts
+    - only_throw_errors
+    - package_api_docs
+    - parameter_assignments
+    - prefer_asserts_in_initializer_lists
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_constructors_over_static_methods
+    - prefer_expression_function_bodies
+    - prefer_final_locals
+    - prefer_foreach
+    - prefer_single_quotes
+    # - public_member_api_docs # TODO: Update Docs
+    - require_trailing_commas
+    - sort_constructors_first
+    - sort_unnamed_constructors_first
+    - type_annotate_public_apis
+    - unawaited_futures
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+    - use_setters_to_change_properties
+    - use_string_buffers
+    - use_to_and_as_if_applicable
+
+dart_code_linter:
+  extends:
+    - package:dart_code_linter/presets/recommended.yaml
+    - package:dart_code_linter/presets/metrics_recommended.yaml
+    # - package:dart_code_linter/presets/dart_all.yaml
+    # - package:dart_code_linter/presets/all.yaml
+    # - package:dart_code_linter/presets/intl.yaml
+
+  metrics:
+    cyclomatic-complexity: 20
+    number-of-parameters: 4
+    maximum-nesting-level: 5
+  metrics-exclude:
+    - test/**
+
+  rules:
+  - member-ordering:
+      order:
+        - constructors
+        - public-fields
+        - private-fields
+        - close-method
+        - dispose-method
+      widgets-order:
+        - constructor
+        - build-method
+        - init-state-method
+        - did-change-dependencies-method
+        - did-update-widget-method
+        - dispose-method
+  - format-comment: true
+  - no-magic-number:
+      allowed: [0, 2, 100, 200, 300, 400, 401, 402, 403, 404, 500, 501, 600]
+  # - allow-only-once: true
+  # - avoid-dynamic: true
+  # - avoid-passing-async-when-sync-expected: true
+  # - avoid-redundant-async: true
+  # - avoid-unnecessary-type-assertions: true
+  # - avoid-unnecessary-type-casts: true
+  # - avoid-unrelated-type-assertions: true
+  # - avoid-unused-parameters: true
+  # - avoid-nested-conditional-expressions: true
+  # - newline-before-return: true
+  # - no-boolean-literal-compare: true
+  # - no-empty-block: true
+  # - prefer-trailing-comma: true
+  # - prefer-conditional-expressions: true
+  # - no-equal-then-else: true
+  # - prefer-moving-to-variable: true
+  # - prefer-match-file-name: true

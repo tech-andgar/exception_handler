@@ -14,7 +14,7 @@ class UserModel {
     required this.name,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory UserModel.fromJson(Map<String, Object?> json) => UserModel(
         id: json['id'] as int,
         name: json['name'] as String,
       );
@@ -38,7 +38,7 @@ void main() {
 
     Future<Never> futureDioException(
       DioExceptionType type, {
-      Response? response,
+      Response<Object?>? response,
     }) =>
         Future.delayed(
           const Duration(microseconds: 10),
@@ -63,7 +63,7 @@ void main() {
           'should return SuccessState<UserModel> when conversion is successful',
           () async {
         // Arrange
-        final dioResponse = Response<Map<String, dynamic>>(
+        final dioResponse = Response<Map<String, Object?>>(
           data: data,
           statusCode: 200,
           requestOptions: requestOptions,
@@ -85,7 +85,7 @@ void main() {
           'should return FailureState DataParseExceptionState when conversion fails',
           () async {
         // Arrange
-        final dioResponse = Response<Map<String, dynamic>>(
+        final dioResponse = Response<Map<String, Object?>>(
           data: {'id': 'invalid', 'name': 'John Doe'},
           statusCode: 200,
           requestOptions: requestOptions,
@@ -99,7 +99,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataParseExceptionState>(),
+          isA<DataParseExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -121,7 +121,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -142,7 +142,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -163,7 +163,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -184,7 +184,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -206,7 +206,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -227,7 +227,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -252,7 +252,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != null),
             statusCode: null,
@@ -266,7 +266,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -291,7 +291,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 100),
             statusCode: 100,
@@ -305,7 +305,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -324,7 +324,7 @@ void main() {
 
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 300),
             statusCode: 300,
@@ -338,7 +338,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
 
         expect(
@@ -356,7 +356,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 400),
             statusCode: 400,
@@ -370,7 +370,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
 
         expect(
@@ -389,7 +389,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 500),
             statusCode: 500,
@@ -403,7 +403,7 @@ void main() {
         expect(result, isA<FailureState<UserModel>>());
         expect(
           (result as FailureState<UserModel>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -422,7 +422,7 @@ void main() {
           () async {
         // Arrange
 
-        final dioResponse = Response<List<dynamic>>(
+        final dioResponse = Response<List<Object?>>(
           data: dataList,
           statusCode: 200,
           requestOptions: requestOptions,
@@ -445,7 +445,7 @@ void main() {
           'should return FailureState DataParseExceptionState when conversion fails for at least one field',
           () async {
         // Arrange
-        final dioResponse = Response<List<dynamic>>(
+        final dioResponse = Response<List<Object?>>(
           data: [
             {'id': 1, 'name': 'John Doe'},
             {'id': 'invalid', 'name': 'Jane Doe'},
@@ -462,11 +462,11 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataParseExceptionState>(),
+          isA<DataParseExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
-          'DataParseExceptionState<List<UserModel>>(parseException: "type \'List<dynamic>\' is not a subtype of type \'List<Map<String, dynamic>>\' in type cast")',
+          'DataParseExceptionState<List<UserModel>>(parseException: "type \'List<Object?>\' is not a subtype of type \'List<Map<String, dynamic>>\' in type cast")',
         );
       });
 
@@ -484,7 +484,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -508,7 +508,7 @@ void main() {
         );
         expect(
           result.exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -529,7 +529,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -550,7 +550,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -572,7 +572,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataNetworkExceptionState>(),
+          isA<DataNetworkExceptionState<Object?>>(),
         );
         expect(
           result.exception.toString(),
@@ -593,7 +593,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -618,7 +618,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != null),
             statusCode: null,
@@ -632,7 +632,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -657,7 +657,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 100),
             statusCode: 100,
@@ -671,7 +671,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -689,7 +689,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 300),
             statusCode: 300,
@@ -703,7 +703,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -721,7 +721,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 400),
             statusCode: 400,
@@ -735,7 +735,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
@@ -753,7 +753,7 @@ void main() {
         // Arrange
         final dioResponse = futureDioException(
           DioExceptionType.badResponse,
-          response: Response<Map<String, dynamic>>(
+          response: Response<Map<String, Object?>>(
             requestOptions:
                 RequestOptions(validateStatus: (status) => status != 500),
             statusCode: 500,
@@ -767,7 +767,7 @@ void main() {
         expect(result, isA<FailureState<List<UserModel>>>());
         expect(
           (result as FailureState<List<UserModel>>).exception,
-          isA<DataHttpExceptionState>(),
+          isA<DataHttpExceptionState<Object?>>(),
         );
         expect(
           (result.exception as DataHttpExceptionState).httpException,
