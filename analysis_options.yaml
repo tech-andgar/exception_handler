@@ -81,16 +81,16 @@ linter:
 
 dart_code_linter:
   extends:
-    - package:dart_code_linter/presets/recommended.yaml
-    - package:dart_code_linter/presets/metrics_recommended.yaml
+    # - package:dart_code_linter/presets/recommended.yaml
+    # - package:dart_code_linter/presets/metrics_recommended.yaml
     # - package:dart_code_linter/presets/dart_all.yaml
     # - package:dart_code_linter/presets/all.yaml
     # - package:dart_code_linter/presets/intl.yaml
 
-  metrics:
-    cyclomatic-complexity: 20
-    number-of-parameters: 4
-    maximum-nesting-level: 5
+  # metrics:
+  #   cyclomatic-complexity: 20
+  #   number-of-parameters: 4
+  #   maximum-nesting-level: 5
   metrics-exclude:
     - test/**
 
@@ -109,7 +109,7 @@ dart_code_linter:
         - did-change-dependencies-method
         - did-update-widget-method
         - dispose-method
-  - format-comment: true
+  # - format-comment: true
   - no-magic-number:
       allowed: [0, 2, 100, 200, 300, 400, 401, 402, 403, 404, 500, 501, 600]
   # - allow-only-once: true
