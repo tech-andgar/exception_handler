@@ -17,18 +17,30 @@ class UserModel extends CustomEquatable {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      email: json['email'],
-      address:
-          json['address'] != null ? Address.fromJson(json['address']) : null,
-      phone: json['phone'],
-      website: json['website'],
-      company:
-          json['company'] != null ? Company.fromJson(json['company']) : null,
-    );
+    if (json
+        case {
+          'id': int? id,
+          'name': String? name,
+          'username': String? username,
+          'email': String? email,
+          'address': Map<String, dynamic>? address,
+          'phone': String? phone,
+          'website': String? website,
+          'company': Map<String, dynamic>? company,
+        }) {
+      return UserModel(
+        id: id,
+        name: name,
+        username: username,
+        email: email,
+        address: address != null ? Address.fromJson(address) : null,
+        phone: phone,
+        website: website,
+        company: company != null ? Company.fromJson(company) : null,
+      );
+    } else {
+      throw FormatException('Invalid JSON: $json');
+    }
   }
 
   final Address? address;
@@ -80,13 +92,24 @@ class Address extends CustomEquatable {
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
-    return Address(
-      street: json['street'],
-      suite: json['suite'],
-      city: json['city'],
-      zipcode: json['zipcode'],
-      geo: json['geo'] != null ? Geo.fromJson(json['geo']) : null,
-    );
+    if (json
+        case {
+          'street': String? street,
+          'suite': String? suite,
+          'city': String? city,
+          'zipcode': String? zipcode,
+          'geo': Map<String, dynamic>? geo,
+        }) {
+      return Address(
+        street: street,
+        suite: suite,
+        city: city,
+        zipcode: zipcode,
+        geo: geo != null ? Geo.fromJson(geo) : null,
+      );
+    } else {
+      throw FormatException('Invalid JSON: $json');
+    }
   }
 
   final String? city;
@@ -121,11 +144,16 @@ class Geo extends CustomEquatable {
   const Geo({this.lat, this.lng});
 
   factory Geo.fromJson(Map<String, dynamic> json) {
-    final Geo geo = Geo(
-      lat: json['lat'],
-      lng: json['lng'],
-    );
-    return geo;
+    if (json
+        case {
+          'lat': String? lat,
+          'lng': String? lng,
+        }) {
+      final Geo geo = Geo(lat: lat, lng: lng);
+      return geo;
+    } else {
+      throw FormatException('Invalid JSON: $json');
+    }
   }
 
   final String? lat;
@@ -149,11 +177,20 @@ class Company extends CustomEquatable {
   const Company({this.name, this.catchPhrase, this.bs});
 
   factory Company.fromJson(Map<String, dynamic> json) {
-    return Company(
-      name: json['name'],
-      catchPhrase: json['catchPhrase'],
-      bs: json['bs'],
-    );
+    if (json
+        case {
+          'name': String? name,
+          'catchPhrase': String? catchPhrase,
+          'bs': String? bs,
+        }) {
+      return Company(
+        name: name,
+        catchPhrase: catchPhrase,
+        bs: bs,
+      );
+    } else {
+      throw FormatException('Invalid JSON: $json');
+    }
   }
 
   final String? bs;
