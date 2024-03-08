@@ -154,14 +154,14 @@ class UnknownErrorException implements Exception {
 /// It includes optional fields for different exception types.
 sealed class ExceptionState<TModel> extends CustomEquatable
     implements Exception {
-  /// A message describing the format error.
-  final String message;
-  final StackTrace stackTrace;
-
   const ExceptionState({
     required this.message,
     required this.stackTrace,
   });
+
+  /// A message describing the format error.
+  final String message;
+  final StackTrace stackTrace;
 }
 
 /// [DataClientExceptionState] captures exceptions related to client-side
@@ -294,4 +294,21 @@ class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
 
   @override
   Map<String, Object?> get namedProps => {'invalidInputException': message};
+}
+
+class DataUnknownExceptionState<TModel> extends ExceptionState<TModel> {
+  DataUnknownExceptionState(
+    String message,
+    StackTrace stackTrace,
+  ) : super(message: message, stackTrace: stackTrace) {
+    log(
+      'Unknown exception captured:',
+      error: message,
+      stackTrace: stackTrace,
+      name: 'DataUnknownExceptionState',
+    );
+  }
+
+  @override
+  Map<String, Object?> get namedProps => {'unknownException': message};
 }

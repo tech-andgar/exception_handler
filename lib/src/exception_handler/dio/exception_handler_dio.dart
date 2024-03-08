@@ -19,7 +19,7 @@ import '../exception_handler_client.dart';
 /// any parsing exceptions.
 Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
   int statusCode,
-  ResponseParser responseParser,
+  ResponseParser<Response, TModel> responseParser,
 ) async {
   try {
     final FailureState<TModel> failureState = FailureState(
@@ -118,11 +118,11 @@ class DioExceptionHandler extends ClientExceptionHandler {
         );
 
     try {
-      final Response response = await apiHandler.apiCall();
+      dynamic response = await apiHandler.apiCall();
 
       final Future<ResultState<TModel>> handleHttpResponse =
           _handleHttpResponse(
-        ResponseParser<Response, TModel>(
+        ResponseParser(
           response: response,
           parserModel: apiHandler.parserModel,
         ),
@@ -156,18 +156,15 @@ class DioExceptionHandler extends ClientExceptionHandler {
 
   /// _handleHttpResponse processes the HTTP response and handles different
   /// status codes.
-  Future<ResultState<TModel>> _handleHttpResponse<Response, TModel>(
-    ResponseParser responseParser,
+  Future<ResultState<TModel>> _handleHttpResponse<TModel>(
+    ResponseParser<Response, TModel> responseParser,
   ) async {
     final int? statusCode = responseParser.response.statusCode;
 
-    return await _handleStatusCode(
-      statusCode,
-      responseParser as ResponseParser<Response, TModel>,
-    );
+    return await _handleStatusCode(statusCode, responseParser);
   }
 
-  Future<ResultState<TModel>> _handleStatusCode<Response, TModel>(
+  Future<ResultState<TModel>> _handleStatusCode<TModel>(
     int? statusCode,
     ResponseParser<Response, TModel> responseParser,
   ) async {
