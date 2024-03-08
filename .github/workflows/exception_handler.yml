@@ -44,7 +44,7 @@ jobs:
         run: dart --version
 
       - name: 📦 Install Dependencies
-        run: dart pub get
+        run: flutter pub get
 
       # Verifies if the dart code is formatted well
       - name: ✨ Verify formatting
