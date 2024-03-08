@@ -7,7 +7,7 @@ import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:exception_handler/exception_handler.dart';
 import 'package:http_exception/http_exception.dart';
 import 'package:http_status/http_status.dart';
 
@@ -56,7 +56,7 @@ Future<ResultState<TModel>> handleHttp2xxParseResponseDio<Response, TModel>(
 ) async {
   try {
     final TModel dataModelParsed = await compute(
-      responseParser.parserModel as ParseFunction<TModel>,
+      responseParser.parserModel,
       responseParser.response.data,
     );
     return SuccessState(dataModelParsed);
