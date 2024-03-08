@@ -7,7 +7,6 @@ void main() {
     const resultState = SuccessState<String>(data);
     test('should call success callback with correct data', () {
       final result = switch (resultState) {
-        FailureState<String>() => 'Failure',
         SuccessState<String>(:final String data) => data,
       };
 
@@ -24,7 +23,6 @@ void main() {
     final FailureState<String> resultState = FailureState<String>(exception);
     test('should call failure callback with correct exception', () {
       final bool failureCalled = switch (resultState) {
-        SuccessState() => false,
         FailureState() => true,
       };
 
