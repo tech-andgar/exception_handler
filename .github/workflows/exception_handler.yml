@@ -1,11 +1,11 @@
 name: "exception_handler"
 
 on: # rebuild any PRs and main branch changes
-  pull_request:
-    # branches: [ master ]
   push:
-    branches:
-      - main # [ master ]
+    branches: ["main"]
+  pull_request:
+    # branches: ["main", "feature/*"]
+  workflow_dispatch:
 
 jobs:
   # Check code formatting and static analysis on a single OS (linux)
@@ -18,51 +18,75 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest] # or: macos-latest, windows-latest
-        channel: [stable] # or: 'beta', 'dev' or 'master'
+        channel: [stable, beta, dev, main] # or: 'beta', 'dev' or 'main'
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1.6.2
         with:
-          channel: ${{ matrix.channel }}
-
-      - id: disabled_analytics_flutter
-        name: Disabled Analytics Flutter
-        run: flutter config --no-analytics
+          sdk: ${{ matrix.channel }}
 
       - id: disabled_analytics_dart
         name: Disabled Analytics Dart
         run: dart --disable-analytics
 
-      - id: checking_version_flutter
-        name: Check version Flutter is installed
-        run: flutter --version
+      - id: checking_version_dart
+        name: Check version Dart is installed
+        run: dart --version
 
-      - id: install_dependencies
-        name: Install dependencies
-        run: flutter pub get
+      - name: 📦 Install Dependencies
+        run: dart pub get
 
-      - name: Check formatting
+      # Verifies if the dart code is formatted well
+      - name: ✨ Verify formatting
         run: dart format --output=none --set-exit-if-changed .
+        # --set-exit-if-changed stops execution if the any code is not well formatted
+        # --output=none prints files which needs to be formatted
         # if: always() && steps.install.outcome == 'success'
 
-      - name: Analyze code
+        # Checks for Symantic errors. Can be configured using analysis_options.yaml
+      - name: 🔍 Analyze project source
         run: dart analyze --fatal-infos
+        # optionally use --fatal-warnings to stop execution if any warnings are found
         # if: always() && steps.install.outcome == 'success'
 
-      # - id: install_very_good_cli
-      #   name: Install Very Good CLI
-      #   run: dart pub global activate very_good_cli
+        # Checks for the quality and consistency of Dart code. Can be configured using analysis_options.yaml
+      - name: 🔍 Analyze project source (Dart code Linter - DCL)
+        run: dart run dart_code_linter:metrics analyze .
 
-      - name: Run tests with coverage
-        run: flutter test --test-randomize-ordering-seed random --coverage
-        # if: always() && steps.install.outcome == 'success'
+      - name: 🔍 Analyze check unused files (DCL)
+        run: dart run dart_code_linter:metrics check-unused-files lib
 
-      - name: Check Code Coverage
+      - name: 🔍 Analyze check unused l10n (DCL)
+        run: dart run dart_code_linter:metrics check-unused-l10n .
+
+      - name: 🔍 Analyze check unused code (DCL)
+        run: dart run dart_code_linter:metrics check-unused-code .
+
+      - name: 🔍 Analyze check unnecessary nullable (DCL)
+        run: dart run dart_code_linter:metrics check-unnecessary-nullable .
+
+      - name: 🧪 Run Tests
+        run: |
+          dart pub global activate coverage
+          dart pub global run coverage:test_with_coverage
+
+      - name: 📦 Pre-publish - dry run
+        run: dart pub publish --dry-run
+
+      - name: 📊 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           path: "./coverage/lcov.info"
-          min_coverage: 98
+          min_coverage: 100
+
+      - name: ⬆️ Upload Coverage to Coveralls
+        uses: coverallsapp/github-action@v2.2.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage/lcov.info
 
       - id: run_package_flutter_coverage_badge
         name: Run package flutter_coverage_badge
@@ -76,8 +100,12 @@ jobs:
           message: 'Updated coverage_badge.svg'
           add: 'coverage_badge.svg'
 
-      - name: Upload Coveralls coverage
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage/lcov.info
+      - name: 💯 Verify Pub Score
+        run: |
+          dart pub global activate pana
+          sudo apt-get install webp
+          PANA=$(pana . --no-warning); PANA_SCORE=$(echo $PANA | sed -n "s/.*Points: \([0-9]*\)\/\([0-9]*\)./\1\/\2/p")
+          echo "score: $PANA_SCORE"
+          IFS='/'; read -a SCORE_ARR <<< "$PANA_SCORE"; SCORE=SCORE_ARR[0]; TOTAL=SCORE_ARR[1]
+          if [ -z "$1" ]; then MINIMUM_SCORE=TOTAL; else MINIMUM_SCORE=$1; fi
+          if (( $SCORE < $MINIMUM_SCORE )); then echo "minimum score $MINIMUM_SCORE was not met!"; exit 1; fi
