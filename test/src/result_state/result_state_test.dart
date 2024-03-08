@@ -19,7 +19,10 @@ void main() {
 
   group('FailureState', () {
     final DataClientExceptionState<String> exception =
-        DataClientExceptionState<String>('Test Exception', StackTrace.current);
+        DataClientExceptionState<String>(
+      message: 'Test Exception',
+      stackTrace: StackTrace.current,
+    );
     final FailureState<String> resultState = FailureState<String>(exception);
     test('should call failure callback with correct exception', () {
       final bool failureCalled = switch (resultState) {

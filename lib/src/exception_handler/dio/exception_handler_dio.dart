@@ -72,11 +72,26 @@ Change mode async isolate to sync''',
 
       return SuccessState(dataModelParsed);
     } on FormatException catch (e, s) {
-      return FailureState(DataParseExceptionState<TModel>(e.toString(), s));
+      return FailureState(
+        DataParseExceptionState<TModel>(
+          message: e.toString(),
+          stackTrace: s,
+        ),
+      );
     } on TypeError catch (e, s) {
-      return FailureState(DataParseExceptionState<TModel>(e.toString(), s));
+      return FailureState(
+        DataParseExceptionState<TModel>(
+          message: e.toString(),
+          stackTrace: s,
+        ),
+      );
     } catch (e, s) {
-      return FailureState(DataUnknownExceptionState<TModel>(e.toString(), s));
+      return FailureState(
+        DataUnknownExceptionState<TModel>(
+          message: e.toString().replaceAll('Exception: ', ''),
+          stackTrace: s,
+        ),
+      );
     }
   }
 }
@@ -132,8 +147,8 @@ class DioExceptionHandler extends ClientExceptionHandler {
       if (!await _isConnected() || e.type == DioExceptionType.connectionError) {
         return FailureState(
           DataNetworkExceptionState<TModel>(
-            'NetworkException.noInternetConnection',
-            s,
+            message: 'NetworkException.noInternetConnection',
+            stackTrace: s,
           ),
         );
       }
@@ -141,8 +156,9 @@ class DioExceptionHandler extends ClientExceptionHandler {
           await _handleDioException(e, s);
       return handleDioException;
     } on Exception catch (e, s) {
-      final FailureState<TModel> failureState =
-          FailureState(DataClientExceptionState<TModel>(e.toString(), s));
+      final FailureState<TModel> failureState = FailureState(
+        DataClientExceptionState<TModel>(message: e.toString(), stackTrace: s),
+      );
       return failureState;
     }
   }
@@ -231,26 +247,26 @@ class DioExceptionHandler extends ClientExceptionHandler {
       return switch (e.type) {
         DioExceptionType.connectionTimeout => FailureState(
             DataNetworkExceptionState<TModel>(
-              'NetworkException.timeOutException',
-              s,
+              message: 'NetworkException.timeOutException',
+              stackTrace: s,
             ),
           ),
         DioExceptionType.receiveTimeout => FailureState(
             DataNetworkExceptionState<TModel>(
-              'NetworkException.receiveTimeout',
-              s,
+              message: 'NetworkException.receiveTimeout',
+              stackTrace: s,
             ),
           ),
         DioExceptionType.cancel => FailureState(
             DataNetworkExceptionState<TModel>(
-              'NetworkException.cancel',
-              s,
+              message: 'NetworkException.cancel',
+              stackTrace: s,
             ),
           ),
         DioExceptionType.sendTimeout => FailureState(
             DataNetworkExceptionState<TModel>(
-              'NetworkException.sendTimeout',
-              s,
+              message: 'NetworkException.sendTimeout',
+              stackTrace: s,
             ),
           ),
         _ => await handleStatusCode,

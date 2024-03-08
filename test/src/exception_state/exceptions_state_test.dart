@@ -8,8 +8,8 @@ void main() {
     group('DataClientExceptionState', () {
       const testException = 'Test exception';
       final dataClientException = DataClientExceptionState<String>(
-        testException,
-        StackTrace.current,
+        message: testException,
+        stackTrace: StackTrace.current,
       );
       test('should assign the client exception correctly', () {
         expect(dataClientException.message, testException);
@@ -29,7 +29,10 @@ void main() {
     group('DataParseExceptionState', () {
       const exception = 'Parse error';
       final DataParseExceptionState<String> dataParseException =
-          DataParseExceptionState<String>(exception, StackTrace.current);
+          DataParseExceptionState<String>(
+        message: exception,
+        stackTrace: StackTrace.current,
+      );
       test('should assign the parse exception correctly', () {
         expect(dataParseException.message, equals(exception));
       });
@@ -63,8 +66,8 @@ void main() {
     group('DataNetworkExceptionState', () {
       final DataNetworkExceptionState<String> dataNetworkException =
           DataNetworkExceptionState<String>(
-        'NetworkException.noInternetConnection',
-        StackTrace.current,
+        message: 'NetworkException.noInternetConnection',
+        stackTrace: StackTrace.current,
       );
       test('should assign the network exception correctly', () {
         expect(
@@ -83,8 +86,8 @@ void main() {
     group('DataCacheExceptionState', () {
       final DataCacheExceptionState<String> dataCacheException =
           DataCacheExceptionState<String>(
-        'CacheException.unknown',
-        StackTrace.current,
+        message: 'CacheException.unknown',
+        stackTrace: StackTrace.current,
       );
       test('should assign the cache exception correctly', () {
         expect(
@@ -103,10 +106,10 @@ void main() {
     group('DataInvalidInputExceptionState', () {
       final DataInvalidInputExceptionState<String> dataInvalidInputException =
           DataInvalidInputExceptionState<String>(
-        'InvalidInputException.unknown',
-        StackTrace.current,
+        message: 'InvalidInputException.unknown',
+        stackTrace: StackTrace.current,
       );
-      test('should assign the cache exception correctly', () {
+      test('should assign the Invalid input exception correctly', () {
         expect(
           dataInvalidInputException.message,
           equals('InvalidInputException.unknown'),
@@ -117,6 +120,26 @@ void main() {
         expect(
           dataInvalidInputException.toString(),
           'DataInvalidInputExceptionState<String>(invalidInputException: "InvalidInputException.unknown")',
+        );
+      });
+    });
+    group('DataUnknownExceptionState', () {
+      final DataUnknownExceptionState<String> dataUnknownException =
+          DataUnknownExceptionState<String>(
+        message: 'UnknownException.unknown',
+        stackTrace: StackTrace.current,
+      );
+      test('should assign the unknown exception correctly', () {
+        expect(
+          dataUnknownException.message,
+          equals('UnknownException.unknown'),
+        );
+      });
+
+      test('should correct toString', () {
+        expect(
+          dataUnknownException.toString(),
+          'DataUnknownExceptionState<String>(unknownException: "UnknownException.unknown")',
         );
       });
     });

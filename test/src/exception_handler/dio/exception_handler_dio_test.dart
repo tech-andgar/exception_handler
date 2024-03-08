@@ -448,5 +448,35 @@ void main() {
         isA<DataClientExceptionState>(),
       );
     });
+    test('API call with unknown error', () async {
+      when(() => mockDio.get(any())).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: ''),
+          data: 'Invalid data',
+          statusCode: 200,
+        ),
+      );
+
+      final ResultState<String> result = await dioExceptionHandler.callApi(
+        ApiHandler(
+          apiCall: () => mockDio.get('test'),
+          parserModel: (Object? data) {
+            throw Exception('Error Unknown'); // Intentional error
+          },
+        ),
+      );
+
+      String? success;
+      ExceptionState<String>? failure;
+      switch (result) {
+        case SuccessState<String>(:final String data):
+          success = data;
+        case FailureState<String>(:final ExceptionState<String> exception):
+          failure = exception;
+      }
+
+      expect(success, isNull);
+      expect(failure, isA<DataUnknownExceptionState>());
+    });
   });
 }
