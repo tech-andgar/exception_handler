@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "nash.awesome-flutter-snippets",
+    "ryanluker.vscode-coverage-gutters",
+    "dart-code.dart-code",
+    "miquelddg.dart-barrel-file-generator",
+    "luanpotter.dart-import",
+    "usernamehw.errorlens",
+    "dart-code.flutter",
+    "circlecodesolution.ccs-flutter-color",
+    "flutterando.flutter-coverage",
+    "localizely.flutter-intl",
+    "gmlewis-vscode.flutter-stylizer",
+    "everettjf.pubspec-dependency-search",
+    "usernamehw.remove-empty-lines",
+    "shardulm94.trailing-spaces",
+    "marufhassan.flutter",
+    "pflannery.vscode-versionlens",
+    "robert-brunhage.flutter-riverpod-snippets",
+  ]
+}
