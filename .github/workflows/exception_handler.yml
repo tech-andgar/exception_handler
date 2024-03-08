@@ -36,7 +36,7 @@ jobs:
         run: dart --disable-analytics
 
       - id: checking_version_flutter
-        name: Check version flutter is installed
+        name: Check version Flutter is installed
         run: flutter --version
 
       - id: checking_version_dart
