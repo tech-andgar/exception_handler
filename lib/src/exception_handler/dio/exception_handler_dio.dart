@@ -73,6 +73,8 @@ Change mode async isolate to sync''',
       return SuccessState(dataModelParsed);
     } on FormatException catch (e, s) {
       return FailureState(DataParseExceptionState<TModel>(e.toString(), s));
+    } on TypeError catch (e, s) {
+      return FailureState(DataParseExceptionState<TModel>(e.toString(), s));
     } catch (e, s) {
       return FailureState(DataUnknownExceptionState<TModel>(e.toString(), s));
     }
