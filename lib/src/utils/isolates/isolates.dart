@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: prefer_expression_function_bodies, comment_references
+
 import 'dart:async';
 
 import '_isolates_io.dart' if (dart.library.js_util) '_isolates_web.dart'
