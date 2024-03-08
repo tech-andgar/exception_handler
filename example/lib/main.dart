@@ -214,15 +214,13 @@ class Company extends CustomEquatable {
 }
 
 class UserService {
+  final Dio dio = Dio();
   Future<ResultState<UserModel>> getDataUser(int id) async {
-    final Dio dio = Dio();
-
     final ResultState<UserModel> result =
         await DioExceptionHandler().callApi<Response, UserModel>(
       ApiHandler(
-        apiCall: () {
-          return dio.get('https://jsonplaceholder.typicode.com/users/$id');
-        },
+        apiCall: () =>
+            dio.get('https://jsonplaceholder.typicode.com/users/$id'),
         parserModel: (Object? data) =>
             UserModel.fromJson(data as Map<String, dynamic>),
       ),
@@ -231,8 +229,6 @@ class UserService {
   }
 
   Future<ResultState<UserModel>> getDataUserExtensionDio(int id) async {
-    final Dio dio = Dio();
-
     final ResultState<UserModel> result = await dio
         .get('https://jsonplaceholder.typicode.com/users/$id')
         .fromJson(UserModel.fromJson);
