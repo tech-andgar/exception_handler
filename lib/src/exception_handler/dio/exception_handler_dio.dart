@@ -69,11 +69,15 @@ Error: $e
 Change mode async isolate to sync''',
         name: 'DioExceptionHandler._handle2xxparseResponse',
       );
+
       final TModel dataModelParsed =
           responseParser.parserModel(responseParser.response.data);
+
       return SuccessState(dataModelParsed);
-    } catch (e, s) {
+    } on FormatException catch (e, s) {
       return FailureState(DataParseExceptionState<TModel>(e.toString(), s));
+    } catch (e, s) {
+      return FailureState(DataUnknownExceptionState<TModel>(e.toString(), s));
     }
   }
 }
