@@ -65,3 +65,7 @@
 ## 1.1.4
 
 * feat: add support web
+
+## 1.2.0-alpha.1
+
+* abc
