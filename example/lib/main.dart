@@ -304,19 +304,23 @@ class _MyHomePageState extends State<MyHomePage> {
               FutureBuilder(
                 // future: UserService().getDataUser(_counter),
                 future: UserService().getDataUserExtensionDio(_counter),
-                builder:
-                    (context, AsyncSnapshot<ResultState<UserModel>> snapshot) {
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<ResultState<UserModel>> snapshot,
+                ) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
-                  final ResultState<UserModel> result = snapshot.requireData;
+                  final ResultState<UserModel> resultState =
+                      snapshot.requireData;
 
-                  return switch (result) {
+                  final StatelessWidget uiWidget = switch (resultState) {
                     SuccessState<UserModel> success =>
                       UiUserWidget(success.data),
                     FailureState<UserModel> failure =>
                       UiExceptionWidget(failure.exception),
                   };
+                  return uiWidget;
                 },
               ),
             ],
@@ -364,16 +368,18 @@ class UiExceptionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final String textException = switch (exception) {
       DataClientExceptionState<UserModel>() =>
-        'Debugger: Error Client: $exception',
+        'Debugger Error Client: $exception',
       DataParseExceptionState<UserModel>() =>
-        'Debugger: Error Parse: $exception',
-      DataHttpExceptionState<UserModel>() => 'Debugger: Error Http: $exception',
+        'Debugger Error Parse: $exception',
+      DataHttpExceptionState<UserModel>() => 'Debugger Error Http: $exception',
       DataNetworkExceptionState<UserModel>() =>
-        'Debugger: Error Network: $exception\n\nError: ${exception.toString().split('.').last}',
+        'Debugger Error Network: $exception\n\nError: ${exception.toString().split('.').last}',
       DataCacheExceptionState<UserModel>() =>
-        'Debugger: Error Cache: $exception',
+        'Debugger Error Cache: $exception',
       DataInvalidInputExceptionState<UserModel>() =>
-        'Debugger: Error Invalid Input: $exception',
+        'Debugger Error Invalid Input: $exception',
+      DataUnknownExceptionState<UserModel>() =>
+        'Debugger Error Unknown: $exception',
     };
 
     final Text text = Text(
@@ -399,6 +405,8 @@ class UiExceptionWidget extends StatelessWidget {
         const Icon(Icons.storage_outlined, size: 200),
       DataInvalidInputExceptionState<UserModel>() =>
         const Icon(Icons.textsms_outlined, size: 200),
+      DataUnknownExceptionState<UserModel>() =>
+        const Icon(Icons.close, size: 200),
     };
     return Column(
       children: [
