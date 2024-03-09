@@ -48,3 +48,5 @@ lcov.info
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+.github
