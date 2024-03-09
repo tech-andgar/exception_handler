@@ -1,16 +1,20 @@
-import '../utils/utils.dart';
+// Copyright (c) 2024, TECH-ANDGAR.
+// All rights reserved. Use of this source code
+// is governed by a Apache-2.0 license that can be found in the LICENSE file.
 
-typedef ApiCall<R, T> = Future<R> Function();
-typedef ParseFunction<T> = T Function(Object?);
+import '../src.dart';
 
-class ApiHandler<R, T> {
+typedef ApiCall<R, TModel> = Future<R> Function();
+typedef ParseFunction<TModel> = TModel Function(Object?);
+
+class ApiHandler<R, TModel> {
   ApiHandler({required this.apiCall, required this.parserModel});
 
-  final ApiCall<R, T> apiCall;
-  final ParseFunction<T> parserModel;
+  final ApiCall<R, TModel> apiCall;
+  final ParseFunction<TModel> parserModel;
 }
 
-class ResponseParser<R, T> extends CustomEquatable {
+class ResponseParser<R, TModel> extends CustomEquatable {
   const ResponseParser({
     required this.response,
     required this.parserModel,
@@ -18,7 +22,7 @@ class ResponseParser<R, T> extends CustomEquatable {
     this.stackTrace,
   });
 
-  final ParseFunction<T> parserModel;
+  final ParseFunction<TModel> parserModel;
   final R response;
   final Exception? exception;
   final StackTrace? stackTrace;
@@ -30,4 +34,46 @@ class ResponseParser<R, T> extends CustomEquatable {
         'exception': exception,
         'stackTrace': stackTrace,
       };
+}
+
+class HandleHttpParseResponse<R, TModel> {
+  HandleHttpParseResponse({
+    this.handleHttp1xxParseResponse,
+    // TODO(andgar2010): investiagtion bug.
+    //    this.handleHttp2xxParseResponse,
+    this.handleHttp3xxParseResponse,
+    this.handleHttp4xxParseResponse,
+    this.handleHttp5xxParseResponse,
+    this.handleHttpUnknownParseResponse,
+  });
+
+  final Future<ResultState<TModel>> Function<R, TModel>(
+    int statusCode,
+    ResponseParser<R, TModel>,
+  )? handleHttp1xxParseResponse;
+
+  // TODO(andgar2010): investiagtion bug.
+  // final Future<ResultState<TModel>> Function<TModel>(
+  //   ResponseParser,
+  // )? handleHttp2xxParseResponse;
+
+  final Future<ResultState<TModel>> Function<R, TModel>(
+    int statusCode,
+    ResponseParser<R, TModel>,
+  )? handleHttp3xxParseResponse;
+
+  final Future<ResultState<TModel>> Function<R, TModel>(
+    int statusCode,
+    ResponseParser<R, TModel>,
+  )? handleHttp4xxParseResponse;
+
+  final Future<ResultState<TModel>> Function<R, TModel>(
+    int statusCode,
+    ResponseParser<R, TModel>,
+  )? handleHttp5xxParseResponse;
+
+  final Future<ResultState<TModel>> Function<R, TModel>(
+    int statusCode,
+    ResponseParser<R, TModel>,
+  )? handleHttpUnknownParseResponse;
 }
