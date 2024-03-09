@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:exception_handler/exception_handler.dart';
 import 'package:flutter/material.dart';
 
+// Path: model/user_model.dart
 class UserModel extends CustomEquatable {
   const UserModel({
     this.id,
@@ -213,6 +214,7 @@ class Company extends CustomEquatable {
   }
 }
 
+// Path: services/user_service.dart
 class UserService {
   final Dio dio = Dio();
   Future<ResultState<UserModel>> getDataUser(int id) async {
