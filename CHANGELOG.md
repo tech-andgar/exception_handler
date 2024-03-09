@@ -1,8 +1,99 @@
-## 1.0.0
+# Changelog
 
-* Initial release exception_handler
+## [1.2.0] - 2024-03-09
 
-## 1.0.1
+### Added - 1.2.0
+
+* Dio Extensions: Extensions for Dio HTTP response handling and custom parsing.
+
+  ```dart
+    final ResultState<UserModel> result =
+      await DioExceptionHandler().callApi<Response, UserModel>(
+        ApiHandler(
+          apiCall: () =>
+              dio.get('https://jsonplaceholder.typicode.com/users/$id'),
+          parserModel: (Object? data) =>
+              UserModel.fromJson(data as Map<String, dynamic>),
+        ),
+      );
+  ```
+
+  simplified extensions of dio to `dio.get().fromJson()`
+
+  ```dart
+      final ResultState<UserModel> result = await dio
+          .get('https://jsonplaceholder.typicode.com/users/$id')
+          .fromJson(UserModel.fromJson);
+  ```
+
+* Exception Handling: New comprehensive Dio exception handlers and simplified exception state management exception_handler.
+* Isolates for Async: Utility for asynchronous computations using isolates to enhance performance.
+* Updated Dependencies: New and updated package versions for improved functionality.
+* Linting Rules: Expanded Dart code analysis rules for stricter linting.
+
+### Changed - 1.2.0
+
+* CI/CD Workflow: Enhanced with better triggers, actions, and coverage requirements.
+* Code Structure: Improved handling and parsing of HTTP responses and exceptions with updated classes and typedefs.
+* Naming Conventions: Updated for better readability and maintainability.
+
+### Removed - 1.2.0
+
+* Obsolete Code: Removal of outdated exception handling approach for a cleaner codebase.
+
+## 1.1.4
+
+* feat: add support web
+
+## 1.1.3
+
+* doc: updated Readme
+
+## 1.1.2
+
+* refactor: updated class name for consistency and cohesion in the sealed class and subclass names
+
+## 1.1.1
+
+* refactor: updated class name for consistency and cohesion in the sealed class and subclass names
+
+## 1.1.0
+
+* feat: replace "when()/abstract" by "switch/sealed class"
+
+## 1.0.11
+
+* refactor: updated name property of ApiHandler
+
+## 1.0.10
+
+* fix: updated typo
+
+## 1.0.9
+
+* fix: updated type I/O of function callApi
+
+## 1.0.8
+
+* chore: upload demo screenshot
+
+## 1.0.7
+
+* chore: change minimum version to Dart 3.0.0
+
+## 1.0.6
+
+* test: updated test
+
+## 1.0.5
+
+* fix: bug log duplication and add example
+
+## 1.0.4
+
+* chore: add check coverage on pipeline
+
+## 1.0.3
 
 * doc: updated Readme
 
@@ -10,58 +101,10 @@
 
 * doc: updated Readme
 
-## 1.0.3
+## 1.0.1
 
 * doc: updated Readme
 
-## 1.0.4
+## 1.0.0
 
-* chore: add check coverage on pipeline
-
-## 1.0.5
-
-* fix: bug log duplication and add example
-
-## 1.0.6
-
-* test: updated test
-
-## 1.0.7
-
-* chore: change minimum version to Dart 3.0.0
-
-## 1.0.8
-
-* chore: upload demo screenshot
-
-## 1.0.9
-
-* fix: updated type I/O of function callApi
-
-## 1.0.10
-
-* fix: updated typo
-
-## 1.0.11
-
-* refactor: updated name property of ApiHandler
-
-## 1.1.0
-
-* feat: replace "when()/abstract" by "switch/sealed class"
-
-## 1.1.1
-
-* refactor: updated class name for consistency and cohesion in the sealed class and subclass names
-
-## 1.1.2
-
-* refactor: updated class name for consistency and cohesion in the sealed class and subclass names
-
-## 1.1.3
-
-* doc: updated Readme
-
-## 1.1.4
-
-* feat: add support web
+* Initial release exception_handler
