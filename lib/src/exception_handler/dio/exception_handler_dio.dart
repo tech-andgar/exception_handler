@@ -97,11 +97,12 @@ Change mode async isolate to sync''',
   }
 }
 
-mixin DioExceptionHandler implements ClientExceptionHandler {
+class DioExceptionHandler implements ClientExceptionHandler {
   static Connectivity connectivity = Connectivity();
   // ignore: strict_raw_type
   static late HandleHttpParseResponse handleParseResponse_;
 
+  /// {@template DioExceptionHandler_callApi_}
   /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
   ///
@@ -119,7 +120,9 @@ mixin DioExceptionHandler implements ClientExceptionHandler {
   ///    );
   /// ```
   ///
-  static Future<ResultState<TModel>> callApi<TResponse, TModel>(
+  /// {@endtemplate}
+  @override
+  Future<ResultState<TModel>> callApi_<TResponse, TModel>(
     ApiHandler<TResponse, TModel> apiHandler, {
     HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
   }) async {
@@ -162,6 +165,16 @@ mixin DioExceptionHandler implements ClientExceptionHandler {
     }
   }
 
+  /// {@macro DioExceptionHandler_callApi_}
+  static Future<ResultState<TModel>> callApi<TResponse, TModel>(
+    ApiHandler<TResponse, TModel> apiHandler, {
+    HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
+  }) async =>
+      DioExceptionHandler().callApi_(
+        apiHandler,
+        handleHttpParseResponse: handleHttpParseResponse,
+      );
+
   /// _isConnected checks the current network connectivity status.
   static Future<bool> _isConnected() async {
     final ConnectivityResult result = await connectivity.checkConnectivity();
@@ -183,7 +196,9 @@ mixin DioExceptionHandler implements ClientExceptionHandler {
     int? statusCode,
     ResponseParser<Response<Object?>, TModel> responseParser,
   ) async =>
+      // coverage:ignore-start
       switch (statusCode) {
+        // coverage:ignore-end
         final int statusCode when statusCode.isInformationHttpStatusCode =>
           await handleParseResponse_.handleHttp1xxParseResponse!(
             statusCode,

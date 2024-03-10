@@ -7,13 +7,26 @@ import '../../exception_handler.dart';
 export 'dio/dio.dart';
 export 'typedef.dart';
 
-mixin ClientExceptionHandler {
+abstract class ClientExceptionHandler {
+  // coverage:ignore-start
+  ClientExceptionHandler._();
+  // coverage:ignore-end
+
+  /// Method [callApi] is a generic method to handle API calls and return a tuple of
+  /// ExceptionState and parsed data.
+  ///
+  Future<ResultState<TModel>> callApi_<R, TModel>(
+    ApiHandler<R, TModel> apiHandler, {
+    HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
+  });
+
   /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
   ///
   static Future<ResultState<TModel>> callApi<R, TModel>(
     ApiHandler<R, TModel> apiHandler, {
     HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
-  }) =>
-      Future.value(SuccessState<TModel>(Object() as TModel));
+  }) async {
+    throw UnimplementedError();
+  }
 }
