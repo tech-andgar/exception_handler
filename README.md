@@ -34,6 +34,54 @@ import 'package:exception_handler/exception_handler.dart';
 This package simplifies the process of making API calls and handling exceptions in Flutter apps.
 Below are some examples to demonstrate how to use various features of the package.
 
+## Fetching and Enhanced Parsing of JSON Data with Dio and a Custom Extension
+
+In our latest update, version 2.0.0, we have streamlined the process of fetching data from a REST API and converting it into a Dart object. This improvement utilizes Dio, a powerful HTTP client for Dart, enabling us to simplify our codebase while maintaining both efficiency and readability.
+
+Harness the power of Dio for handling HTTP requests in your Dart or Flutter applications, now further simplified with a custom `.fromJson()` extension method. This enhancement allows you to directly fetch data from your endpoints and convert them into Dart objects through one fluid operation, reducing boilerplate code and improving readability.
+
+### Defining a Model
+
+To begin, create your data model with a factory constructor designed for JSON deserialization. Below is an example of a `UserModel`:
+
+```dart
+class UserModel {
+  final int id;
+  final String name;
+  final String email;
+
+  UserModel({required this.id, required this.name, required this.email});
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+    );
+  }
+}
+```
+
+With the custom extension in place, fetching data and parsing it into a Dart object becomes straightforward. Here's how to implement it in your application:
+
+```dart
+Future<void> main() async {
+  Dio dio = Dio(); // Instantiate Dio
+  final int userId = 1; // Example user ID
+
+  final ResultState<UserModel> resultState = await dio
+      .get('https://jsonplaceholder.typicode.com/users/$userId')
+      .fromJson(UserModel.fromJson);
+
+  print(resultState.data); // Utilize the fetched and parsed userModel data
+  final Widget uiWidget = switch (resultState) {
+    SuccessState<UserModel> success =>
+      UiUserWidget(success.data), // Using a hypothetical UiUserWidget for displaying user data
+    FailureState<UserModel> failure =>
+      UiExceptionWidget(failure.exception), // Using a hypothetical UiExceptionWidget for handling errors
+  };
+```
+
 ### Basic API Call
 
 Here's a simple example of making an API call and handling the response:
@@ -49,7 +97,7 @@ Future<void> fetchUserData() async {
         parserModel: (data) => UserModel.fromJson(data),
     );
 
-    ResultState<UserModel> result = await DioExceptionHandler().callApi(apiHandler);
+    ResultState<UserModel> result = await DioExceptionHandler.callApi(apiHandler);
 
     switch (result) {
       case SuccessState<UserModel>(:UserModel data):
@@ -76,7 +124,7 @@ Future<void> fetchComplexData() async {
         parserModel: customParser,
     );
 
-    ResultState<ComplexData> result = await DioExceptionHandler().callApi(apiHandler);
+    ResultState<ComplexData> result = await DioExceptionHandler.callApi(apiHandler);
 
     switch (result) {
       case SuccessState<ComplexData>(:ComplexData data):
@@ -98,7 +146,7 @@ Handling basic exceptions with logging information:
 
 ```dart
 void handleApiCall() async {
-    ResultState<UserModel> result = await DioExceptionHandler().callApi(apiHandler);
+    ResultState<UserModel> result = await DioExceptionHandler.callApi(apiHandler);
 
     switch (result) {
       case SuccessState<UserModel>(:UserModel data):
@@ -116,7 +164,7 @@ Implementing detailed handling for each type of exception:
 
 ```dart
 void advancedExceptionHandling() async {
-    ResultState<UserModel> result = await DioExceptionHandler().callApi(apiHandler);
+    ResultState<UserModel> result = await DioExceptionHandler.callApi(apiHandler);
 
     switch (result) {
       case SuccessState<UserModel>(:UserModel data):
