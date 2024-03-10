@@ -1,4 +1,4 @@
-name: "exception_handler"
+name: "build"
 
 on: # rebuild any PRs and main branch changes
   push:
