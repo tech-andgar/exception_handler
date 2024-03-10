@@ -97,10 +97,10 @@ Change mode async isolate to sync''',
   }
 }
 
-class DioExceptionHandler implements ClientExceptionHandler {
+mixin DioExceptionHandler implements ClientExceptionHandler {
   static Connectivity connectivity = Connectivity();
   // ignore: strict_raw_type
-  late HandleHttpParseResponse handleParseResponse_;
+  static late HandleHttpParseResponse handleParseResponse_;
 
   /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
@@ -108,7 +108,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   /// Eg:
   /// ```dart
   /// final ResultState<UserModel> result =
-  ///        await DioExceptionHandler().callApi<Response, UserModel>(
+  ///        await DioExceptionHandler.callApi<Response, UserModel>(
   ///      ApiHandler(
   ///        apiCall: () {
   ///          return dio.get('https://jsonplaceholder.typicode.com/users/$id');
@@ -119,8 +119,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   ///    );
   /// ```
   ///
-  @override
-  Future<ResultState<TModel>> callApi<TResponse, TModel>(
+  static Future<ResultState<TModel>> callApi<TResponse, TModel>(
     ApiHandler<TResponse, TModel> apiHandler, {
     HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
   }) async {
@@ -172,7 +171,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
 
   /// _handleHttpResponse processes the HTTP response and handles different
   /// status codes.
-  Future<ResultState<TModel>> _handleHttpResponse<TModel>(
+  static Future<ResultState<TModel>> _handleHttpResponse<TModel>(
     ResponseParser<Response<Object?>, TModel> responseParser,
   ) async {
     final int? statusCode = responseParser.response.statusCode;
@@ -180,7 +179,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
     return await _handleStatusCode(statusCode, responseParser);
   }
 
-  Future<ResultState<TModel>> _handleStatusCode<TModel>(
+  static Future<ResultState<TModel>> _handleStatusCode<TModel>(
     int? statusCode,
     ResponseParser<Response<Object?>, TModel> responseParser,
   ) async =>
@@ -218,7 +217,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
 
   /// _handleDioException handles exceptions from the Dio library,
   /// particularly around connectivity.
-  Future<ResultState<TModel>> _handleDioException<TModel>(
+  static Future<ResultState<TModel>> _handleDioException<TModel>(
     DioException e,
     StackTrace s,
   ) async {

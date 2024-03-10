@@ -11,8 +11,9 @@ mixin ClientExceptionHandler {
   /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
   ///
-  Future<ResultState<TModel>> callApi<R, TModel>(
+  static Future<ResultState<TModel>> callApi<R, TModel>(
     ApiHandler<R, TModel> apiHandler, {
     HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
-  });
+  }) =>
+      Future.value(SuccessState<TModel>(Object() as TModel));
 }
