@@ -129,7 +129,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
     handleParseResponse_ = handleHttpParseResponse ??
         HandleHttpParseResponse<Response<Object?>, TModel>(
           handleHttp1xxParseResponse: handleHttpGenericParseResponseDio,
-          // TODO(andgar2010): investiagtion bug.
+          // TODO(andgar2010): investigation bug.
           // handleHttp2xxParseResponse: handleHttp2xxParseResponseDio,
           handleHttp3xxParseResponse: handleHttpGenericParseResponseDio,
           handleHttp4xxParseResponse: handleHttpGenericParseResponseDio,
@@ -206,7 +206,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
           ),
         final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
           await handleHttp2xxParseResponseDio<TModel>(responseParser),
-        // TODO(andgar2010): investiagtion bug
+        // TODO(andgar2010): investigation bug
         // final int statusCode when statusCode.isSuccessfulHttpStatusCode =>
         //   await handleParseResponse_.handleHttp2xxParseResponse!(responseParser),
         final int statusCode when statusCode.isRedirectHttpStatusCode =>
