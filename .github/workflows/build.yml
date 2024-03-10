@@ -99,7 +99,7 @@ jobs:
 
       - id: run_package_flutter_coverage_badge
         name: Run package flutter_coverage_badge
-        run: flutter pub run flutter_coverage_badge
+        run: dart run flutter_coverage_badge
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
