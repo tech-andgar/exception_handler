@@ -14,13 +14,18 @@ jobs:
     steps:
       # Checkout repository
       - uses: actions/checkout@v4
+      # This action adds a token needed for pub.dev
+      - name: Install Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
       # Setup Flutter SDK
       - uses: subosito/flutter-action@v2
       # Minimal package setup and dry run checks.
       - name: Install dependencies
         run: flutter pub get
       - name: Publish - dry run
-        run: dart pub publish --dry-run
+        run: flutter pub publish --dry-run
       # Publishing...
       - name: Publish to pub.dev
-        run: dart pub publish -f
+        run: flutter pub publish -f
