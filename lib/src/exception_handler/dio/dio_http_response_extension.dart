@@ -89,7 +89,7 @@ extension HttpResponseDioExtension on Future<Response<Object?>> {
   Future<ResultState<TModel>> fromJson<TModel>(
     TModel Function(Map<String, dynamic>) fromJson,
   ) async =>
-      await DioExceptionHandler.callApi<Response<Object?>, TModel>(
+      await DioExceptionHandler.callApi_<Response<Object?>, TModel>(
         ApiHandler(
           apiCall: () => this, // Same: response = dio.get('https://').
           parserModel: (Object? data) => fromJson(data as Map<String, dynamic>),
@@ -175,7 +175,7 @@ extension HttpResponseDioExtension on Future<Response<Object?>> {
   Future<ResultState<List<TModel>>> fromJsonAsList<TModel>(
     TModel Function(Map<String, dynamic>) fromJson,
   ) async =>
-      await DioExceptionHandler.callApi<Response<Object?>, List<TModel>>(
+      await DioExceptionHandler.callApi_<Response<Object?>, List<TModel>>(
         ApiHandler(
           apiCall: () => this, // Same: response = dio.get('https://').
           parserModel: (Object? data) => (data as List<Map<String, dynamic>>)

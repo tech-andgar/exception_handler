@@ -219,7 +219,7 @@ class UserService {
   final Dio dio = Dio();
   Future<ResultState<UserModel>> getDataUser(int id) async {
     final ResultState<UserModel> result =
-        await DioExceptionHandler.callApi<Response, UserModel>(
+        await DioExceptionHandler.callApi_<Response, UserModel>(
       ApiHandler(
         apiCall: () =>
             dio.get('https://jsonplaceholder.typicode.com/users/$id'),

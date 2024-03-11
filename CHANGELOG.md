@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1] - 2024-03-10
+
+### Changed
+
+* revert: renamed method direct DioExceptionHandler.callApi to DioExceptionHandler.callApi_ for compatibility v1 because method original use DioExceptionHandler().callApi()
+
 ## [2.0.0] - 2024-03-10
 
 ### Breaking Changes
@@ -26,7 +32,7 @@ Refactor of Exception Handling: The conversion of DioExceptionHandler into a mix
 
   ```dart
     final ResultState<UserModel> result =
-      await DioExceptionHandler.callApi<Response, UserModel>( // use direct call DioExceptionHandler.callApi
+      await DioExceptionHandler.callApi_<Response, UserModel>( // use direct call DioExceptionHandler.callApi
         ApiHandler(
           apiCall: () =>
               dio.get('https://jsonplaceholder.typicode.com/users/$id'),
