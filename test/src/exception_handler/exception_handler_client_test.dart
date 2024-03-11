@@ -8,7 +8,7 @@ void main() {
   test('Testing ClientExceptionHandler.callApi', () async {
     try {
       // Act
-      await ClientExceptionHandler.callApi(
+      await ClientExceptionHandler.callApi_(
         MockApiHandler<Response<Object>, UserModel>(),
       );
     } catch (e) {

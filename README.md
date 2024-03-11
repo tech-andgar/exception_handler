@@ -97,7 +97,8 @@ Future<void> fetchUserData() async {
         parserModel: (data) => UserModel.fromJson(data),
     );
 
-    ResultState<UserModel> result = await DioExceptionHandler.callApi(apiHandler);
+    // ResultState<UserModel> result = await DioExceptionHandler().callApi(apiHandler); // v1.x.x
+    ResultState<UserModel> result = await DioExceptionHandler.callApi_(apiHandler);
 
     switch (result) {
       case SuccessState<UserModel>(:UserModel data):
@@ -124,7 +125,8 @@ Future<void> fetchComplexData() async {
         parserModel: customParser,
     );
 
-    ResultState<ComplexData> result = await DioExceptionHandler.callApi(apiHandler);
+    // ResultState<ComplexData> result = await DioExceptionHandler().callApi(apiHandler); // v1.x.x
+    ResultState<ComplexData> result = await DioExceptionHandler.callApi_(apiHandler);
 
     switch (result) {
       case SuccessState<ComplexData>(:ComplexData data):
@@ -146,7 +148,8 @@ Handling basic exceptions with logging information:
 
 ```dart
 void handleApiCall() async {
-    ResultState<UserModel> result = await DioExceptionHandler.callApi(apiHandler);
+    // ResultState<UserModel> result = await DioExceptionHandler().callApi(apiHandler); // v1.x.x
+    ResultState<UserModel> result = await DioExceptionHandler.callApi_(apiHandler);
 
     switch (result) {
       case SuccessState<UserModel>(:UserModel data):
@@ -164,7 +167,8 @@ Implementing detailed handling for each type of exception:
 
 ```dart
 void advancedExceptionHandling() async {
-    ResultState<UserModel> result = await DioExceptionHandler.callApi(apiHandler);
+    // ResultState<UserModel> result = await DioExceptionHandler().callApi(apiHandler); // v1.x.x
+    ResultState<UserModel> result = await DioExceptionHandler.callApi_(apiHandler);
 
     switch (result) {
       case SuccessState<UserModel>(:UserModel data):

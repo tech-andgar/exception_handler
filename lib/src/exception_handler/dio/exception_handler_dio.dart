@@ -109,7 +109,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   /// Eg:
   /// ```dart
   /// final ResultState<UserModel> result =
-  ///        await DioExceptionHandler.callApi<Response, UserModel>(
+  ///        await DioExceptionHandler.callApi_<Response, UserModel>(
   ///      ApiHandler(
   ///        apiCall: () {
   ///          return dio.get('https://jsonplaceholder.typicode.com/users/$id');
@@ -122,7 +122,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   ///
   /// {@endtemplate}
   @override
-  Future<ResultState<TModel>> callApi_<TResponse, TModel>(
+  Future<ResultState<TModel>> callApi<TResponse, TModel>(
     ApiHandler<TResponse, TModel> apiHandler, {
     HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
   }) async {
@@ -166,11 +166,11 @@ class DioExceptionHandler implements ClientExceptionHandler {
   }
 
   /// {@macro DioExceptionHandler_callApi_}
-  static Future<ResultState<TModel>> callApi<TResponse, TModel>(
+  static Future<ResultState<TModel>> callApi_<TResponse, TModel>(
     ApiHandler<TResponse, TModel> apiHandler, {
     HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
   }) async =>
-      DioExceptionHandler().callApi_(
+      DioExceptionHandler().callApi(
         apiHandler,
         handleHttpParseResponse: handleHttpParseResponse,
       );
