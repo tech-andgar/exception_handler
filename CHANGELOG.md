@@ -1,8 +1,49 @@
 # Changelog
 
+## [2.0.2] - 2024-03-11
+
+Overall, these changes primarily revolve around improving exception handling and string formatting versatility.
+
+### Changed - 2.0.2
+
+* Exception message handling has been improved for better readability wherein the handler now uses the string representation of exceptions.
+* String formatting logic in the CustomEquatable class has been improved to handle null and empty values more gracefully.
+* More descriptive messages in place of direct position to parameters of extends ExceptionState calls have been introduced. `class DataXXXXXExceptionState<TModel> extends ExceptionState`
+
+    v1.x.x
+
+    ```dart
+    FailureState(
+      DataNetworkExceptionState(
+        NetworkException.noInternetConnection,
+        StackTrace.current,
+      ),
+    ),
+    ```
+
+    v2.x.x
+
+    ```dart
+    FailureState(
+      DataNetworkExceptionState(
+        message: 'NetworkException.noInternetConnection',
+        stackTrace: StackTrace.current,
+    ),
+  ),
+  ```
+
+### Added - 2.0.2
+
+* More specific details about the exceptions including DioException information in the test cases for exception handling.
+* `message` to namedProps in DataHttpExceptionState for more detailed logging.
+
+### Fixed - 2.0.2
+
+* An issue with trailing commas in the output string of the CustomEquatable class.
+
 ## [2.0.1] - 2024-03-10
 
-### Changed
+### Changed - 2.0.1
 
 * revert: renamed method direct DioExceptionHandler.callApi to DioExceptionHandler.callApi_ for compatibility v1 because method original use DioExceptionHandler().callApi()
 
