@@ -250,7 +250,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
+            'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [unknown]: null")',
           );
         },
       );
@@ -290,7 +290,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
+            'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [bad response]: null")',
           );
         },
       );
@@ -323,7 +323,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<UserModel>(httpException: HttpException [100 Continue])',
+            'DataHttpExceptionState<UserModel>(httpException: HttpException [100 Continue], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -358,7 +358,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<UserModel>(httpException: HttpException [300 Multiple Choices])',
+            'DataHttpExceptionState<UserModel>(httpException: HttpException [300 Multiple Choices], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -391,7 +391,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<UserModel>(httpException: HttpException [400 Bad Request])',
+            'DataHttpExceptionState<UserModel>(httpException: HttpException [400 Bad Request], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -424,7 +424,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<UserModel>(httpException: HttpException [500 Internal Server Error])',
+            'DataHttpExceptionState<UserModel>(httpException: HttpException [500 Internal Server Error], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -630,7 +630,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
+            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [unknown]: null")',
           );
         },
       );
@@ -670,7 +670,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0)',
+            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [bad response]: null")',
           );
         },
       );
@@ -703,7 +703,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [100 Continue])',
+            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [100 Continue], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -736,7 +736,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [300 Multiple Choices])',
+            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [300 Multiple Choices], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -769,7 +769,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [400 Bad Request])',
+            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [400 Bad Request], message: "DioException [bad response]: null")',
           );
         },
       );
@@ -802,7 +802,7 @@ void main() {
           );
           expect(
             result.exception.toString(),
-            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [500 Internal Server Error])',
+            'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [500 Internal Server Error], message: "DioException [bad response]: null")',
           );
         },
       );
