@@ -79,11 +79,14 @@ class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
   DataHttpExceptionState({
     required this.httpException,
     required StackTrace stackTrace,
-    Exception? exception,
-  }) : super(message: httpException.toString(), stackTrace: stackTrace) {
+    String? message,
+  }) : super(
+          message: message ?? '',
+          stackTrace: stackTrace,
+        ) {
     log(
       'A $httpException, captured:',
-      error: exception.toString(),
+      error: message,
       stackTrace: stackTrace,
       name: 'DataHttpExceptionState',
     );
@@ -92,7 +95,8 @@ class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
   final HttpException httpException;
 
   @override
-  Map<String, Object?> get namedProps => {'httpException': httpException};
+  Map<String, Object?> get namedProps =>
+      {'httpException': httpException, 'message': message};
 }
 
 /// [DataNetworkExceptionState] is for handling network-related exceptions

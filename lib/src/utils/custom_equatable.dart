@@ -24,11 +24,13 @@ abstract class CustomEquatable extends Equatable {
                       is ExceptionState || // For internal exception handler.
                   e.value == null)
               ? '${e.key}: ${e.value}'
-              : '${e.key}: "${e.value}"',
+              : e.value != null && e.value != ''
+                  ? '${e.key}: "${e.value}"'
+                  : '',
         )
         .join(', ');
 
-    return '$type($propList)';
+    return '$type($propList)'.replaceAll('], )', '])');
   }
 
   Map<String, Object?> get namedProps;

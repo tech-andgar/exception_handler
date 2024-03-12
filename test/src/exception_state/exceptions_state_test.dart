@@ -52,23 +52,45 @@ void main() {
     group(
       'DataHttpExceptionState',
       () {
-        final DataHttpExceptionState<String> dataHttpException =
-            DataHttpExceptionState<String>(
-          exception: null,
-          httpException: HttpStatus.fromCode(401).exception(),
-          stackTrace: StackTrace.current,
-        );
-        test('should assign the http exception correctly', () {
-          expect(
-            dataHttpException.httpException,
-            equals(const UnauthorizedHttpException()),
+        group('null message', () {
+          final DataHttpExceptionState<String> dataHttpException =
+              DataHttpExceptionState<String>(
+            message: null,
+            httpException: HttpStatus.fromCode(401).exception(),
+            stackTrace: StackTrace.current,
           );
+          test('should assign the http exception correctly', () {
+            expect(
+              dataHttpException.httpException,
+              equals(const UnauthorizedHttpException()),
+            );
+          });
+          test('should correct toString', () {
+            expect(
+              dataHttpException.toString(),
+              'DataHttpExceptionState<String>(httpException: HttpException [401 Unauthorized])',
+            );
+          });
         });
-        test('should correct toString', () {
-          expect(
-            dataHttpException.toString(),
-            'DataHttpExceptionState<String>(httpException: HttpException [401 Unauthorized])',
+        group('non-null message', () {
+          final DataHttpExceptionState<String> dataHttpException =
+              DataHttpExceptionState<String>(
+            message: 'Error ABC',
+            httpException: HttpStatus.fromCode(402).exception(),
+            stackTrace: StackTrace.current,
           );
+          test('should assign the http exception correctly', () {
+            expect(
+              dataHttpException.httpException,
+              equals(const PaymentRequiredHttpException()),
+            );
+          });
+          test('should correct toString', () {
+            expect(
+              dataHttpException.toString(),
+              'DataHttpExceptionState<String>(httpException: HttpException [402 Payment Required], message: "Error ABC")',
+            );
+          });
         });
       },
     );

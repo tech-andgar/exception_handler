@@ -22,7 +22,7 @@ Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
   try {
     return FailureState(
       DataHttpExceptionState<TModel>(
-        exception: responseParser.exception,
+        message: responseParser.exception.toString(),
         httpException: HttpStatus.fromCode(statusCode).exception(),
         stackTrace: StackTrace.current,
       ),
@@ -30,7 +30,7 @@ Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
   } catch (e) {
     return FailureState(
       DataHttpExceptionState<TModel>(
-        exception: responseParser.exception,
+        message: responseParser.exception.toString(),
         httpException: HttpException(
           httpStatus: HttpStatus(
             code: statusCode,
