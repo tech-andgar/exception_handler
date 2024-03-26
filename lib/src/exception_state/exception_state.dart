@@ -32,8 +32,8 @@ sealed class ExceptionState<TModel> extends CustomEquatable
 /// the exception.
 class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
   DataClientExceptionState({
-    required String message,
-    required StackTrace stackTrace,
+    required final String message,
+    required final StackTrace stackTrace,
   }) : super(message: message, stackTrace: stackTrace) {
     log(
       'Client exception captured:',
@@ -44,7 +44,8 @@ class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
   }
 
   @override
-  Map<String, Object?> get namedProps => {'clientException': message};
+  Map<String, Object?> get namedProps =>
+      <String, Object?>{'clientException': message};
 }
 
 /// [DataParseExceptionState] handles exceptions related to parsing issues
@@ -55,8 +56,8 @@ class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
   DataParseExceptionState({
-    required StackTrace stackTrace,
-    String message = 'Error parsing data.',
+    required final StackTrace stackTrace,
+    final String message = 'Error parsing data.',
   }) : super(message: message, stackTrace: stackTrace) {
     log(
       'Unable to parse the json:',
@@ -78,8 +79,8 @@ class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
 class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
   DataHttpExceptionState({
     required this.httpException,
-    required StackTrace stackTrace,
-    String? message,
+    required final StackTrace stackTrace,
+    final String? message,
   }) : super(
           message: message ?? '',
           stackTrace: stackTrace,
@@ -107,8 +108,8 @@ class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
   DataNetworkExceptionState({
-    required StackTrace stackTrace,
-    String message = 'A network error occurred.',
+    required final StackTrace stackTrace,
+    final String message = 'A network error occurred.',
   }) : super(message: message, stackTrace: stackTrace) {
     log(
       'Network exception captured:',
@@ -130,8 +131,8 @@ class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
   DataCacheExceptionState({
-    required StackTrace stackTrace,
-    String message = 'A cache error occurred.',
+    required final StackTrace stackTrace,
+    final String message = 'A cache error occurred.',
   }) : super(message: message, stackTrace: stackTrace) {
     log(
       'Cache exception captured:',
@@ -153,8 +154,8 @@ class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
   DataInvalidInputExceptionState({
-    required StackTrace stackTrace,
-    String message = 'Invalid input provided.',
+    required final StackTrace stackTrace,
+    final String message = 'Invalid input provided.',
   }) : super(message: message, stackTrace: stackTrace) {
     log(
       'Invalid Input exception captured:',
@@ -176,8 +177,8 @@ class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
 /// the exception.
 class DataUnknownExceptionState<TModel> extends ExceptionState<TModel> {
   DataUnknownExceptionState({
-    required String message,
-    required StackTrace stackTrace,
+    required final String message,
+    required final StackTrace stackTrace,
   }) : super(message: message, stackTrace: stackTrace) {
     log(
       'Unknown exception captured:',

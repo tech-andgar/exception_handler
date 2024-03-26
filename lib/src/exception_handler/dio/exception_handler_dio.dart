@@ -16,8 +16,8 @@ import '../../../exception_handler.dart';
 /// any parsing exceptions.
 ///
 Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
-  int statusCode,
-  ResponseParser<Response, TModel> responseParser,
+  final int statusCode,
+  final ResponseParser<Response, TModel> responseParser,
 ) async {
   try {
     return FailureState(
@@ -48,7 +48,7 @@ Future<ResultState<TModel>> handleHttpGenericParseResponseDio<Response, TModel>(
 /// Method [handleHttp2xxParseResponseDio] tries to parse the response and handle
 /// any parsing exceptions.
 Future<ResultState<TModel>> handleHttp2xxParseResponseDio<TModel>(
-  ResponseParser<Response<Object?>, TModel> responseParser,
+  final ResponseParser<Response<Object?>, TModel> responseParser,
 ) async {
   try {
     final TModel dataModelParsed = await compute(
@@ -59,7 +59,7 @@ Future<ResultState<TModel>> handleHttp2xxParseResponseDio<TModel>(
     return SuccessState(dataModelParsed);
   } catch (e) {
     try {
-      // TODO(andgar2010): need more investigation about compute error on platform windows
+      // TODO(andgar2010): need more investigation about compute error on platform windows.
       log(
         '''
 Handle error compute.
@@ -123,8 +123,8 @@ class DioExceptionHandler implements ClientExceptionHandler {
   /// {@endtemplate}
   @override
   Future<ResultState<TModel>> callApi<TResponse, TModel>(
-    ApiHandler<TResponse, TModel> apiHandler, {
-    HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
+    final ApiHandler<TResponse, TModel> apiHandler, {
+    final HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
   }) async {
     handleParseResponse_ = handleHttpParseResponse ??
         HandleHttpParseResponse<Response<Object?>, TModel>(
@@ -167,9 +167,9 @@ class DioExceptionHandler implements ClientExceptionHandler {
 
   /// {@macro DioExceptionHandler_callApi_}
   static Future<ResultState<TModel>> callApi_<TResponse, TModel>(
-    ApiHandler<TResponse, TModel> apiHandler, {
-    HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
-  }) async =>
+    final ApiHandler<TResponse, TModel> apiHandler, {
+    final HandleHttpParseResponse<TResponse, TModel>? handleHttpParseResponse,
+  }) =>
       DioExceptionHandler().callApi(
         apiHandler,
         handleHttpParseResponse: handleHttpParseResponse,
@@ -186,7 +186,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   /// _handleHttpResponse processes the HTTP response and handles different
   /// status codes.
   static Future<ResultState<TModel>> _handleHttpResponse<TModel>(
-    ResponseParser<Response<Object?>, TModel> responseParser,
+    final ResponseParser<Response<Object?>, TModel> responseParser,
   ) async {
     final int? statusCode = responseParser.response.statusCode;
 
@@ -194,8 +194,8 @@ class DioExceptionHandler implements ClientExceptionHandler {
   }
 
   static Future<ResultState<TModel>> _handleStatusCode<TModel>(
-    int? statusCode,
-    ResponseParser<Response<Object?>, TModel> responseParser,
+    final int? statusCode,
+    final ResponseParser<Response<Object?>, TModel> responseParser,
   ) async =>
       // coverage:ignore-start
       switch (statusCode) {
@@ -234,8 +234,8 @@ class DioExceptionHandler implements ClientExceptionHandler {
   /// _handleDioException handles exceptions from the Dio library,
   /// particularly around connectivity.
   static Future<ResultState<TModel>> _handleDioException<TModel>(
-    DioException e,
-    StackTrace s,
+    final DioException e,
+    final StackTrace s,
   ) async {
     const String start =
         'This exception was thrown because the response has a status code of ';
@@ -250,7 +250,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
       ResponseParser(
         response: Response(requestOptions: RequestOptions()),
         // coverage:ignore-start
-        parserModel: (_) => Object() as TModel,
+        parserModel: (final _) => Object() as TModel,
         // coverage:ignore-end
         exception: e,
         stackTrace: s,

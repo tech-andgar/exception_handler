@@ -16,16 +16,16 @@ abstract class ClientExceptionHandler {
   /// ExceptionState and parsed data.
   ///
   Future<ResultState<TModel>> callApi<R, TModel>(
-    ApiHandler<R, TModel> apiHandler, {
-    HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
+    final ApiHandler<R, TModel> apiHandler, {
+    final HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
   });
 
   /// Method [callApi] is a generic method to handle API calls and return a tuple of
   /// ExceptionState and parsed data.
   ///
   static Future<ResultState<TModel>> callApi_<R, TModel>(
-    ApiHandler<R, TModel> apiHandler, {
-    HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
+    final ApiHandler<R, TModel> apiHandler, {
+    final HandleHttpParseResponse<R, TModel>? handleHttpParseResponse,
   }) async {
     throw UnimplementedError();
   }

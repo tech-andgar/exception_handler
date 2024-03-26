@@ -29,7 +29,7 @@ void main() {
         'Successful API call returns parsed data',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               data: {'key': 'value'},
               statusCode: 200,
@@ -39,7 +39,8 @@ void main() {
           final ResultState<String> result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (Object? data) => (data as Map)['key'] as String,
+              parserModel: (final Object? data) =>
+                  (data as Map)['key'] as String,
             ),
           );
 
@@ -61,7 +62,7 @@ void main() {
         'API call with 401 status code returns unauthorized exception',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 401,
             ),
@@ -70,7 +71,7 @@ void main() {
           final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (Object? data) => data as String,
+              parserModel: (final Object? data) => data as String,
             ),
           );
 
@@ -122,7 +123,7 @@ void main() {
           final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (Object? data) => data as String,
+              parserModel: (final Object? data) => data as String,
             ),
           );
 
@@ -145,7 +146,7 @@ void main() {
         'API call with parsing error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               data: 'Invalid data',
               statusCode: 200,
@@ -155,7 +156,7 @@ void main() {
           final ResultState<String> result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (Object? data) => int.parse(data as String)
+              parserModel: (final Object? data) => int.parse(data as String)
                   .toString(), // Intentional parse error
             ),
           );
@@ -184,7 +185,7 @@ void main() {
                 requestOptions: RequestOptions(path: ''),
                 statusCode: 300,
               ),
-              parserModel: (res) => null,
+              parserModel: (final res) => null,
             ),
           );
 
@@ -206,7 +207,7 @@ void main() {
         'should return FailureState with DataHttpException for 4xx error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 400,
             ),
@@ -215,7 +216,7 @@ void main() {
               await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (res) => null,
+              parserModel: (final res) => null,
             ),
           );
 
@@ -239,7 +240,7 @@ void main() {
         'should return FailureState with DataHttpException for 404 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 404,
             ),
@@ -248,7 +249,7 @@ void main() {
               await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (res) => null,
+              parserModel: (final res) => null,
             ),
           );
 
@@ -273,7 +274,7 @@ void main() {
         'should return FailureState with DataHttpException for 500 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 500,
             ),
@@ -282,7 +283,7 @@ void main() {
               await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (res) => null,
+              parserModel: (final res) => null,
             ),
           );
           expect(result, isA<FailureState<Object?>>());
@@ -305,7 +306,7 @@ void main() {
         'should return FailureState with DataHttpException for 501 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 501,
             ),
@@ -314,7 +315,7 @@ void main() {
               await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (res) => null,
+              parserModel: (final res) => null,
             ),
           );
 
@@ -338,7 +339,7 @@ void main() {
         'should return FailureState with DataHttpException for 600 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               statusCode: 600,
             ),
@@ -347,7 +348,7 @@ void main() {
               await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (res) => null,
+              parserModel: (final res) => null,
             ),
           );
 
@@ -496,7 +497,7 @@ void main() {
         'API call with unknown error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
-            (_) async => Response(
+            (final _) async => Response(
               requestOptions: RequestOptions(path: ''),
               data: 'Invalid data',
               statusCode: 200,
@@ -506,7 +507,7 @@ void main() {
           final ResultState<String> result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
-              parserModel: (Object? data) {
+              parserModel: (final Object? data) {
                 throw Exception('Error Unknown'); // Intentional error
               },
             ),

@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code
 // is governed by a Apache-2.0 license that can be found in the LICENSE file.
 
-import '../exception_state/exceptions_state.dart';
+import '../exception_state/exception_state.dart';
 import '../utils/utils.dart';
 
 /// An sealed base ResultState class

@@ -4,7 +4,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../exception_state/exceptions_state.dart';
+import '../exception_state/exception_state.dart';
 
 abstract class CustomEquatable extends Equatable {
   const CustomEquatable();
@@ -17,11 +17,11 @@ abstract class CustomEquatable extends Equatable {
     final String type = runtimeType.toString();
     final String propList = namedProps.entries
         .map(
-          (MapEntry<String, Object?> e) => (e.value is num ||
+          (final MapEntry<String, Object?> e) => (e.value is num ||
                   e.value is Exception ||
                   e.value is Enum ||
-                  e.value
-                      is ExceptionState || // For internal exception handler.
+                  // For internal exception handler.
+                  e.value is ExceptionState ||
                   e.value == null)
               ? '${e.key}: ${e.value}'
               : e.value != null && e.value != ''

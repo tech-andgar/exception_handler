@@ -12,6 +12,10 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: false
 
+  exclude:
+    - lib/**/*.g.dart
+    - lib/generated/*.g.dart
+
 # Lint rules and documentation, see http://dart-lang.github.io/linter/lints
 linter:
   rules:
@@ -33,7 +37,7 @@ linter:
     # - always_specify_types # More disbuting
     - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
-    # - avoid_catching_errors # tempory disabled because working validation
+    - avoid_catching_errors # tempory disabled because working validation
     - avoid_classes_with_only_static_members
     - avoid_double_and_int_checks
     - avoid_field_initializers_in_const_classes
@@ -64,7 +68,10 @@ linter:
     - prefer_const_literals_to_create_immutables
     - prefer_constructors_over_static_methods
     - prefer_expression_function_bodies
+    - prefer_final_fields
+    - prefer_final_in_for_each
     - prefer_final_locals
+    - prefer_final_parameters
     - prefer_foreach
     - prefer_single_quotes
     # - public_member_api_docs # TODO: Update Docs
@@ -87,10 +94,10 @@ dart_code_linter:
     # - package:dart_code_linter/presets/all.yaml
     # - package:dart_code_linter/presets/intl.yaml
 
-  # metrics:
-  #   cyclomatic-complexity: 20
-  #   number-of-parameters: 4
-  #   maximum-nesting-level: 5
+  metrics:
+    cyclomatic-complexity: 20
+    number-of-parameters: 4
+    maximum-nesting-level: 5
   metrics-exclude:
     - test/**
 
@@ -109,23 +116,20 @@ dart_code_linter:
         - did-change-dependencies-method
         - did-update-widget-method
         - dispose-method
-  # - format-comment: true
-  - no-magic-number:
-      allowed: [0, 2, 100, 200, 300, 400, 401, 402, 403, 404, 500, 501, 600]
-  # - allow-only-once: true
+  - format-comment: true
   # - avoid-dynamic: true
-  # - avoid-passing-async-when-sync-expected: true
-  # - avoid-redundant-async: true
-  # - avoid-unnecessary-type-assertions: true
-  # - avoid-unnecessary-type-casts: true
-  # - avoid-unrelated-type-assertions: true
-  # - avoid-unused-parameters: true
-  # - avoid-nested-conditional-expressions: true
-  # - newline-before-return: true
-  # - no-boolean-literal-compare: true
-  # - no-empty-block: true
-  # - prefer-trailing-comma: true
-  # - prefer-conditional-expressions: true
-  # - no-equal-then-else: true
-  # - prefer-moving-to-variable: true
-  # - prefer-match-file-name: true
+  - avoid-passing-async-when-sync-expected: true
+  - avoid-redundant-async: true
+  - avoid-unnecessary-type-assertions: true
+  - avoid-unnecessary-type-casts: true
+  - avoid-unrelated-type-assertions: true
+  - avoid-unused-parameters: true
+  - avoid-nested-conditional-expressions: true
+  - newline-before-return: true
+  - no-boolean-literal-compare: true
+  - no-empty-block: true
+  - prefer-trailing-comma: true
+  - prefer-conditional-expressions: true
+  - no-equal-then-else: true
+  - prefer-moving-to-variable: true
+  - prefer-match-file-name: true
