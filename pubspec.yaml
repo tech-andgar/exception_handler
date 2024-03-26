@@ -1,14 +1,14 @@
 name: exception_handler
 description: A Dart package for streamlined API handling and robust exception management in Flutter apps.
-version: 2.0.2
+version: 3.0.0
 homepage: "https://github.com/andgar2010/exception_handler"
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=3.10.0"
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=3.19.0"
 
 dependencies:
-  connectivity_plus: ^5.0.2
+  connectivity_plus: ^6.0.1
   dio: ^5.4.1
   equatable: ^2.0.5
   http_exception: ^2.0.0

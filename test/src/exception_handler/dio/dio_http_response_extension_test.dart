@@ -55,7 +55,7 @@ void main() {
       mockConnectivity = MockConnectivity();
       DioExceptionHandler.connectivity = mockConnectivity;
       when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => ConnectivityResult.mobile);
+          .thenAnswer((final _) async => [ConnectivityResult.mobile]);
     });
 
     group('fromJson', () {

@@ -177,9 +177,10 @@ class DioExceptionHandler implements ClientExceptionHandler {
 
   /// _isConnected checks the current network connectivity status.
   static Future<bool> _isConnected() async {
-    final ConnectivityResult result = await connectivity.checkConnectivity();
+    final List<ConnectivityResult> result =
+        await connectivity.checkConnectivity();
 
-    return result != ConnectivityResult.none;
+    return !result.contains(ConnectivityResult.none);
   }
 
   /// _handleHttpResponse processes the HTTP response and handles different

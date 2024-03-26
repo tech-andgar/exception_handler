@@ -99,7 +99,7 @@ void main() {
               .thenThrow(DioException(requestOptions: RequestOptions()));
 
           when(() => mockConnectivity.checkConnectivity())
-              .thenAnswer((_) async => ConnectivityResult.none);
+              .thenAnswer((final _) async => [ConnectivityResult.none]);
 
           final result = await DioExceptionHandler.callApi_(mockApiHandler);
 
@@ -386,7 +386,7 @@ void main() {
           );
 
           when(() => mockConnectivity.checkConnectivity())
-              .thenAnswer((_) async => ConnectivityResult.wifi);
+              .thenAnswer((final _) async => [ConnectivityResult.wifi]);
 
           final ResultState<String> result =
               await DioExceptionHandler.callApi_(mockApiHandler);
@@ -416,7 +416,7 @@ void main() {
           );
 
           when(() => mockConnectivity.checkConnectivity())
-              .thenAnswer((_) async => ConnectivityResult.wifi);
+              .thenAnswer((final _) async => [ConnectivityResult.wifi]);
 
           final ResultState<String> result =
               await DioExceptionHandler.callApi_(mockApiHandler);
@@ -446,7 +446,7 @@ void main() {
           );
 
           when(() => mockConnectivity.checkConnectivity())
-              .thenAnswer((_) async => ConnectivityResult.wifi);
+              .thenAnswer((final _) async => [ConnectivityResult.wifi]);
 
           final ResultState<String> result =
               await DioExceptionHandler.callApi_(mockApiHandler);
