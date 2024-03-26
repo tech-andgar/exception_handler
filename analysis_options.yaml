@@ -37,7 +37,7 @@ linter:
     # - always_specify_types # More disbuting
     - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
-    - avoid_catching_errors # tempory disabled because working validation
+    # - avoid_catching_errors # tempory disabled because working validation
     - avoid_classes_with_only_static_members
     - avoid_double_and_int_checks
     - avoid_field_initializers_in_const_classes
@@ -116,7 +116,7 @@ dart_code_linter:
         - did-change-dependencies-method
         - did-update-widget-method
         - dispose-method
-  - format-comment: true
+  # - format-comment: true
   # - avoid-dynamic: true
   - avoid-passing-async-when-sync-expected: true
   - avoid-redundant-async: true
@@ -124,7 +124,7 @@ dart_code_linter:
   - avoid-unnecessary-type-casts: true
   - avoid-unrelated-type-assertions: true
   - avoid-unused-parameters: true
-  - avoid-nested-conditional-expressions: true
+  # - avoid-nested-conditional-expressions: true
   - newline-before-return: true
   - no-boolean-literal-compare: true
   - no-empty-block: true
@@ -132,4 +132,4 @@ dart_code_linter:
   - prefer-conditional-expressions: true
   - no-equal-then-else: true
   - prefer-moving-to-variable: true
-  - prefer-match-file-name: true
+  # - prefer-match-file-name: true
