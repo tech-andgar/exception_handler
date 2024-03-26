@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.0.0] - 2024-03-26
+
+### Changed - 3.0.0
+
+* **Dependency**: Updated the `dio` package version from `5.4.1` to `5.4.2`.
+* **Dependency**: Updated the `connectivity_plus` plugin from version `^5.0.2` to `^6.0.1`.
+
+### Breaking Changes - 3.0.0
+
+* **SDK and Flutter versions**:
+  Increased the minimum Dart version from `>=3.0.0 <4.0.0` to `>=3.3.0 <4.0.0` and the Flutter version from `>=3.0.0` to `>=3.19.0` in the `pubspec.yaml` file. This change may affect developers working on older versions of the SDK or Flutter.
+
+### Added - 3.0.0
+
+* **Code Quality**: Enhanced linter rules for improved code quality, enabling previously commented-out linting rules, adding new ones, and notably, the addition of metrics with specific complexity parameters to drive better code practices.
+
 ## [2.0.2] - 2024-03-11
 
 Overall, these changes primarily revolve around improving exception handling and string formatting versatility.
@@ -49,7 +65,7 @@ Overall, these changes primarily revolve around improving exception handling and
 
 ## [2.0.0] - 2024-03-10
 
-### Breaking Changes
+### Breaking Changes - 2.0.0
 
 Refactor of Exception Handling: The conversion of DioExceptionHandler into a mixin and the static method adjustments represent a breaking change for any existing codebases that instantiate DioExceptionHandler or rely on its previous class structure. Projects will need to update their exception handling implementations to adapt to this refactor. This change aims to streamline the process and enhance overall usability, but will require attention during migration to the new version.
 
