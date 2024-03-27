@@ -64,6 +64,7 @@ class UserModel {
     data['email'] = email;
     data['phone'] = phone;
     data['website'] = website;
+
     return data;
   }
 }

@@ -41,10 +41,12 @@ void main() {
         response: mockResponse,
         parserModel: mockParserModel,
       );
-      test('should correctly parse the response using the given parserModel',
-          () {
-        expect(parser.parserModel(parser.response.data), equals('value'));
-      });
+      test(
+        'should correctly parse the response using the given parserModel',
+        () {
+          expect(parser.parserModel(parser.response.data), equals('value'));
+        },
+      );
       test(
         'should correct toString',
         () {
