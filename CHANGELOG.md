@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.1] - 2024-03-26
+
+### Fixed - 3.0.1
+
+* reverted to using 'isolates.dart' from utils exports to framework for web compatibility.
+
 ## [3.0.0] - 2024-03-26
 
 ### Changed - 3.0.0

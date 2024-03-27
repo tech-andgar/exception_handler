@@ -7,6 +7,7 @@ import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http_exception/http_exception.dart';
 import 'package:http_status/http_status.dart';
 
