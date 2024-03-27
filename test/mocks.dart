@@ -26,7 +26,7 @@ class UserModel {
     this.website,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(final Map<String, dynamic> json) {
     if (json
         case {
           'id': final int? id,
@@ -64,6 +64,7 @@ class UserModel {
     data['email'] = email;
     data['phone'] = phone;
     data['website'] = website;
+
     return data;
   }
 }

@@ -14,7 +14,7 @@ void main() {
                 statusCode: 200,
                 requestOptions: RequestOptions(),
               );
-          String mockParserModel(Object? data) => 'Parsed $data';
+          String mockParserModel(final Object? data) => 'Parsed $data';
 
           final handler = ApiHandler<Response<Object?>, String>(
             apiCall: mockApiCall,
@@ -35,15 +35,18 @@ void main() {
         statusCode: 200,
         requestOptions: RequestOptions(),
       );
-      String mockParserModel(Object? data) => (data as Map)['key'] as String;
+      String mockParserModel(final Object? data) =>
+          (data as Map)['key'] as String;
       final parser = ResponseParser<Response<Object?>, String>(
         response: mockResponse,
         parserModel: mockParserModel,
       );
-      test('should correctly parse the response using the given parserModel',
-          () {
-        expect(parser.parserModel(parser.response.data), equals('value'));
-      });
+      test(
+        'should correctly parse the response using the given parserModel',
+        () {
+          expect(parser.parserModel(parser.response.data), equals('value'));
+        },
+      );
       test(
         'should correct toString',
         () {

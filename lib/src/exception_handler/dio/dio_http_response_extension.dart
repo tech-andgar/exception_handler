@@ -8,7 +8,7 @@ import '../../../exception_handler.dart';
 
 /// An extension on `Future<Response>` providing methods for handling Dio HTTP responses and converting them
 /// into [ResultState<TModel>] or [ResultState<List<TModel>>] types.
-extension HttpResponseDioExtension on Future<Response<Object?>> {
+extension DioHttpResponseExtension on Future<Response<Object?>> {
   /// Converts a Dio HTTP response into an [ResultState<TModel>] type using
   /// a custom `fromJson` method.
   ///
@@ -87,12 +87,13 @@ extension HttpResponseDioExtension on Future<Response<Object?>> {
   /// ```
   ///
   Future<ResultState<TModel>> fromJson<TModel>(
-    TModel Function(Map<String, dynamic>) fromJson,
+    final TModel Function(Map<String, dynamic>) fromJson,
   ) async =>
       await DioExceptionHandler.callApi_<Response<Object?>, TModel>(
         ApiHandler(
           apiCall: () => this, // Same: response = dio.get('https://').
-          parserModel: (Object? data) => fromJson(data as Map<String, dynamic>),
+          parserModel: (final Object? data) =>
+              fromJson(data as Map<String, dynamic>),
         ),
       );
 
@@ -173,14 +174,13 @@ extension HttpResponseDioExtension on Future<Response<Object?>> {
   ///    }
   /// ```
   Future<ResultState<List<TModel>>> fromJsonAsList<TModel>(
-    TModel Function(Map<String, dynamic>) fromJson,
+    final TModel Function(Map<String, dynamic>) fromJson,
   ) async =>
       await DioExceptionHandler.callApi_<Response<Object?>, List<TModel>>(
         ApiHandler(
           apiCall: () => this, // Same: response = dio.get('https://').
-          parserModel: (Object? data) => (data as List<Map<String, dynamic>>)
-              .map((item) => fromJson(item))
-              .toList(),
+          parserModel: (final Object? data) =>
+              (data as List<Map<String, dynamic>>).map(fromJson).toList(),
         ),
       );
 }

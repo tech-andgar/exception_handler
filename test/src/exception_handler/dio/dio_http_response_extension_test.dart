@@ -14,7 +14,7 @@ class UserModel {
     required this.name,
   });
 
-  factory UserModel.fromJson(Map<String, Object?> json) => UserModel(
+  factory UserModel.fromJson(final Map<String, Object?> json) => UserModel(
         id: json['id'] as int,
         name: json['name'] as String,
       );
@@ -27,7 +27,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('HttpResponseDioExtension', () {
     final requestOptions =
-        RequestOptions(path: '/data', validateStatus: (status) => true);
+        RequestOptions(path: '/data', validateStatus: (final status) => true);
 
     final data = {'id': 1, 'name': 'John Doe'};
 
@@ -37,8 +37,8 @@ void main() {
     ];
 
     Future<Never> futureDioException(
-      DioExceptionType type, {
-      Response<Object?>? response,
+      final DioExceptionType type, {
+      final Response<Object?>? response,
     }) =>
         Future.delayed(
           const Duration(microseconds: 10),
@@ -55,7 +55,7 @@ void main() {
       mockConnectivity = MockConnectivity();
       DioExceptionHandler.connectivity = mockConnectivity;
       when(() => mockConnectivity.checkConnectivity())
-          .thenAnswer((_) async => ConnectivityResult.mobile);
+          .thenAnswer((final _) async => [ConnectivityResult.mobile]);
     });
 
     group('fromJson', () {
@@ -262,8 +262,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != null),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != null,
+              ),
               statusCode: null,
             ),
           );
@@ -302,8 +303,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 100),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 100,
+              ),
               statusCode: 100,
             ),
           );
@@ -336,8 +338,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 300),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 300,
+              ),
               statusCode: 300,
             ),
           );
@@ -369,8 +372,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 400),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 400,
+              ),
               statusCode: 400,
             ),
           );
@@ -403,8 +407,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 500),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 500,
+              ),
               statusCode: 500,
             ),
           );
@@ -642,8 +647,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != null),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != null,
+              ),
               statusCode: null,
             ),
           );
@@ -682,8 +688,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 100),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 100,
+              ),
               statusCode: 100,
             ),
           );
@@ -715,8 +722,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 300),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 300,
+              ),
               statusCode: 300,
             ),
           );
@@ -748,8 +756,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 400),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 400,
+              ),
               statusCode: 400,
             ),
           );
@@ -781,8 +790,9 @@ void main() {
           final dioResponse = futureDioException(
             DioExceptionType.badResponse,
             response: Response<Map<String, Object?>>(
-              requestOptions:
-                  RequestOptions(validateStatus: (status) => status != 500),
+              requestOptions: RequestOptions(
+                validateStatus: (final status) => status != 500,
+              ),
               statusCode: 500,
             ),
           );
