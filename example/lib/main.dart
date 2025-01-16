@@ -217,8 +217,8 @@ class Company extends CustomEquatable {
 // Path: services/user_service.dart
 class UserService {
   final Dio dio = Dio();
-  Future<ResultState<UserModel>> getDataUser(int id) async {
-    final ResultState<UserModel> result =
+  Future<Result<UserModel>> getDataUser(int id) async {
+    final Result<UserModel> result =
         await DioExceptionHandler.callApi_<Response, UserModel>(
       ApiHandler(
         apiCall: () =>
@@ -230,8 +230,8 @@ class UserService {
     return result;
   }
 
-  Future<ResultState<UserModel>> getDataUserExtensionDio(int id) async {
-    final ResultState<UserModel> result = await dio
+  Future<Result<UserModel>> getDataUserExtensionDio(int id) async {
+    final Result<UserModel> result = await dio
         .get('https://jsonplaceholder.typicode.com/users/$id')
         .fromJson(UserModel.fromJson);
 
@@ -308,19 +308,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 future: UserService().getDataUserExtensionDio(_counter),
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<ResultState<UserModel>> snapshot,
+                  AsyncSnapshot<Result<UserModel>> snapshot,
                 ) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
-                  final ResultState<UserModel> resultState =
+                  final Result<UserModel> result =
                       snapshot.requireData;
 
-                  final StatelessWidget uiWidget = switch (resultState) {
-                    SuccessState<UserModel> success =>
-                      UiUserWidget(success.data),
-                    FailureState<UserModel> failure =>
-                      UiExceptionWidget(failure.exception),
+                  final StatelessWidget uiWidget = switch (result) {
+                    Ok<UserModel> success =>
+                      UiUserWidget(success.value),
+                    Error<UserModel> failure =>
+                      UiExceptionWidget(failure.error),
                   };
                   return uiWidget;
                 },

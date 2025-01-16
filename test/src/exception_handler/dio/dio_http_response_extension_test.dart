@@ -60,7 +60,7 @@ void main() {
 
     group('fromJson', () {
       test(
-        'should return SuccessState<UserModel> when conversion is successful',
+        'should return Ok<UserModel> when conversion is successful',
         () async {
           // Arrange
           final dioResponse = Response<Map<String, Object?>>(
@@ -74,16 +74,16 @@ void main() {
               await Future.value(dioResponse).fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<SuccessState<UserModel>>());
+          expect(result, isA<Ok<UserModel>>());
           expect(
-            (result as SuccessState<UserModel>).data,
+            (result as Ok<UserModel>).value,
             isA<UserModel>(),
           );
         },
       );
 
       test(
-        'should return FailureState DataParseExceptionState when conversion fails',
+        'should return Error DataParseExceptionState when conversion fails',
         () async {
           // Arrange
           final dioResponse = Response<Map<String, Object?>>(
@@ -97,20 +97,20 @@ void main() {
               await Future.value(dioResponse).fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataParseExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataParseExceptionState<UserModel>(parseException: "type \'String\' is not a subtype of type \'int\' in type cast")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.connectionTimeout on DioExceptionType.connectionTimeout',
+        'should return Error DataNetworkExceptionState.NetworkException.connectionTimeout on DioExceptionType.connectionTimeout',
         () async {
           // Arrange
           final dioResponse =
@@ -120,20 +120,20 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.timeOutException")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.sendTimeout on DioExceptionType.sendTimeout',
+        'should return Error DataNetworkExceptionState.NetworkException.sendTimeout on DioExceptionType.sendTimeout',
         () async {
           // Arrange
           final dioResponse = futureDioException(DioExceptionType.sendTimeout);
@@ -142,20 +142,20 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.sendTimeout")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.requestCancel on DioExceptionType.cancel',
+        'should return Error DataNetworkExceptionState.NetworkException.requestCancel on DioExceptionType.cancel',
         () async {
           // Arrange
           final dioResponse = futureDioException(DioExceptionType.cancel);
@@ -164,20 +164,20 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.cancel")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.receiveTimeout on DioExceptionType.receiveTimeout',
+        'should return Error DataNetworkExceptionState.NetworkException.receiveTimeout on DioExceptionType.receiveTimeout',
         () async {
           // Arrange
           final dioResponse =
@@ -187,20 +187,20 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.receiveTimeout")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.noInternetConnection on DioExceptionType.connectionError',
+        'should return Error DataNetworkExceptionState.NetworkException.noInternetConnection on DioExceptionType.connectionError',
         () async {
           // Arrange
           final dioResponse =
@@ -210,20 +210,20 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<UserModel>(networkException: "NetworkException.noInternetConnection")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.unknown on DioExceptionType.unknown',
+        'should return Error DataNetworkExceptionState.NetworkException.unknown on DioExceptionType.unknown',
         () async {
           // Arrange
           final dioResponse = futureDioException(DioExceptionType.unknown);
@@ -232,13 +232,13 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpException(
               httpStatus: HttpStatus(
                 code: 0,
@@ -249,14 +249,14 @@ void main() {
             ),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [unknown]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException on DioExceptionType.badResponse with status code null',
+        'should return Error.DataHttpExceptionState.httpException on DioExceptionType.badResponse with status code null',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -273,13 +273,13 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpException(
               httpStatus: HttpStatus(
                 code: 0,
@@ -290,14 +290,14 @@ void main() {
             ),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<UserModel>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException on status code 100',
+        'should return Error.DataHttpExceptionState.httpException on status code 100',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -314,24 +314,24 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(100).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<UserModel>(httpException: HttpException [100 Continue], message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException.multipleChoices on status code 300',
+        'should return Error.DataHttpExceptionState.httpException.multipleChoices on status code 300',
         () async {
           // Arrange
 
@@ -349,24 +349,24 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
 
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(300).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<UserModel>(httpException: HttpException [300 Multiple Choices], message: "DioException [bad response]: null")',
           );
         },
       );
       test(
-        'should return FailureState.DataHttpExceptionState.httpException.badRequest on status code 400',
+        'should return Error.DataHttpExceptionState.httpException.badRequest on status code 400',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -383,25 +383,25 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
 
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(400).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<UserModel>(httpException: HttpException [400 Bad Request], message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException.internalServerError on status code 500',
+        'should return Error.DataHttpExceptionState.httpException.internalServerError on status code 500',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -418,17 +418,17 @@ void main() {
           final result = await dioResponse.fromJson(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<UserModel>>());
+          expect(result, isA<Error<UserModel>>());
           expect(
-            (result as FailureState<UserModel>).exception,
+            (result as Error<UserModel>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(500).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<UserModel>(httpException: HttpException [500 Internal Server Error], message: "DioException [bad response]: null")',
           );
         },
@@ -437,7 +437,7 @@ void main() {
 
     group('fromJsonAsList', () {
       test(
-        'should return SuccessState<List<UserModel>> when conversion is successful',
+        'should return Ok<List<UserModel>> when conversion is successful',
         () async {
           // Arrange
 
@@ -452,17 +452,17 @@ void main() {
               .fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<SuccessState<List<UserModel>>>());
+          expect(result, isA<Ok<List<UserModel>>>());
           expect(
-            (result as SuccessState<List<UserModel>>).data,
+            (result as Ok<List<UserModel>>).value,
             isA<List<UserModel>>(),
           );
-          expect(result.data.length, 2);
+          expect(result.value.length, 2);
         },
       );
 
       test(
-        'should return FailureState DataParseExceptionState when conversion fails for at least one field',
+        'should return Error DataParseExceptionState when conversion fails for at least one field',
         () async {
           // Arrange
           final dioResponse = Response<List<Object?>>(
@@ -479,20 +479,20 @@ void main() {
               .fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataParseExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataParseExceptionState<List<UserModel>>(parseException: "type \'List<Object?>\' is not a subtype of type \'List<Map<String, dynamic>>\' in type cast")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.connectionTimeout on DioExceptionType.connectionTimeout',
+        'should return Error DataNetworkExceptionState.NetworkException.connectionTimeout on DioExceptionType.connectionTimeout',
         () async {
           // Arrange
           final dioResponse =
@@ -502,20 +502,20 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.timeOutException")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.sendTimeout on DioExceptionType.sendTimeout',
+        'should return Error DataNetworkExceptionState.NetworkException.sendTimeout on DioExceptionType.sendTimeout',
         () async {
           // Arrange
           final dioResponse = futureDioException(DioExceptionType.sendTimeout);
@@ -525,22 +525,22 @@ void main() {
 
           // Assert
           expect(
-            result as FailureState<List<UserModel>>,
-            isA<FailureState<List<UserModel>>>(),
+            result as Error<List<UserModel>>,
+            isA<Error<List<UserModel>>>(),
           );
           expect(
-            result.exception,
+            result.error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.sendTimeout")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.requestCancel on DioExceptionType.cancel',
+        'should return Error DataNetworkExceptionState.NetworkException.requestCancel on DioExceptionType.cancel',
         () async {
           // Arrange
           final dioResponse = futureDioException(DioExceptionType.cancel);
@@ -549,20 +549,20 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.cancel")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.receiveTimeout on DioExceptionType.receiveTimeout',
+        'should return Error DataNetworkExceptionState.NetworkException.receiveTimeout on DioExceptionType.receiveTimeout',
         () async {
           // Arrange
           final dioResponse =
@@ -572,20 +572,20 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.receiveTimeout")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.noInternetConnection on DioExceptionType.connectionError',
+        'should return Error DataNetworkExceptionState.NetworkException.noInternetConnection on DioExceptionType.connectionError',
         () async {
           // Arrange
           final dioResponse =
@@ -595,20 +595,20 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataNetworkExceptionState<Object?>>(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataNetworkExceptionState<List<UserModel>>(networkException: "NetworkException.noInternetConnection")',
           );
         },
       );
 
       test(
-        'should return FailureState DataNetworkExceptionState.NetworkException.unknown on DioExceptionType.unknown',
+        'should return Error DataNetworkExceptionState.NetworkException.unknown on DioExceptionType.unknown',
         () async {
           // Arrange
           final dioResponse = futureDioException(DioExceptionType.unknown);
@@ -617,13 +617,13 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpException(
               httpStatus: HttpStatus(
                 code: 0,
@@ -634,14 +634,14 @@ void main() {
             ),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [unknown]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException on DioExceptionType.badResponse with status code null',
+        'should return Error.DataHttpExceptionState.httpException on DioExceptionType.badResponse with status code null',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -658,13 +658,13 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpException(
               httpStatus: HttpStatus(
                 code: 0,
@@ -675,14 +675,14 @@ void main() {
             ),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [0 unknown_HttpStatus]: exception: Invalid argument (code): Unrecognized status code. Use the HttpStatus constructor for custom codes: 0, message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState<HttpFailure.informationalResponse> on status code 100',
+        'should return Error<HttpFailure.informationalResponse> on status code 100',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -699,24 +699,24 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(100).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [100 Continue], message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException.unknownRedirect on status code 300',
+        'should return Error.DataHttpExceptionState.httpException.unknownRedirect on status code 300',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -733,24 +733,24 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(300).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [300 Multiple Choices], message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException.unknownClient on status code 400',
+        'should return Error.DataHttpExceptionState.httpException.unknownClient on status code 400',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -767,24 +767,24 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(400).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [400 Bad Request], message: "DioException [bad response]: null")',
           );
         },
       );
 
       test(
-        'should return FailureState.DataHttpExceptionState.httpException.internalServerError on status code 500',
+        'should return Error.DataHttpExceptionState.httpException.internalServerError on status code 500',
         () async {
           // Arrange
           final dioResponse = futureDioException(
@@ -801,17 +801,17 @@ void main() {
           final result = await dioResponse.fromJsonAsList(UserModel.fromJson);
 
           // Assert
-          expect(result, isA<FailureState<List<UserModel>>>());
+          expect(result, isA<Error<List<UserModel>>>());
           expect(
-            (result as FailureState<List<UserModel>>).exception,
+            (result as Error<List<UserModel>>).error,
             isA<DataHttpExceptionState<Object?>>(),
           );
           expect(
-            (result.exception as DataHttpExceptionState).httpException,
+            (result.error as DataHttpExceptionState).httpException,
             HttpStatus.fromCode(500).exception(),
           );
           expect(
-            result.exception.toString(),
+            result.error.toString(),
             'DataHttpExceptionState<List<UserModel>>(httpException: HttpException [500 Internal Server Error], message: "DioException [bad response]: null")',
           );
         },

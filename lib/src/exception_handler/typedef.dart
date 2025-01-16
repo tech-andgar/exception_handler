@@ -4,17 +4,17 @@
 
 import '../src.dart';
 
-typedef ApiCall<R, TModel> = Future<R> Function();
-typedef ParseFunction<TModel> = TModel Function(Object?);
+typedef ApiCall<R, T> = Future<R> Function();
+typedef ParseFunction<T> = T Function(Object?);
 
-class ApiHandler<R, TModel> {
+class ApiHandler<R, T> {
   ApiHandler({required this.apiCall, required this.parserModel});
 
-  final ApiCall<R, TModel> apiCall;
-  final ParseFunction<TModel> parserModel;
+  final ApiCall<R, T> apiCall;
+  final ParseFunction<T> parserModel;
 }
 
-class ResponseParser<R, TModel> extends CustomEquatable {
+class ResponseParser<R, T> extends CustomEquatable {
   const ResponseParser({
     required this.response,
     required this.parserModel,
@@ -22,7 +22,7 @@ class ResponseParser<R, TModel> extends CustomEquatable {
     this.stackTrace,
   });
 
-  final ParseFunction<TModel> parserModel;
+  final ParseFunction<T> parserModel;
   final R response;
   final Exception? exception;
   final StackTrace? stackTrace;
@@ -36,7 +36,7 @@ class ResponseParser<R, TModel> extends CustomEquatable {
       };
 }
 
-class HandleHttpParseResponse<R, TModel> {
+class HandleHttpParseResponse<R, T> {
   HandleHttpParseResponse({
     this.handleHttp1xxParseResponse,
     // TODO(andgar2010): investigation bug.
@@ -47,33 +47,33 @@ class HandleHttpParseResponse<R, TModel> {
     this.handleHttpUnknownParseResponse,
   });
 
-  final Future<ResultState<TModel>> Function<R, TModel>(
+  final Future<Result<T>> Function<R, T>(
     int statusCode,
-    ResponseParser<R, TModel>,
+    ResponseParser<R, T>,
   )? handleHttp1xxParseResponse;
 
   // TODO(andgar2010): investigation bug.
-  // final Future<ResultState<TModel>> Function<TModel>(
+  // final Future<Result<T>> Function<T>(
   //   ResponseParser,
   // )? handleHttp2xxParseResponse;
 
-  final Future<ResultState<TModel>> Function<R, TModel>(
+  final Future<Result<T>> Function<R, T>(
     int statusCode,
-    ResponseParser<R, TModel>,
+    ResponseParser<R, T>,
   )? handleHttp3xxParseResponse;
 
-  final Future<ResultState<TModel>> Function<R, TModel>(
+  final Future<Result<T>> Function<R, T>(
     int statusCode,
-    ResponseParser<R, TModel>,
+    ResponseParser<R, T>,
   )? handleHttp4xxParseResponse;
 
-  final Future<ResultState<TModel>> Function<R, TModel>(
+  final Future<Result<T>> Function<R, T>(
     int statusCode,
-    ResponseParser<R, TModel>,
+    ResponseParser<R, T>,
   )? handleHttp5xxParseResponse;
 
-  final Future<ResultState<TModel>> Function<R, TModel>(
+  final Future<Result<T>> Function<R, T>(
     int statusCode,
-    ResponseParser<R, TModel>,
+    ResponseParser<R, T>,
   )? handleHttpUnknownParseResponse;
 }

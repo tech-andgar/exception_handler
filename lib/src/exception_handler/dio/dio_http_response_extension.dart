@@ -7,9 +7,9 @@ import 'package:dio/dio.dart';
 import '../../../exception_handler.dart';
 
 /// An extension on `Future<Response>` providing methods for handling Dio HTTP responses and converting them
-/// into [ResultState<TModel>] or [ResultState<List<TModel>>] types.
+/// into [Result<T>] or [Result<List<T>>] types.
 extension DioHttpResponseExtension on Future<Response<Object?>> {
-  /// Converts a Dio HTTP response into an [ResultState<TModel>] type using
+  /// Converts a Dio HTTP response into an [Result<T>] type using
   /// a custom `fromJson` method.
   ///
   /// Usage:
@@ -86,10 +86,10 @@ extension DioHttpResponseExtension on Future<Response<Object?>> {
   ///    }
   /// ```
   ///
-  Future<ResultState<TModel>> fromJson<TModel>(
-    final TModel Function(Map<String, dynamic>) fromJson,
+  Future<Result<T>> fromJson<T>(
+    final T Function(Map<String, dynamic>) fromJson,
   ) async =>
-      await DioExceptionHandler.callApi_<Response<Object?>, TModel>(
+      await DioExceptionHandler.callApi_<Response<Object?>, T>(
         ApiHandler(
           apiCall: () => this, // Same: response = dio.get('https://').
           parserModel: (final Object? data) =>
@@ -97,7 +97,7 @@ extension DioHttpResponseExtension on Future<Response<Object?>> {
         ),
       );
 
-  /// Converts a Dio HTTP response into an [ResultState<List<TModel>>] type
+  /// Converts a Dio HTTP response into an [Result<List<T>>] type
   /// using a custom `fromJsonAsList` method.
   ///
   /// Usage:
@@ -173,10 +173,10 @@ extension DioHttpResponseExtension on Future<Response<Object?>> {
   ///        print(failure.exception);
   ///    }
   /// ```
-  Future<ResultState<List<TModel>>> fromJsonAsList<TModel>(
-    final TModel Function(Map<String, dynamic>) fromJson,
+  Future<Result<List<T>>> fromJsonAsList<T>(
+    final T Function(Map<String, dynamic>) fromJson,
   ) async =>
-      await DioExceptionHandler.callApi_<Response<Object?>, List<TModel>>(
+      await DioExceptionHandler.callApi_<Response<Object?>, List<T>>(
         ApiHandler(
           apiCall: () => this, // Same: response = dio.get('https://').
           parserModel: (final Object? data) =>
