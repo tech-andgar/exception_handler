@@ -33,8 +33,7 @@ void main() {
       'DataParseExceptionState',
       () {
         const exception = 'Parse error';
-        final DataParseExceptionState<String> dataParseException =
-            DataParseExceptionState<String>(
+        final dataParseException = DataParseExceptionState<String>(
           message: exception,
           stackTrace: StackTrace.current,
         );
@@ -53,8 +52,7 @@ void main() {
       'DataHttpExceptionState',
       () {
         group('null message', () {
-          final DataHttpExceptionState<String> dataHttpException =
-              DataHttpExceptionState<String>(
+          final dataHttpException = DataHttpExceptionState<String>(
             message: null,
             httpException: HttpStatus.fromCode(401).exception(),
             stackTrace: StackTrace.current,
@@ -73,8 +71,7 @@ void main() {
           });
         });
         group('non-null message', () {
-          final DataHttpExceptionState<String> dataHttpException =
-              DataHttpExceptionState<String>(
+          final dataHttpException = DataHttpExceptionState<String>(
             message: 'Error ABC',
             httpException: HttpStatus.fromCode(402).exception(),
             stackTrace: StackTrace.current,
@@ -97,8 +94,7 @@ void main() {
     group(
       'DataNetworkExceptionState',
       () {
-        final DataNetworkExceptionState<String> dataNetworkException =
-            DataNetworkExceptionState<String>(
+        final dataNetworkException = DataNetworkExceptionState<String>(
           message: 'NetworkException.noInternetConnection',
           stackTrace: StackTrace.current,
         );
@@ -120,8 +116,7 @@ void main() {
     group(
       'DataCacheExceptionState',
       () {
-        final DataCacheExceptionState<String> dataCacheException =
-            DataCacheExceptionState<String>(
+        final dataCacheException = DataCacheExceptionState<String>(
           message: 'CacheException.unknown',
           stackTrace: StackTrace.current,
         );
@@ -143,7 +138,7 @@ void main() {
     group(
       'DataInvalidInputExceptionState',
       () {
-        final DataInvalidInputExceptionState<String> dataInvalidInputException =
+        final dataInvalidInputException =
             DataInvalidInputExceptionState<String>(
           message: 'InvalidInputException.unknown',
           stackTrace: StackTrace.current,
@@ -166,8 +161,7 @@ void main() {
     group(
       'DataUnknownExceptionState',
       () {
-        final DataUnknownExceptionState<String> dataUnknownException =
-            DataUnknownExceptionState<String>(
+        final dataUnknownException = DataUnknownExceptionState<String>(
           message: 'UnknownException.unknown',
           stackTrace: StackTrace.current,
         );

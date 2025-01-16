@@ -26,14 +26,13 @@ void main() {
   group(
     'Error',
     () {
-      final DataClientExceptionState<String> exception =
-          DataClientExceptionState<String>(
+      final exception = DataClientExceptionState<String>(
         message: 'Test Exception',
         stackTrace: StackTrace.current,
       );
-      final Error<String> resultState = Error<String>(exception);
+      final resultState = Error<String>(exception);
       test('should call failure callback with correct exception', () {
-        final bool failureCalled = switch (resultState) {
+        final failureCalled = switch (resultState) {
           Error() => true,
         };
 

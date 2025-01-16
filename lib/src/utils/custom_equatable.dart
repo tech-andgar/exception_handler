@@ -14,8 +14,8 @@ abstract class CustomEquatable extends Equatable {
 
   @override
   String toString() {
-    final String type = runtimeType.toString();
-    final String propList = namedProps.entries
+    final type = runtimeType.toString();
+    final propList = namedProps.entries
         .map(
           (final MapEntry<String, Object?> e) => (e.value is num ||
                   e.value is Exception ||

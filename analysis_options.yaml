@@ -34,10 +34,11 @@ linter:
     - always_declare_return_types
     - always_put_control_body_on_new_line # works against dartfmt
     - always_put_required_named_parameters_first
-    # - always_specify_types # More disbuting
+    # - always_specify_types # More disturbing
     - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
-    # - avoid_catching_errors # tempory disabled because working validation
+    # - avoid_catching_errors # temporary disabled because working validation
+    # - avoid_catches_without_on_clauses
     - avoid_classes_with_only_static_members
     - avoid_double_and_int_checks
     - avoid_field_initializers_in_const_classes
@@ -48,7 +49,7 @@ linter:
     - avoid_private_typedef_functions
     - avoid_returning_this
     - avoid_setters_without_getters
-    # - avoid_types_on_closure_parameters # confilict always_specify_types
+    # - avoid_types_on_closure_parameters # conflict always_specify_types
     - avoid_unused_constructor_parameters
     - avoid_void_async
     - cascade_invocations
@@ -56,7 +57,7 @@ linter:
     - join_return_with_assignment
     - library_prefixes
     # - lines_longer_than_80_chars
-    # - omit_local_variable_types # confilict always_specify_types
+    - omit_local_variable_types # conflict always_specify_types
     - one_member_abstracts
     - only_throw_errors
     - package_api_docs

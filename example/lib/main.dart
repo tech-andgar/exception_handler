@@ -313,12 +313,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
-                  final Result<UserModel> result =
-                      snapshot.requireData;
+                  final Result<UserModel> result = snapshot.requireData;
 
                   final StatelessWidget uiWidget = switch (result) {
-                    Ok<UserModel> success =>
-                      UiUserWidget(success.value),
+                    Ok<UserModel> success => UiUserWidget(success.value),
                     Error<UserModel> failure =>
                       UiExceptionWidget(failure.error),
                   };

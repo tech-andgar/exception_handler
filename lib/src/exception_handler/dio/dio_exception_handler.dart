@@ -52,7 +52,7 @@ Future<Result<T>> handleHttp2xxParseResponseDio<T>(
   final ResponseParser<Response<Object?>, T> responseParser,
 ) async {
   try {
-    final T dataModelParsed = await compute(
+    final dataModelParsed = await compute(
       responseParser.parserModel,
       responseParser.response.data,
     );
@@ -69,7 +69,7 @@ Change mode async isolate to sync''',
         name: 'DioExceptionHandler._handle2xxparseResponse',
       );
 
-      final T dataModelParsed =
+      final dataModelParsed =
           responseParser.parserModel(responseParser.response.data);
 
       return Ok(dataModelParsed);
@@ -139,8 +139,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
         );
 
     try {
-      final Response<Object?> response =
-          await apiHandler.apiCall() as Response<Object?>;
+      final response = await apiHandler.apiCall() as Response<Object?>;
 
       return _handleHttpResponse(
         ResponseParser(
@@ -178,8 +177,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
 
   /// _isConnected checks the current network connectivity status.
   static Future<bool> _isConnected() async {
-    final List<ConnectivityResult> result =
-        await connectivity.checkConnectivity();
+    final result = await connectivity.checkConnectivity();
 
     return !result.contains(ConnectivityResult.none);
   }
@@ -189,7 +187,7 @@ class DioExceptionHandler implements ClientExceptionHandler {
   static Future<Result<T>> _handleHttpResponse<T>(
     final ResponseParser<Response<Object?>, T> responseParser,
   ) async {
-    final int? statusCode = responseParser.response.statusCode;
+    final statusCode = responseParser.response.statusCode;
 
     return await _handleStatusCode(statusCode, responseParser);
   }
@@ -238,15 +236,15 @@ class DioExceptionHandler implements ClientExceptionHandler {
     final DioException e,
     final StackTrace s,
   ) async {
-    const String start =
+    const start =
         'This exception was thrown because the response has a status code of ';
-    const String end =
+    const end =
         'and RequestOptions.validateStatus was configured to throw for this status code.';
-    final int? statusCode =
+    final statusCode =
         int.tryParse(e.message.toString().split(start).last.split(end).first) ??
             e.response?.statusCode;
 
-    late final Future<Result<T>> handleStatusCode = _handleStatusCode(
+    late final handleStatusCode = _handleStatusCode(
       statusCode,
       ResponseParser(
         response: Response(requestOptions: RequestOptions()),
