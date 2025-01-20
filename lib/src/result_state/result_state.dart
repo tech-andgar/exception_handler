@@ -5,6 +5,7 @@
 import '../exception_state/exception_state.dart';
 import '../utils/utils.dart';
 
+// coverage:ignore-start
 /// An sealed base ResultState class
 /// to [TModel] represents the different states of result.
 @Deprecated('Use class Result() instead.')
@@ -33,17 +34,31 @@ final class FailureState<TModel> extends ResultState<TModel> {
   @override
   Map<String, Object?> get namedProps => {'exception': exception};
 }
+// coverage:ignore-end
 
 /// Utility class that simplifies handling errors.
-/// Inspired by the [Result] class from the official Dart language documentation https://docs.flutter.dev/app-architecture/design-patterns/result.
 ///
-/// Return a [Result] from a function to indicate success or failure.
+/// Inspired by the [Result] class from the official Dart language documentation https://docs.flutter.dev/app-architecture/design-patterns/result#putting-it-all-together.
 ///
-/// A [Result] is either an [Ok] with a value of type [T]
-/// or an [Error] with an [Exception].
+/// Use this class to return a `Result` from a function, indicating success or failure.
 ///
-/// Use [Result.ok] to create a successful result with a value of type [T].
-/// Use [Result.error] to create an error result with an [Exception].
+/// A `Result` object can be either an `Ok` with a value of type `T`, or an `Error` with an `Exception`.
+///
+/// Use `Result.ok(value)` to create a successful result with a value of type `T`.
+/// Use `Result.error(exception)` to create an error result with an `Exception`.
+///
+/// Example:
+///
+/// /// A function that returns a `Result` object.
+/// ```dart
+/// Result<int> getResult() {
+///  try {
+///   // Some code that might throw an exception.
+///  return Result.ok(42);
+/// } catch (e) {
+///  return Result.error(Exception(e));
+/// }
+/// ```
 sealed class Result<T> extends CustomEquatable {
   const Result();
 
@@ -51,7 +66,7 @@ sealed class Result<T> extends CustomEquatable {
   factory Result.ok(final T value) => Ok(value);
 
   /// Create an instance of Result containing an error.
-  factory Result.error(final ExceptionState<T> error) => Error(error);
+  factory Result.error(final Exception error) => Error(error);
 }
 
 /// Subclass of Result for values.
@@ -70,7 +85,7 @@ final class Error<T> extends Result<T> {
   const Error(this.error);
 
   /// Returned error in result.
-  final ExceptionState<T> error;
+  final Exception error;
 
   @override
   Map<String, Object?> get namedProps => {'error': error};
