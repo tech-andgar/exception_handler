@@ -30,7 +30,7 @@ void main() {
   group(
     'ResponseParser',
     () {
-      final Response<Object?> mockResponse = Response<Object?>(
+      final mockResponse = Response<Object?>(
         data: {'key': 'value'},
         statusCode: 200,
         requestOptions: RequestOptions(),

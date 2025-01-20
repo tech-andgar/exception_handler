@@ -3,13 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group(
-    'SuccessState',
+    'Ok',
     () {
       const data = 'Test Data';
-      const resultState = SuccessState<String>(data);
+      const resultState = Ok<String>(data);
       test('should call success callback with correct data', () {
         final result = switch (resultState) {
-          SuccessState<String>(:final String data) => data,
+          Ok<String>(:final String value) => value,
         };
 
         expect(result, equals(data));
@@ -17,33 +17,32 @@ void main() {
       test('should correct toString', () {
         expect(
           resultState.toString(),
-          'SuccessState<String>(data: "Test Data")',
+          'Ok<String>(value: "Test Data")',
         );
       });
     },
   );
 
   group(
-    'FailureState',
+    'Error',
     () {
-      final DataClientExceptionState<String> exception =
-          DataClientExceptionState<String>(
+      final exception = DataClientExceptionState<String>(
         message: 'Test Exception',
         stackTrace: StackTrace.current,
       );
-      final FailureState<String> resultState = FailureState<String>(exception);
+      final resultState = Error<String>(exception);
       test('should call failure callback with correct exception', () {
-        final bool failureCalled = switch (resultState) {
-          FailureState() => true,
+        final failureCalled = switch (resultState) {
+          Error() => true,
         };
 
         expect(failureCalled, isTrue);
-        expect(resultState.exception, equals(exception));
+        expect(resultState.error, equals(exception));
       });
       test('should correct toString', () {
         expect(
           resultState.toString(),
-          'FailureState<String>(exception: DataClientExceptionState<String>(clientException: "Test Exception"))',
+          'Error<String>(error: DataClientExceptionState<String>(clientException: "Test Exception"))',
         );
       });
     },

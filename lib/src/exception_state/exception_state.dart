@@ -12,8 +12,7 @@ import '../utils/utils.dart';
 /// various exceptions.
 ///
 /// It includes optional fields for different exception types.
-sealed class ExceptionState<TModel> extends CustomEquatable
-    implements Exception {
+sealed class ExceptionState<T> extends CustomEquatable implements Exception {
   const ExceptionState({
     required this.message,
     required this.stackTrace,
@@ -22,15 +21,19 @@ sealed class ExceptionState<TModel> extends CustomEquatable
   /// A message describing the format error.
   final String message;
   final StackTrace stackTrace;
+
+  @override
+  Map<String, Object?> get namedProps =>
+      {'message': message, 'stackTrace': stackTrace};
 }
 
 /// [DataClientExceptionState] captures exceptions related to client-side
 /// issues.
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
+class DataClientExceptionState<T> extends ExceptionState<T> {
   DataClientExceptionState({
     required final String message,
     required final StackTrace stackTrace,
@@ -52,9 +55,9 @@ class DataClientExceptionState<TModel> extends ExceptionState<TModel> {
 /// (e.g., JSON parsing).
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
+class DataParseExceptionState<T> extends ExceptionState<T> {
   DataParseExceptionState({
     required final StackTrace stackTrace,
     final String message = 'Error parsing data.',
@@ -74,9 +77,9 @@ class DataParseExceptionState<TModel> extends ExceptionState<TModel> {
 /// [DataHttpExceptionState] is used for handling HTTP-related exceptions.
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
+class DataHttpExceptionState<T> extends ExceptionState<T> {
   DataHttpExceptionState({
     required this.httpException,
     required final StackTrace stackTrace,
@@ -104,9 +107,9 @@ class DataHttpExceptionState<TModel> extends ExceptionState<TModel> {
 /// (e.g., no internet connection).
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
+class DataNetworkExceptionState<T> extends ExceptionState<T> {
   DataNetworkExceptionState({
     required final StackTrace stackTrace,
     final String message = 'A network error occurred.',
@@ -127,9 +130,9 @@ class DataNetworkExceptionState<TModel> extends ExceptionState<TModel> {
 /// caching operations.
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
+class DataCacheExceptionState<T> extends ExceptionState<T> {
   DataCacheExceptionState({
     required final StackTrace stackTrace,
     final String message = 'A cache error occurred.',
@@ -150,9 +153,9 @@ class DataCacheExceptionState<TModel> extends ExceptionState<TModel> {
 /// invalid input data.
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
+class DataInvalidInputExceptionState<T> extends ExceptionState<T> {
   DataInvalidInputExceptionState({
     required final StackTrace stackTrace,
     final String message = 'Invalid input provided.',
@@ -173,9 +176,9 @@ class DataInvalidInputExceptionState<TModel> extends ExceptionState<TModel> {
 /// Unknown error data.
 ///
 /// This exception class extends [ExceptionState], providing a generic type
-/// [TModel] to allow encapsulating additional information or data related to
+/// [T] to allow encapsulating additional information or data related to
 /// the exception.
-class DataUnknownExceptionState<TModel> extends ExceptionState<TModel> {
+class DataUnknownExceptionState<T> extends ExceptionState<T> {
   DataUnknownExceptionState({
     required final String message,
     required final StackTrace stackTrace,

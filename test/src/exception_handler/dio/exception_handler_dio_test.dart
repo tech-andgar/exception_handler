@@ -36,7 +36,7 @@ void main() {
             ),
           );
 
-          final ResultState<String> result = await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final Object? data) =>
@@ -47,10 +47,10 @@ void main() {
           String? success;
           ExceptionState<String>? failure;
           switch (result) {
-            case SuccessState<String>(:final String data):
-              success = data;
-            case FailureState<String>(:final ExceptionState<String> exception):
-              failure = exception;
+            case Ok<String>(:final String value):
+              success = value;
+            case Error<String>(:final ExceptionState<String> error):
+              failure = error;
           }
 
           expect(failure, isNull);
@@ -78,10 +78,10 @@ void main() {
           String? success;
           ExceptionState<String>? failure;
           switch (result) {
-            case SuccessState<String>(:final String data):
-              success = data;
-            case FailureState<String>(:final ExceptionState<String> exception):
-              failure = exception;
+            case Ok<String>(:final String value):
+              success = value;
+            case Error<String>(:final ExceptionState<String> error):
+              failure = error;
           }
 
           expect(success, isNull);
@@ -104,13 +104,13 @@ void main() {
 
           final result = await DioExceptionHandler.callApi_(mockApiHandler);
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState<String>():
+            case Ok<String>():
               fail('Expected failure but got success');
-            case FailureState<String>(:final ExceptionState<String> exception):
-              expect(exception, isA<DataNetworkExceptionState<Object?>>());
+            case Error<String>(:final ExceptionState<String> error):
+              expect(error, isA<DataNetworkExceptionState<Object?>>());
           }
         },
       );
@@ -131,10 +131,10 @@ void main() {
           ExceptionState<String>? failure;
 
           switch (result) {
-            case SuccessState<String>(:final String data):
-              success = data;
-            case FailureState<String>(:final ExceptionState<String> exception):
-              failure = exception;
+            case Ok<String>(:final String value):
+              success = value;
+            case Error<String>(:final ExceptionState<String> error):
+              failure = error;
           }
 
           expect(success, isNull);
@@ -153,7 +153,7 @@ void main() {
             ),
           );
 
-          final ResultState<String> result = await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final Object? data) => int.parse(data as String)
@@ -164,10 +164,10 @@ void main() {
           String? success;
           ExceptionState<String>? failure;
           switch (result) {
-            case SuccessState<String>(:final String data):
-              success = data;
-            case FailureState<String>(:final ExceptionState<String> exception):
-              failure = exception;
+            case Ok<String>(:final String value):
+              success = value;
+            case Error<String>(:final ExceptionState<String> error):
+              failure = error;
           }
 
           expect(success, isNull);
@@ -176,10 +176,9 @@ void main() {
       );
 
       test(
-        'should return FailureState with DataHttpException for 3xx error',
+        'should return Error with DataHttpException for 3xx error',
         () async {
-          final ResultState<Object?> result =
-              await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () async => Response<Object>(
                 requestOptions: RequestOptions(path: ''),
@@ -189,22 +188,22 @@ void main() {
             ),
           );
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
               expect(
-                (exception as DataHttpExceptionState).httpException,
+                (error as DataHttpExceptionState).httpException,
                 equals(HttpStatus.fromCode(300).exception()),
               );
           }
         },
       );
       test(
-        'should return FailureState with DataHttpException for 4xx error',
+        'should return Error with DataHttpException for 4xx error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
             (final _) async => Response(
@@ -212,24 +211,23 @@ void main() {
               statusCode: 400,
             ),
           );
-          final ResultState<Object?> result =
-              await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final res) => null,
             ),
           );
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
-              if (exception is DataHttpExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
+              if (error is DataHttpExceptionState) {
                 expect(
-                  exception.httpException,
+                  error.httpException,
                   equals(HttpStatus.fromCode(400).exception()),
                 );
               }
@@ -237,7 +235,7 @@ void main() {
         },
       );
       test(
-        'should return FailureState with DataHttpException for 404 error',
+        'should return Error with DataHttpException for 404 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
             (final _) async => Response(
@@ -245,24 +243,23 @@ void main() {
               statusCode: 404,
             ),
           );
-          final ResultState<Object?> result =
-              await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final res) => null,
             ),
           );
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
-              if (exception is DataHttpExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
+              if (error is DataHttpExceptionState) {
                 expect(
-                  exception.httpException,
+                  error.httpException,
                   equals(HttpStatus.fromCode(404).exception()),
                 );
               }
@@ -271,7 +268,7 @@ void main() {
       );
 
       test(
-        'should return FailureState with DataHttpException for 500 error',
+        'should return Error with DataHttpException for 500 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
             (final _) async => Response(
@@ -279,23 +276,22 @@ void main() {
               statusCode: 500,
             ),
           );
-          final ResultState<Object?> result =
-              await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final res) => null,
             ),
           );
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
-              if (exception is DataHttpExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
+              if (error is DataHttpExceptionState) {
                 expect(
-                  exception.httpException,
+                  error.httpException,
                   equals(HttpStatus.fromCode(500).exception()),
                 );
               }
@@ -303,7 +299,7 @@ void main() {
         },
       );
       test(
-        'should return FailureState with DataHttpException for 501 error',
+        'should return Error with DataHttpException for 501 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
             (final _) async => Response(
@@ -311,24 +307,23 @@ void main() {
               statusCode: 501,
             ),
           );
-          final ResultState<Object?> result =
-              await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final res) => null,
             ),
           );
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
-              if (exception is DataHttpExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
+              if (error is DataHttpExceptionState) {
                 expect(
-                  exception.httpException,
+                  error.httpException,
                   equals(HttpStatus.fromCode(501).exception()),
                 );
               }
@@ -336,7 +331,7 @@ void main() {
         },
       );
       test(
-        'should return FailureState with DataHttpException for 600 error',
+        'should return Error with DataHttpException for 600 error',
         () async {
           when(() => mockDio.get<Object>(any())).thenAnswer(
             (final _) async => Response(
@@ -344,24 +339,23 @@ void main() {
               statusCode: 600,
             ),
           );
-          final ResultState<Object?> result =
-              await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final res) => null,
             ),
           );
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
-              if (exception is DataHttpExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
+              if (error is DataHttpExceptionState) {
                 expect(
-                  exception.httpException,
+                  error.httpException,
                   equals(
                     HttpException(
                       httpStatus: HttpStatus(
@@ -389,24 +383,23 @@ void main() {
           when(() => mockConnectivity.checkConnectivity())
               .thenAnswer((final _) async => [ConnectivityResult.wifi]);
 
-          final ResultState<String> result =
-              await DioExceptionHandler.callApi_(mockApiHandler);
+          final result = await DioExceptionHandler.callApi_(mockApiHandler);
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataNetworkExceptionState<Object?>>());
-              if (exception is DataNetworkExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataNetworkExceptionState<Object?>>());
+              if (error is DataNetworkExceptionState) {
                 expect(
-                  exception.message,
+                  error.message,
                   equals('NetworkException.timeOutException'),
                 );
               }
           }
-          expect(result.exception, isA<DataNetworkExceptionState<Object?>>());
+          expect(result.error, isA<DataNetworkExceptionState<Object?>>());
         },
       );
       test(
@@ -419,24 +412,23 @@ void main() {
           when(() => mockConnectivity.checkConnectivity())
               .thenAnswer((final _) async => [ConnectivityResult.wifi]);
 
-          final ResultState<String> result =
-              await DioExceptionHandler.callApi_(mockApiHandler);
+          final result = await DioExceptionHandler.callApi_(mockApiHandler);
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataNetworkExceptionState<Object?>>());
-              if (exception is DataNetworkExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataNetworkExceptionState<Object?>>());
+              if (error is DataNetworkExceptionState) {
                 expect(
-                  exception.message,
+                  error.message,
                   equals('NetworkException.sendTimeout'),
                 );
               }
           }
-          expect(result.exception, isA<DataNetworkExceptionState<Object?>>());
+          expect(result.error, isA<DataNetworkExceptionState<Object?>>());
         },
       );
       test(
@@ -449,19 +441,18 @@ void main() {
           when(() => mockConnectivity.checkConnectivity())
               .thenAnswer((final _) async => [ConnectivityResult.wifi]);
 
-          final ResultState<String> result =
-              await DioExceptionHandler.callApi_(mockApiHandler);
+          final result = await DioExceptionHandler.callApi_(mockApiHandler);
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
 
           switch (result) {
-            case SuccessState():
+            case Ok():
               fail('Expected failure but got success');
-            case FailureState(:final ExceptionState<Object?> exception):
-              expect(exception, isA<DataHttpExceptionState<Object?>>());
-              if (exception is DataHttpExceptionState) {
+            case Error(:final ExceptionState<Object?> error):
+              expect(error, isA<DataHttpExceptionState<Object?>>());
+              if (error is DataHttpExceptionState) {
                 expect(
-                  exception.httpException,
+                  error.httpException,
                   equals(
                     HttpException(
                       httpStatus: HttpStatus(
@@ -475,7 +466,7 @@ void main() {
                 );
               }
           }
-          expect(result.exception, isA<DataHttpExceptionState<Object?>>());
+          expect(result.error, isA<DataHttpExceptionState<Object?>>());
         },
       );
 
@@ -486,9 +477,9 @@ void main() {
           when(() => mockApiHandler.apiCall()).thenThrow(exception);
           final result = await DioExceptionHandler.callApi_(mockApiHandler);
 
-          expect(result, isA<FailureState<Object?>>());
+          expect(result, isA<Error<Object?>>());
           expect(
-            (result as FailureState).exception,
+            (result as Error<Object?>).error,
             isA<DataClientExceptionState<Object?>>(),
           );
         },
@@ -504,7 +495,7 @@ void main() {
             ),
           );
 
-          final ResultState<String> result = await DioExceptionHandler.callApi_(
+          final result = await DioExceptionHandler.callApi_(
             ApiHandler(
               apiCall: () => mockDio.get<Object>('test'),
               parserModel: (final Object? data) {
@@ -516,10 +507,10 @@ void main() {
           String? success;
           ExceptionState<String>? failure;
           switch (result) {
-            case SuccessState<String>(:final String data):
-              success = data;
-            case FailureState<String>(:final ExceptionState<String> exception):
-              failure = exception;
+            case Ok<String>(:final String value):
+              success = value;
+            case Error<String>(:final ExceptionState<String> error):
+              failure = error;
           }
 
           expect(success, isNull);

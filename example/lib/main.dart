@@ -66,7 +66,7 @@ class UserModel extends CustomEquatable {
       };
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['username'] = username;
@@ -79,6 +79,7 @@ class UserModel extends CustomEquatable {
     if (company != null) {
       data['company'] = company!.toJson();
     }
+
     return data;
   }
 }
@@ -129,7 +130,7 @@ class Address extends CustomEquatable {
       };
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['street'] = street;
     data['suite'] = suite;
     data['city'] = city;
@@ -137,6 +138,7 @@ class Address extends CustomEquatable {
     if (geo != null) {
       data['geo'] = geo!.toJson();
     }
+
     return data;
   }
 }
@@ -150,7 +152,7 @@ class Geo extends CustomEquatable {
           'lat': String? lat,
           'lng': String? lng,
         }) {
-      final Geo geo = Geo(lat: lat, lng: lng);
+      final geo = Geo(lat: lat, lng: lng);
       return geo;
     } else {
       throw FormatException('Invalid JSON: $json');
@@ -167,9 +169,10 @@ class Geo extends CustomEquatable {
       };
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['lat'] = lat;
     data['lng'] = lng;
+
     return data;
   }
 }
@@ -206,10 +209,11 @@ class Company extends CustomEquatable {
       };
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final data = <String, dynamic>{};
     data['name'] = name;
     data['catchPhrase'] = catchPhrase;
     data['bs'] = bs;
+
     return data;
   }
 }
@@ -217,9 +221,8 @@ class Company extends CustomEquatable {
 // Path: services/user_service.dart
 class UserService {
   final Dio dio = Dio();
-  Future<ResultState<UserModel>> getDataUser(int id) async {
-    final ResultState<UserModel> result =
-        await DioExceptionHandler.callApi_<Response, UserModel>(
+  Future<Result<UserModel>> getDataUser(int id) async {
+    final result = await DioExceptionHandler.callApi_<Response, UserModel>(
       ApiHandler(
         apiCall: () =>
             dio.get('https://jsonplaceholder.typicode.com/users/$id'),
@@ -227,11 +230,12 @@ class UserService {
             UserModel.fromJson(data as Map<String, dynamic>),
       ),
     );
+
     return result;
   }
 
-  Future<ResultState<UserModel>> getDataUserExtensionDio(int id) async {
-    final ResultState<UserModel> result = await dio
+  Future<Result<UserModel>> getDataUserExtensionDio(int id) async {
+    final result = await dio
         .get('https://jsonplaceholder.typicode.com/users/$id')
         .fromJson(UserModel.fromJson);
 
@@ -260,7 +264,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({required this.title, super.key});
 
   final String title;
 
@@ -308,20 +312,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 future: UserService().getDataUserExtensionDio(_counter),
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<ResultState<UserModel>> snapshot,
+                  AsyncSnapshot<Result<UserModel>> snapshot,
                 ) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
-                  final ResultState<UserModel> resultState =
-                      snapshot.requireData;
+                  final result = snapshot.requireData;
 
-                  final StatelessWidget uiWidget = switch (resultState) {
-                    SuccessState<UserModel> success =>
-                      UiUserWidget(success.data),
-                    FailureState<UserModel> failure =>
-                      UiExceptionWidget(failure.exception),
+                  final uiWidget = switch (result) {
+                    Ok<UserModel> success => UiUserWidget(success.value),
+                    Error<UserModel> failure =>
+                      UiExceptionWidget(failure.error),
                   };
+
                   return uiWidget;
                 },
               ),
@@ -364,27 +367,23 @@ class UiExceptionWidget extends StatelessWidget {
     'https://httpcats.com',
   ];
 
-  final ExceptionState<UserModel> exception;
+  final Exception exception;
 
   @override
   Widget build(BuildContext context) {
-    final String textException = switch (exception) {
-      DataClientExceptionState<UserModel>() =>
-        'Debugger Error Client: $exception',
-      DataParseExceptionState<UserModel>() =>
-        'Debugger Error Parse: $exception',
-      DataHttpExceptionState<UserModel>() => 'Debugger Error Http: $exception',
-      DataNetworkExceptionState<UserModel>() =>
+    final textException = switch (exception) {
+      DataClientException() => 'Debugger Error Client: $exception',
+      DataParseException() => 'Debugger Error Parse: $exception',
+      DataHttpException() => 'Debugger Error Http: $exception',
+      DataNetworkException() =>
         'Debugger Error Network: $exception\n\nError: ${exception.toString().split('.').last}',
-      DataCacheExceptionState<UserModel>() =>
-        'Debugger Error Cache: $exception',
-      DataInvalidInputExceptionState<UserModel>() =>
-        'Debugger Error Invalid Input: $exception',
-      DataUnknownExceptionState<UserModel>() =>
-        'Debugger Error Unknown: $exception',
+      DataCacheException() => 'Debugger Error Cache: $exception',
+      DataInvalidInputException() => 'Debugger Error Invalid Input: $exception',
+      DataUnknownException() => 'Debugger Error Unknown: $exception',
+      _ => 'Debugger Error Unknown: $exception',
     };
 
-    final Text text = Text(
+    final text = Text(
       textException,
       style: TextStyle(color: Colors.orange[800]),
     );
@@ -393,23 +392,20 @@ class UiExceptionWidget extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: text));
     });
 
-    final Widget imageException = switch (exception) {
-      DataClientExceptionState<UserModel>() =>
-        const Icon(Icons.devices_outlined, size: 200),
-      DataParseExceptionState<UserModel>() =>
-        const Icon(Icons.sms_failed_outlined, size: 200),
-      DataHttpExceptionState<UserModel>() => Image.network(
+    final imageException = switch (exception) {
+      DataClientException() => const Icon(Icons.devices_outlined, size: 200),
+      DataParseException() => const Icon(Icons.sms_failed_outlined, size: 200),
+      DataHttpException() => Image.network(
           '${links[Random().nextInt(links.length)]}/404.webp',
         ),
-      DataNetworkExceptionState<UserModel>() =>
-        const Icon(Icons.wifi_off_outlined, size: 200),
-      DataCacheExceptionState<UserModel>() =>
-        const Icon(Icons.storage_outlined, size: 200),
-      DataInvalidInputExceptionState<UserModel>() =>
+      DataNetworkException() => const Icon(Icons.wifi_off_outlined, size: 200),
+      DataCacheException() => const Icon(Icons.storage_outlined, size: 200),
+      DataInvalidInputException() =>
         const Icon(Icons.textsms_outlined, size: 200),
-      DataUnknownExceptionState<UserModel>() =>
-        const Icon(Icons.close, size: 200),
+      DataUnknownException() => const Icon(Icons.close, size: 200),
+      _ => const Icon(Icons.close, size: 200),
     };
+
     return Column(
       children: [
         SizedBox(
@@ -433,7 +429,7 @@ class UiUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
